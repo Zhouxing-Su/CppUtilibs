@@ -4,7 +4,7 @@ using namespace std;
 
 int RandSelect::seed = (srand( static_cast<unsigned>(time( NULL )) ), 0);
 
-RandSelect::RandSelect() : count( 1 )
+RandSelect::RandSelect( int startCount ) : count( startCount )
 {
 }
 

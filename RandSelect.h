@@ -13,21 +13,29 @@ using namespace std;
 int main( int argc, char **argv )
 {
 int result = 0;
-for (int k = 0; k < 10; k++) {
+
 RandSelect rs;
 for (int i = 0; i < 10; i++) {
 if (rs.isSelected()) {
 result = i;
 }
+cout << result << endl;
+
+rs.reset(2);    // select 1 out of 11 elements (0-9 and the last selected number)
+for (int i = 0; i < 10; i++) {
+if (rs.isSelected()) {
+result = i;
 }
 cout << result << endl;
 }
+
 return 0;
 }
 ====================================================================
 */
 
 #ifndef RAND_SELECT_H
+#define RAND_SELECT_H
 
 
 #include <cstdlib>
@@ -36,15 +44,17 @@ return 0;
 class RandSelect
 {
 public:
-    RandSelect();
+    // sometimes the first element is pre-selected with the posibility of 1,
+    // so you can pass 2 into the constructor in this condition to leave out a isSelected() call.
+    RandSelect(int startCount = 1);
     ~RandSelect();
 
     // call this for each of the N elements (N times in total) to judge whether each of them is selected.
     bool isSelected();  // only the last returned "true" means that element is selected finally.
     // start a new selection on another N elements
-    void reset()
+    void reset( int startCount = 1 )
     {
-        count = 1;
+        count = startCount;
     }
 
 private:
@@ -55,5 +65,4 @@ private:
 
 
 
-#define RAND_SELECT_H
 #endif

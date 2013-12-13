@@ -21,6 +21,7 @@ return 0;
 */
 
 #ifndef RANGERAND_H
+#define RANGERAND_H
 
 
 #include <cstdlib>
@@ -51,5 +52,4 @@ private:
 };
 
 
-#define RANGERAND_H
 #endif
