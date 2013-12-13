@@ -10,12 +10,12 @@ using namespace std;
 
 int main( int argc, char **argv )
 {
-    RangeRand r( 1, 10 );
+RangeRand r( 1, 10 );
 
-    for (int i = 0; i < 20; i++) {
-        cout << r() << endl;
-    }
-    return 0;
+for (int i = 0; i < 20; i++) {
+cout << r() << endl;
+}
+return 0;
 }
 ====================================================================
 */
@@ -41,10 +41,13 @@ public:
     // static methods ===================
 
     // member methods ===================
-    RangeRand( int lowerBound, int upperBound );
+    RangeRand( int lowerBound = 0, int upperBound = RAND_MAX );
     ~RangeRand();
 
     int operator() ();
+
+private:
+    static int seed;    // this is used for calling srand() only once and should not be used elsewhere !
 };
 
 

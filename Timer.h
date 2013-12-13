@@ -1,5 +1,7 @@
 /**
-*   usage:  (example code)
+*   usage:  record time in millisecond and record the related information into a vector.
+
+(example code)
 ====================================================================
 #include <iostream>
 #include "Timer.h"
