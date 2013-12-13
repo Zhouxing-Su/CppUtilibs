@@ -147,7 +147,7 @@ const Graph::DistSeqTable& Graph::getDistSeqTableBySTLsort()
 
     // init distSeq
     vector<int> seq( vertexAllocNum );
-    for (int i = minVertexIndex; i < maxVertexIndex; i++) {
+    for (int i = minVertexIndex; i <= maxVertexIndex; i++) {
         seq[i] = i;
     }
     distSeq = DistSeqTable( vertexAllocNum, seq );
@@ -155,7 +155,7 @@ const Graph::DistSeqTable& Graph::getDistSeqTableBySTLsort()
     // do sort
     for (int i = minVertexIndex; i <= maxVertexIndex; i++) {
         DistCmp cmp( *this, i );
-        sort( distSeq[i].begin(), distSeq[i].end(), cmp );
+        sort( distSeq[i].begin() + minVertexIndex, distSeq[i].end(), cmp );
     }
 
     return distSeq;
@@ -165,7 +165,7 @@ const Graph::DistSeqTable& Graph::getDistSeqTableByInsertSort()
 {
     // init distSeq
     vector<int> seq( vertexAllocNum );
-    for (int i = minVertexIndex; i < maxVertexIndex; i++) {
+    for (int i = minVertexIndex; i <= maxVertexIndex; i++) {
         seq[i] = i;
     }
     distSeq = DistSeqTable( vertexAllocNum, seq );
@@ -199,8 +199,8 @@ UndirectedGraph::UndirectedGraph( const ArcList &arcList, int vn, int mvi )
 : Graph( vn, mvi )
 {
     for (ArcList::const_iterator iter = arcList.begin(); iter != arcList.end(); iter++) {
-        adjMat[(*iter)[0]][(*iter)[1]] = (*iter)[2];
-        adjMat[(*iter)[1]][(*iter)[0]] = (*iter)[2];
+        adjMat[iter->startVertex][iter->endVertex] = iter->dist;
+        adjMat[iter->endVertex][iter->startVertex] = iter->dist;
     }
 }
 
@@ -215,7 +215,7 @@ DirectedGraph::DirectedGraph( const ArcList &arcList, int vn, int mvi )
 : Graph( vn, mvi )
 {
     for (ArcList::const_iterator iter = arcList.begin(); iter != arcList.end(); iter++) {
-        adjMat[(*iter)[0]][(*iter)[1]] = (*iter)[2];
+        adjMat[iter->startVertex][iter->endVertex] = iter->dist;
     }
 }
 
