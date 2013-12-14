@@ -51,3 +51,13 @@ void Timer::printAll( ostream &os ) const
         os << "\n[time: " << ((iter->time - timestamps.front().time) / 1000.0) << "s] " << (iter->msg) << endl;
     }
 }
+
+double Timer::getDuration() const
+{
+    return ((timestamps.back().time - timestamps.front().time) / 1000.0);
+}
+
+double Timer::getDuration( int start, int end ) const
+{
+    return ((timestamps[end].time - timestamps[start].time) / 1000.0);
+}

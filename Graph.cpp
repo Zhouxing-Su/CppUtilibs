@@ -16,6 +16,35 @@ Graph::~Graph()
 {
 }
 
+int Graph::findVertexWithinRadius( int start, Graph::Distance radius ) const
+{
+    RandSelect rs( 1 );
+    int vertex;
+    for (int i = minVertexIndex; i <= maxVertexIndex; i++) {
+        if (distance( start, nthClosestVertex( start, i ) ) < radius) {
+            if (rs.isSelected( )) {
+                vertex = nthClosestVertex( start, i );
+            }
+        } else {
+            break;
+        }
+    }
+
+    return vertex;
+}
+
+int Graph::findVertexNumWithinRadius( int start, Graph::Distance radius ) const
+{
+    int i = minVertexIndex;
+    for (; i <= maxVertexIndex; i++) {
+        if (distance( start, nthClosestVertex( start, i ) ) >= radius) {
+            break;
+        }
+    }
+
+    return i;
+}
+
 const Graph::DistanceMatrix& Graph::getShortestPath()
 {
     if (!shortestDistSolved) {

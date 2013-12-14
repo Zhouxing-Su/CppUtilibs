@@ -13,19 +13,19 @@ void B() {}   // some procedure written by you.
 
 int main( int argc, char **argv )
 {
-    Timer timer;
+Timer timer;
 
-    timer.record( Timer::INFO, string( "A start" ) );
-    A();    // some procedure writen by you.
-    timer.record( Timer::INFO, string( "A end" ) );
-    timer.printAll( cout );
+timer.record( Timer::INFO, string( "A start" ) );
+A();    // some procedure writen by you.
+timer.record( Timer::INFO, string( "A end" ) );
+timer.printAll( cout );
 
-    timer.reset();
-    timer.recordAndPrint( Timer::INFO, string( "B start" ), cout );
-    B();
-    timer.recordAndPrint( Timer::INFO, string( "B end" ), cout );
+timer.reset();
+timer.recordAndPrint( Timer::INFO, string( "B start" ), cout );
+B();
+timer.recordAndPrint( Timer::INFO, string( "B end" ), cout );
 
-    return 0;
+return 0;
 }
 ====================================================================
 */
@@ -76,6 +76,9 @@ public:
     void recordAndPrint( LogLevel level, const std::string &msg, std::ostream &os );
     // print all record
     void printAll( std::ostream &os ) const;
+    // get duration
+    double getDuration() const;
+    double getDuration( int start, int end ) const;
 
 private:
     std::vector<TimeStamp> timestamps;

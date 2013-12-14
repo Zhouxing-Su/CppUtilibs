@@ -21,17 +21,29 @@ return 0;
 
 
 #include <vector>
+#include <set>
 #include <array>
 #include <iostream>
 #include <iomanip>
+#include "RandSelect.h"
 
 class Graph
 {
 public:
     // the distance or weight on edges
+    typedef std::set<int> VertexSet;
     typedef unsigned Distance;
     struct Arc
     {
+        class CmpClass
+        {
+        public:
+            bool operator() ( const Arc& lhs, const Arc& rhs ) const
+            {
+                return (lhs.startVertex < rhs.startVertex);
+            }
+        };
+
         Arc() {}
         Arc( int sv, int ev, Distance d )
             : startVertex( sv ), endVertex( ev ), dist( d )
@@ -44,6 +56,7 @@ public:
         Distance dist;
     };
     typedef std::vector<Arc> ArcList;
+    typedef std::set<Arc, Arc::CmpClass> ArcSet;
     // the No. N element on line M is the distance from vertex N to vertex M
     typedef std::vector< std::vector<Distance> > DistanceMatrix;
     // for each line N, it records the index of vertices sorted by their distance to vertex N with ascending order
@@ -73,6 +86,12 @@ public:
     {
         return distSeq[start][shiftedN];
     }
+
+    // find a vertex whose distance to start is shorter the radius randomly
+    int findVertexWithinRadius( int start, Graph::Distance radius ) const;
+    // find the number of vertices whose distance to start is shorter the radius
+    // this number can be used to get all vertices within radius by distSeq
+    int findVertexNumWithinRadius( int start, Graph::Distance radius ) const;
 
     const DistanceMatrix& getShortestPath();
     void printShortestDist( std::ostream &os ) const;
