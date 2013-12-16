@@ -23,6 +23,7 @@ return 0;
 #include <vector>
 #include <set>
 #include <array>
+#include <algorithm>
 #include <iostream>
 #include <iomanip>
 #include "RandSelect.h"
@@ -69,9 +70,9 @@ public:
 
 
     const int vertexNum;
-    const int vertexAllocNum;
     const int minVertexIndex;
     const int maxVertexIndex;
+    const int vertexAllocNum;
 
 
     // get the shortest distance between start and end

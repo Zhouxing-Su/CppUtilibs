@@ -16,6 +16,17 @@ Timer::TimeStamp::~TimeStamp()
 
 
 
+string Timer::getLocalTime()
+{
+    char buf[64];
+
+    time_t t = time( NULL );
+    tm *date = localtime( &t );
+    strftime( buf, 64, "%Y-%m-%d %a %H:%M:%S", date );
+
+    return string( buf );
+}
+
 Timer::Timer() : timestamps( 1, TimeStamp( clock(), string() ) )
 {
 }

@@ -13,6 +13,8 @@ void B() {}   // some procedure written by you.
 
 int main( int argc, char **argv )
 {
+cout << Timer::getLocalTime() << endl;
+
 Timer timer;
 
 timer.record( Timer::INFO, string( "A start" ) );
@@ -63,6 +65,7 @@ public:
     // member constant ===================
 
     // static methods ===================
+    static std::string getLocalTime();
 
     // member methods ===================
     Timer();    // get the start time
@@ -71,7 +74,7 @@ public:
     // clear all records and reset the start time
     void reset();
     // record current time and a message for the related event
-    void record( LogLevel level, const std::string &msg );
+    void record( LogLevel level = LogLevel::INFO, const std::string &msg = std::string( ) );
     // call record() and print the record just inserted
     void recordAndPrint( LogLevel level, const std::string &msg, std::ostream &os );
     // print all record
