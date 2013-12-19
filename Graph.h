@@ -31,6 +31,44 @@ return 0;
 class Graph
 {
 public:
+    const unsigned vertexNum;
+
+protected:
+    Graph( unsigned vn ) :vertexNum( vn ) {}
+    ~Graph() {}
+};
+
+class GeometricalGraph : public Graph
+{
+public:
+    typedef double Distance;
+    typedef double Coord;
+    class Point
+    {
+    public:
+        Point() {}
+        Point( Coord cx, Coord cy ) :x( cx ), y( cy ) {}
+
+        Coord x;
+        Coord y;
+    };
+    typedef std::vector<Point> PointList;
+
+    GeometricalGraph( const PointList &pl ) : Graph(pl.size()), pointList( pl ) {}
+    ~GeometricalGraph() {}
+
+    const Point& point( int i ) const
+    {
+        return pointList[i];
+    }
+
+private:
+    PointList pointList;
+};
+
+class TopologicalGraph : public Graph
+{
+public:
     // the distance or weight on edges
     typedef std::set<int> VertexSet;
     typedef unsigned Distance;
@@ -69,7 +107,6 @@ public:
     static const int DEFAULT_MIN_VERTEX_INDEX = 1;
 
 
-    const int vertexNum;
     const int minVertexIndex;
     const int maxVertexIndex;
     const int vertexAllocNum;
@@ -89,10 +126,10 @@ public:
     }
 
     // find a vertex whose distance to start is shorter the radius randomly
-    int findVertexWithinRadius( int start, Graph::Distance radius ) const;
+    int findVertexWithinRadius( int start, TopologicalGraph::Distance radius ) const;
     // find the number of vertices whose distance to start is shorter the radius
     // this number can be used to get all vertices within radius by distSeq
-    int findVertexNumWithinRadius( int start, Graph::Distance radius ) const;
+    int findVertexNumWithinRadius( int start, TopologicalGraph::Distance radius ) const;
 
     const DistanceMatrix& getShortestPath();
     void printShortestDist( std::ostream &os ) const;
@@ -100,39 +137,44 @@ public:
     void printDistSeqTable( std::ostream &os ) const;
 
 protected:
-    Graph( int vertexNumber, int minVertexIndex );
-    virtual ~Graph();
-    const DistanceMatrix& getShortestPathByDijkstra();
-    const DistanceMatrix& getShortestPathByFloyd();
-    const DistSeqTable& getDistSeqTableBySTLsort();
-    const DistSeqTable& getDistSeqTableByInsertSort();
+    TopologicalGraph( unsigned vertexNumber, int minVertexIndex );
+    virtual ~TopologicalGraph();
 
 
     // essential elements ( must be initialized in constructor )
     DistanceMatrix adjMat;          // use elements within [minVertexIndex,maxVertexIndex]
-    bool shortestDistSolved;
-    bool distSeqSolved;
 
     // optional elements ( can be generated later by calling member methods )
     DistanceMatrix shortestDist;    // use elements within [minVertexIndex,maxVertexIndex]
     DistSeqTable distSeq;           // use elements within [minVertexIndex,maxVertexIndex]
+    bool shortestDistSolved;
+    bool distSeqSolved;
+
+private:
+    const DistanceMatrix& getShortestPathByDijkstra();
+    const DistanceMatrix& getShortestPathByFloyd();
+    const DistSeqTable& getDistSeqTableBySTLsort();
+    const DistSeqTable& getDistSeqTableByInsertSort();
 };
 
 
 
-class UndirectedGraph : public Graph
+class UndirectedGraph : public TopologicalGraph
 {
 public:
-    UndirectedGraph( const ArcList &arcList, int vertexNumber, int minVertexIndex = DEFAULT_MIN_VERTEX_INDEX );
+    // get a symmetrical adjMat
+    UndirectedGraph( const ArcList &arcList, unsigned vertexNumber, int minVertexIndex = DEFAULT_MIN_VERTEX_INDEX );
+    // automatically generate the shortestDist
+    UndirectedGraph( const GeometricalGraph& gg );
     ~UndirectedGraph();
-
 };
 
 
-class DirectedGraph : public Graph
+class DirectedGraph : public TopologicalGraph
 {
 public:
-    DirectedGraph( const ArcList &arcList, int vertexNumber, int minVertexIndex = DEFAULT_MIN_VERTEX_INDEX );
+    // get a asymmetrical adjMat
+    DirectedGraph( const ArcList &arcList, unsigned vertexNumber, int minVertexIndex = DEFAULT_MIN_VERTEX_INDEX );
     ~DirectedGraph();
 };
 

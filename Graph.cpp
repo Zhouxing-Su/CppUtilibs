@@ -2,9 +2,12 @@
 
 using namespace std;
 
-// Graph =======================
-Graph::Graph( int vn, int mvi )
-: vertexNum( vn ), minVertexIndex( mvi ), maxVertexIndex( vn + mvi - 1 ), vertexAllocNum( vn + mvi ),
+// GeometricalGraph =======================
+
+
+// TopologicalGraph =======================
+TopologicalGraph::TopologicalGraph( unsigned vn, int mvi )
+: Graph( vn ), minVertexIndex( mvi ), maxVertexIndex( vn + mvi - 1 ), vertexAllocNum( vn + mvi ),
 adjMat( vn + mvi, vector<Distance>( vn + mvi, MAX_DISTANCE ) ), shortestDistSolved( false ), distSeqSolved( false )
 {
     for (int i = minVertexIndex; i <= maxVertexIndex; i++) {
@@ -12,17 +15,17 @@ adjMat( vn + mvi, vector<Distance>( vn + mvi, MAX_DISTANCE ) ), shortestDistSolv
     }
 }
 
-Graph::~Graph()
+TopologicalGraph::~TopologicalGraph()
 {
 }
 
-int Graph::findVertexWithinRadius( int start, Graph::Distance radius ) const
+int TopologicalGraph::findVertexWithinRadius( int start, TopologicalGraph::Distance radius ) const
 {
     RandSelect rs( 1 );
     int vertex;
     for (int i = minVertexIndex; i <= maxVertexIndex; i++) {
         if (distance( start, nthClosestVertex( start, i ) ) < radius) {
-            if (rs.isSelected( )) {
+            if (rs.isSelected()) {
                 vertex = nthClosestVertex( start, i );
             }
         } else {
@@ -33,7 +36,7 @@ int Graph::findVertexWithinRadius( int start, Graph::Distance radius ) const
     return vertex;
 }
 
-int Graph::findVertexNumWithinRadius( int start, Graph::Distance radius ) const
+int TopologicalGraph::findVertexNumWithinRadius( int start, TopologicalGraph::Distance radius ) const
 {
     int i = minVertexIndex;
     for (; i <= maxVertexIndex; i++) {
@@ -45,7 +48,7 @@ int Graph::findVertexNumWithinRadius( int start, Graph::Distance radius ) const
     return i;
 }
 
-const Graph::DistanceMatrix& Graph::getShortestPath()
+const TopologicalGraph::DistanceMatrix& TopologicalGraph::getShortestPath()
 {
     if (!shortestDistSolved) {
         getShortestPathByFloyd();   /// put your own specified algorithm here
@@ -57,7 +60,7 @@ const Graph::DistanceMatrix& Graph::getShortestPath()
     return shortestDist;
 }
 
-const Graph::DistSeqTable& Graph::getDistSeqTable()
+const TopologicalGraph::DistSeqTable& TopologicalGraph::getDistSeqTable()
 {
     if (!distSeqSolved) {
         getShortestPath();  // prerequisite  
@@ -70,7 +73,7 @@ const Graph::DistSeqTable& Graph::getDistSeqTable()
     return distSeq;
 }
 
-void Graph::printDistSeqTable( std::ostream &os ) const
+void TopologicalGraph::printDistSeqTable( std::ostream &os ) const
 {
     for (int i = minVertexIndex; i <= maxVertexIndex; i++) {
         for (int j = minVertexIndex; j < maxVertexIndex; j++) {
@@ -80,7 +83,7 @@ void Graph::printDistSeqTable( std::ostream &os ) const
     }
 }
 
-void Graph::printShortestDist( ostream &os ) const
+void TopologicalGraph::printShortestDist( ostream &os ) const
 {
     for (int i = minVertexIndex; i <= maxVertexIndex; i++) {
         for (int j = minVertexIndex; j < maxVertexIndex; j++) {
@@ -100,7 +103,7 @@ void Graph::printShortestDist( ostream &os ) const
 }
 
 
-const Graph::DistanceMatrix& Graph::getShortestPathByDijkstra()
+const TopologicalGraph::DistanceMatrix& TopologicalGraph::getShortestPathByDijkstra()
 {
     enum VertexState { IN_SET, OUT_OF_SET };
 
@@ -138,7 +141,7 @@ const Graph::DistanceMatrix& Graph::getShortestPathByDijkstra()
     return shortestDist;
 }
 
-const Graph::DistanceMatrix& Graph::getShortestPathByFloyd()
+const TopologicalGraph::DistanceMatrix& TopologicalGraph::getShortestPathByFloyd()
 {
     shortestDist = adjMat;
 
@@ -156,12 +159,12 @@ const Graph::DistanceMatrix& Graph::getShortestPathByFloyd()
     return shortestDist;
 }
 
-const Graph::DistSeqTable& Graph::getDistSeqTableBySTLsort()
+const TopologicalGraph::DistSeqTable& TopologicalGraph::getDistSeqTableBySTLsort()
 {
     class DistCmp
     {
     public:
-        DistCmp( const Graph &g, int sv ) : graph( g ), startVertex( sv ) {}
+        DistCmp( const TopologicalGraph &g, int sv ) : graph( g ), startVertex( sv ) {}
         ~DistCmp() {}
 
         bool operator() ( const int &a, const int &b )
@@ -170,7 +173,7 @@ const Graph::DistSeqTable& Graph::getDistSeqTableBySTLsort()
         }
 
     private:
-        const Graph &graph;
+        const TopologicalGraph &graph;
         int startVertex;
     };
 
@@ -190,7 +193,7 @@ const Graph::DistSeqTable& Graph::getDistSeqTableBySTLsort()
     return distSeq;
 }
 
-const Graph::DistSeqTable& Graph::getDistSeqTableByInsertSort()
+const TopologicalGraph::DistSeqTable& TopologicalGraph::getDistSeqTableByInsertSort()
 {
     // init distSeq
     vector<int> seq( vertexAllocNum );
@@ -200,11 +203,11 @@ const Graph::DistSeqTable& Graph::getDistSeqTableByInsertSort()
     distSeq = DistSeqTable( vertexAllocNum, seq );
 
     // do sort
-    for (int i = Graph::minVertexIndex; i <= maxVertexIndex; i++) {
+    for (int i = minVertexIndex; i <= maxVertexIndex; i++) {
         //  do insertion sort on each vertex
-        for (int j = Graph::minVertexIndex; j <= maxVertexIndex; j++) {
+        for (int j = minVertexIndex; j <= maxVertexIndex; j++) {
             int k = j;
-            for (Graph::Distance d = distance( i, j ); k > 0; k--) {
+            for (Distance d = distance( i, j ); k > 0; k--) {
                 if (d < distance( i, distSeq[i][k - 1] )) {
                     distSeq[i][k] = distSeq[i][k - 1];
                 } else {
@@ -224,8 +227,8 @@ const Graph::DistSeqTable& Graph::getDistSeqTableByInsertSort()
 
 
 // UndirectedGraph =======================
-UndirectedGraph::UndirectedGraph( const ArcList &arcList, int vn, int mvi )
-: Graph( vn, mvi )
+UndirectedGraph::UndirectedGraph( const ArcList &arcList, unsigned vn, int mvi )
+: TopologicalGraph( vn, mvi )
 {
     for (ArcList::const_iterator iter = arcList.begin(); iter != arcList.end(); iter++) {
         adjMat[iter->startVertex][iter->endVertex] = iter->dist;
@@ -233,6 +236,21 @@ UndirectedGraph::UndirectedGraph( const ArcList &arcList, int vn, int mvi )
     }
 }
 
+UndirectedGraph::UndirectedGraph( const GeometricalGraph &gg )
+: TopologicalGraph( gg.vertexNum, 0 )
+{
+    // calculate distance between each pair of points
+    for (int i = 0; i < gg.vertexNum; i++) {
+        for (int j = 0; j < i; j++) {
+            GeometricalGraph::Coord dx = gg.point( i ).x - gg.point( j ).x;
+            GeometricalGraph::Coord dy = gg.point( i ).y - gg.point( j ).y;
+            adjMat[i][j] = adjMat[j][i] = dx*dx + dy*dy;
+        }
+        adjMat[i][i] = 0;
+    }
+    shortestDist = adjMat;
+    shortestDistSolved = true;
+}
 
 UndirectedGraph::~UndirectedGraph()
 {
@@ -240,14 +258,13 @@ UndirectedGraph::~UndirectedGraph()
 
 
 // DirectedGraph =======================
-DirectedGraph::DirectedGraph( const ArcList &arcList, int vn, int mvi )
-: Graph( vn, mvi )
+DirectedGraph::DirectedGraph( const ArcList &arcList, unsigned vn, int mvi )
+: TopologicalGraph( vn, mvi )
 {
     for (ArcList::const_iterator iter = arcList.begin(); iter != arcList.end(); iter++) {
         adjMat[iter->startVertex][iter->endVertex] = iter->dist;
     }
 }
-
 
 DirectedGraph::~DirectedGraph()
 {
