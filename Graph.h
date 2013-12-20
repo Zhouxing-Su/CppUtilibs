@@ -38,6 +38,7 @@ protected:
     ~Graph() {}
 };
 
+
 class GeometricalGraph : public Graph
 {
 public:
@@ -54,7 +55,7 @@ public:
     };
     typedef std::vector<Point> PointList;
 
-    GeometricalGraph( const PointList &pl ) : Graph(pl.size()), pointList( pl ) {}
+    GeometricalGraph( const PointList &pl ) : Graph( pl.size() ), pointList( pl ) {}
     ~GeometricalGraph() {}
 
     const Point& point( int i ) const
@@ -66,11 +67,14 @@ private:
     PointList pointList;
 };
 
+
+template <typename T_DIST = unsigned, T_DIST MAX_DIST = 0x3fffffff>
 class TopologicalGraph : public Graph
 {
 public:
     // the distance or weight on edges
     typedef std::set<int> VertexSet;
+    //typedef T_DIST Distance;
     typedef unsigned Distance;
     struct Arc
     {
@@ -95,14 +99,14 @@ public:
         Distance dist;
     };
     typedef std::vector<Arc> ArcList;
-    typedef std::set<Arc, Arc::CmpClass> ArcSet;
+    typedef std::set<Arc, typename Arc::CmpClass> ArcSet;
     // the No. N element on line M is the distance from vertex N to vertex M
     typedef std::vector< std::vector<Distance> > DistanceMatrix;
     // for each line N, it records the index of vertices sorted by their distance to vertex N with ascending order
     typedef std::vector< std::vector<int> > DistSeqTable;
 
 
-    static const Distance MAX_DISTANCE = 0x3fffffff;
+    static const Distance MAX_DISTANCE = MAX_DIST;
     static const Distance MIN_DISTANCE = 0;
     static const int DEFAULT_MIN_VERTEX_INDEX = 1;
 
@@ -126,10 +130,10 @@ public:
     }
 
     // find a vertex whose distance to start is shorter the radius randomly
-    int findVertexWithinRadius( int start, TopologicalGraph::Distance radius ) const;
+    int findVertexWithinRadius( int start, Distance radius ) const;
     // find the number of vertices whose distance to start is shorter the radius
     // this number can be used to get all vertices within radius by distSeq
-    int findVertexNumWithinRadius( int start, TopologicalGraph::Distance radius ) const;
+    int findVertexNumWithinRadius( int start, Distance radius ) const;
 
     const DistanceMatrix& getShortestPath();
     void printShortestDist( std::ostream &os ) const;
@@ -157,9 +161,8 @@ private:
     const DistSeqTable& getDistSeqTableByInsertSort();
 };
 
-
-
-class UndirectedGraph : public TopologicalGraph
+template <typename T_DIST = unsigned, T_DIST MAX_DIST = 0x3fffffff>
+class UndirectedGraph : public TopologicalGraph<T_DIST, MAX_DIST>
 {
 public:
     // get a symmetrical adjMat
@@ -169,8 +172,8 @@ public:
     ~UndirectedGraph();
 };
 
-
-class DirectedGraph : public TopologicalGraph
+template <typename T_DIST = unsigned, T_DIST MAX_DIST = 0x3fffffff>
+class DirectedGraph : public TopologicalGraph<T_DIST, MAX_DIST>
 {
 public:
     // get a asymmetrical adjMat
