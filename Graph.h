@@ -35,7 +35,7 @@ public:
 
 protected:
     Graph( unsigned vn ) :vertexNum( vn ) {}
-    ~Graph() {}
+    virtual ~Graph( ) {}
 };
 
 
@@ -67,15 +67,15 @@ private:
     PointList pointList;
 };
 
-
+export
 template <typename T_DIST = unsigned, T_DIST MAX_DIST = 0x3fffffff>
 class TopologicalGraph : public Graph
 {
 public:
     // the distance or weight on edges
     typedef std::set<int> VertexSet;
-    //typedef T_DIST Distance;
-    typedef unsigned Distance;
+    typedef T_DIST Distance;
+    //typedef unsigned Distance;
     struct Arc
     {
         class CmpClass
@@ -142,7 +142,7 @@ public:
 
 protected:
     TopologicalGraph( unsigned vertexNumber, int minVertexIndex );
-    virtual ~TopologicalGraph();
+    ~TopologicalGraph();
 
 
     // essential elements ( must be initialized in constructor )
@@ -161,6 +161,7 @@ private:
     const DistSeqTable& getDistSeqTableByInsertSort();
 };
 
+export
 template <typename T_DIST = unsigned, T_DIST MAX_DIST = 0x3fffffff>
 class UndirectedGraph : public TopologicalGraph<T_DIST, MAX_DIST>
 {
@@ -172,6 +173,7 @@ public:
     ~UndirectedGraph();
 };
 
+export
 template <typename T_DIST = unsigned, T_DIST MAX_DIST = 0x3fffffff>
 class DirectedGraph : public TopologicalGraph<T_DIST, MAX_DIST>
 {

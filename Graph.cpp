@@ -22,7 +22,7 @@ TopologicalGraph<T_DIST, MAX_DIST>::~TopologicalGraph( )
 }
 
 template <typename T_DIST, T_DIST MAX_DIST>
-int TopologicalGraph<T_DIST, MAX_DIST>::findVertexWithinRadius( int start, TopologicalGraph::Distance radius ) const
+int TopologicalGraph<T_DIST, MAX_DIST>::findVertexWithinRadius( int start, typename TopologicalGraph<T_DIST, MAX_DIST>::Distance radius ) const
 {
     RandSelect rs( 1 );
     int vertex;
@@ -40,7 +40,7 @@ int TopologicalGraph<T_DIST, MAX_DIST>::findVertexWithinRadius( int start, Topol
 }
 
 template <typename T_DIST, T_DIST MAX_DIST>
-int TopologicalGraph<T_DIST, MAX_DIST>::findVertexNumWithinRadius( int start, TopologicalGraph::Distance radius ) const
+int TopologicalGraph<T_DIST, MAX_DIST>::findVertexNumWithinRadius( int start, typename TopologicalGraph<T_DIST, MAX_DIST>::Distance radius ) const
 {
     int i = minVertexIndex;
     for (; i <= maxVertexIndex; i++) {
@@ -53,7 +53,7 @@ int TopologicalGraph<T_DIST, MAX_DIST>::findVertexNumWithinRadius( int start, To
 }
 
 template <typename T_DIST, T_DIST MAX_DIST>
-const TopologicalGraph<T_DIST, MAX_DIST>::DistanceMatrix& TopologicalGraph<T_DIST, MAX_DIST>::getShortestPath( )
+const typename TopologicalGraph<T_DIST, MAX_DIST>::DistanceMatrix& TopologicalGraph<T_DIST, MAX_DIST>::getShortestPath( )
 {
     if (!shortestDistSolved) {
         getShortestPathByFloyd();   /// put your own specified algorithm here
@@ -66,7 +66,7 @@ const TopologicalGraph<T_DIST, MAX_DIST>::DistanceMatrix& TopologicalGraph<T_DIS
 }
 
 template <typename T_DIST, T_DIST MAX_DIST>
-const TopologicalGraph<T_DIST, MAX_DIST>::DistSeqTable& TopologicalGraph<T_DIST, MAX_DIST>::getDistSeqTable( )
+const typename TopologicalGraph<T_DIST, MAX_DIST>::DistSeqTable& TopologicalGraph<T_DIST, MAX_DIST>::getDistSeqTable( )
 {
     if (!distSeqSolved) {
         getShortestPath();  // prerequisite  
@@ -112,7 +112,7 @@ void TopologicalGraph<T_DIST, MAX_DIST>::printShortestDist( ostream &os ) const
 
 
 template <typename T_DIST, T_DIST MAX_DIST>
-const TopologicalGraph<T_DIST, MAX_DIST>::DistanceMatrix& TopologicalGraph<T_DIST, MAX_DIST>::getShortestPathByDijkstra()
+const typename TopologicalGraph<T_DIST, MAX_DIST>::DistanceMatrix& TopologicalGraph<T_DIST, MAX_DIST>::getShortestPathByDijkstra()
 {
     enum VertexState { IN_SET, OUT_OF_SET };
 
@@ -151,7 +151,7 @@ const TopologicalGraph<T_DIST, MAX_DIST>::DistanceMatrix& TopologicalGraph<T_DIS
 }
 
 template <typename T_DIST, T_DIST MAX_DIST>
-const TopologicalGraph<T_DIST, MAX_DIST>::DistanceMatrix& TopologicalGraph<T_DIST, MAX_DIST>::getShortestPathByFloyd()
+const typename TopologicalGraph<T_DIST, MAX_DIST>::DistanceMatrix& TopologicalGraph<T_DIST, MAX_DIST>::getShortestPathByFloyd()
 {
     shortestDist = adjMat;
 
@@ -170,7 +170,7 @@ const TopologicalGraph<T_DIST, MAX_DIST>::DistanceMatrix& TopologicalGraph<T_DIS
 }
 
 template <typename T_DIST, T_DIST MAX_DIST>
-const TopologicalGraph<T_DIST, MAX_DIST>::DistSeqTable& TopologicalGraph<T_DIST, MAX_DIST>::getDistSeqTableBySTLsort()
+const typename TopologicalGraph<T_DIST, MAX_DIST>::DistSeqTable& TopologicalGraph<T_DIST, MAX_DIST>::getDistSeqTableBySTLsort()
 {
     class DistCmp
     {
@@ -205,7 +205,7 @@ const TopologicalGraph<T_DIST, MAX_DIST>::DistSeqTable& TopologicalGraph<T_DIST,
 }
 
 template <typename T_DIST, T_DIST MAX_DIST>
-const TopologicalGraph<T_DIST, MAX_DIST>::DistSeqTable& TopologicalGraph<T_DIST, MAX_DIST>::getDistSeqTableByInsertSort()
+const typename TopologicalGraph<T_DIST, MAX_DIST>::DistSeqTable& TopologicalGraph<T_DIST, MAX_DIST>::getDistSeqTableByInsertSort()
 {
     // init distSeq
     vector<int> seq( vertexAllocNum );
