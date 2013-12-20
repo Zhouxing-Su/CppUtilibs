@@ -26,6 +26,8 @@ return 0;
 #include <algorithm>
 #include <iostream>
 #include <iomanip>
+#include <cmath>
+#include <limits>
 #include "RandSelect.h"
 
 class Graph
@@ -68,14 +70,14 @@ private:
 };
 
 export
-template <typename T_DIST = unsigned, T_DIST MAX_DIST = 0x3fffffff>
+template <typename T_DIST = unsigned>
 class TopologicalGraph : public Graph
 {
 public:
     // the distance or weight on edges
     typedef std::set<int> VertexSet;
     typedef T_DIST Distance;
-    //typedef unsigned Distance;
+
     struct Arc
     {
         class CmpClass
@@ -106,8 +108,8 @@ public:
     typedef std::vector< std::vector<int> > DistSeqTable;
 
 
-    static const Distance MAX_DISTANCE = MAX_DIST;
-    static const Distance MIN_DISTANCE = 0;
+    static const Distance MAX_DISTANCE;
+    static const Distance MIN_DISTANCE;
     static const int DEFAULT_MIN_VERTEX_INDEX = 1;
 
 
@@ -162,8 +164,8 @@ private:
 };
 
 export
-template <typename T_DIST = unsigned, T_DIST MAX_DIST = 0x3fffffff>
-class UndirectedGraph : public TopologicalGraph<T_DIST, MAX_DIST>
+template <typename T_DIST = unsigned>
+class UndirectedGraph : public TopologicalGraph<T_DIST>
 {
 public:
     // get a symmetrical adjMat
@@ -174,14 +176,21 @@ public:
 };
 
 export
-template <typename T_DIST = unsigned, T_DIST MAX_DIST = 0x3fffffff>
-class DirectedGraph : public TopologicalGraph<T_DIST, MAX_DIST>
+template <typename T_DIST = unsigned>
+class DirectedGraph : public TopologicalGraph<T_DIST>
 {
 public:
     // get a asymmetrical adjMat
     DirectedGraph( const ArcList &arcList, unsigned vertexNumber, int minVertexIndex = DEFAULT_MIN_VERTEX_INDEX );
     ~DirectedGraph();
 };
+
+
+template <typename T_DIST>
+const typename TopologicalGraph<T_DIST>::Distance TopologicalGraph<T_DIST>::MAX_DISTANCE = (numeric_limits<T_DIST>::max( ) / 2);
+
+template <typename T_DIST>
+const typename TopologicalGraph<T_DIST>::Distance TopologicalGraph<T_DIST>::MIN_DISTANCE = 0;
 
 
 #endif
