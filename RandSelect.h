@@ -2,36 +2,6 @@
 *   usage : call isSelected() method N times to randomly select 1 out of N elements with equiprobability.
 *           this class is usefull when you can find out how many elements are there before enumerating them all,
 *           you will not need to hold all posible selections and use (rand() % N) to select one by using this class.
-
-(example code)
-====================================================================
-#include <iostream>
-#include "RandSelect.h"
-
-using namespace std;
-
-int main( int argc, char **argv )
-{
-int result = 0;
-
-RandSelect rs;
-for (int i = 0; i < 10; i++) {
-if (rs.isSelected()) {
-result = i;
-}
-cout << result << endl;
-
-rs.reset(2);    // select 1 out of 11 elements (0-9 and the last selected number)
-for (int i = 0; i < 10; i++) {
-if (rs.isSelected()) {
-result = i;
-}
-cout << result << endl;
-}
-
-return 0;
-}
-====================================================================
 */
 
 #ifndef RAND_SELECT_H

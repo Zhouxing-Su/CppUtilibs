@@ -51,24 +51,24 @@ void Timer::recordAndPrint( LogLevel level, const std::string &msg, std::ostream
 {
     clock_t lastTime = timestamps.back().time;
     record( level, msg );
-    os << "\n\t[duration: " << ((timestamps.back().time - lastTime) / 1000.0) << "s]\n";
-    os << "\n[time: " << ((timestamps.back().time - timestamps.front().time) / 1000.0) << "s] " << timestamps.back().msg << endl;
+    os << "\n\t[duration: " << ((timestamps.back().time - lastTime) / static_cast<double>(CLOCKS_PER_SEC)) << "s]\n";
+    os << "\n[time: " << ((timestamps.back().time - timestamps.front().time) / static_cast<double>(CLOCKS_PER_SEC)) << "s] " << timestamps.back().msg << endl;
 }
 
 void Timer::printAll( ostream &os ) const
 {
     for (vector<TimeStamp>::const_iterator iter = (timestamps.begin() + 1); iter != timestamps.end(); iter++) {
-        os << "\n\t[duration: " << ((iter->time - (iter - 1)->time) / 1000.0) << "s]\n";
-        os << "\n[time: " << ((iter->time - timestamps.front().time) / 1000.0) << "s] " << (iter->msg) << endl;
+        os << "\n\t[duration: " << ((iter->time - (iter - 1)->time) / static_cast<double>(CLOCKS_PER_SEC)) << "s]\n";
+        os << "\n[time: " << ((iter->time - timestamps.front().time) / static_cast<double>(CLOCKS_PER_SEC)) << "s] " << (iter->msg) << endl;
     }
 }
 
 double Timer::getDuration() const
 {
-    return ((timestamps.back().time - timestamps.front().time) / 1000.0);
+    return ((timestamps.back().time - timestamps.front().time) / static_cast<double>(CLOCKS_PER_SEC));
 }
 
 double Timer::getDuration( int start, int end ) const
 {
-    return ((timestamps[end].time - timestamps[start].time) / 1000.0);
+    return ((timestamps[end].time - timestamps[start].time) / static_cast<double>(CLOCKS_PER_SEC));
 }

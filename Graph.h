@@ -1,18 +1,6 @@
 /**
-*   usage:
-
-(example code)
-====================================================================
-#include <iostream>
-#include "Graph.h"
-
-using namespace std;
-
-int main( int argc, char **argv )
-{
-return 0;
-}
-====================================================================
+*   usage : template for Geometrical Graph and Topological Graph.
+*           some basic related operation on graph is implemented.
 */
 
 #ifndef GRAPH_H
@@ -36,7 +24,7 @@ public:
     const unsigned vertexNum;
 
 protected:
-    Graph( unsigned vn ) :vertexNum( vn ) {}
+    Graph( unsigned vn ) : vertexNum( vn ) {}
     ~Graph() {}
 };
 
@@ -50,7 +38,7 @@ public:
     {
     public:
         Point() {}
-        Point( Coord cx, Coord cy ) :x( cx ), y( cy ) {}
+        Point( Coord cx, Coord cy ) : x( cx ), y( cy ) {}
 
         Coord x;
         Coord y;
@@ -131,6 +119,7 @@ public:
     }
 
     // find a vertex whose distance to start is shorter the radius randomly
+    // return -1 if can not find any one
     int findVertexWithinRadius( int start, Distance radius ) const;
     // find the number of vertices whose distance to start is shorter the radius
     // this number can be used to get all vertices within radius by distSeq
@@ -168,7 +157,8 @@ class UndirectedGraph : public TopologicalGraph<T_DIST>
 public:
     // get a symmetrical adjMat
     UndirectedGraph( const ArcList &arcList, unsigned vertexNumber, int minVertexIndex = DEFAULT_MIN_VERTEX_INDEX );
-    // automatically generate the shortestDist
+    // making T_DIST double is recommanded, or the distances will got precision loss
+    // ( the shortestDist will be generated automatically )
     UndirectedGraph( const GeometricalGraph& gg );
     ~UndirectedGraph();
 };
@@ -190,7 +180,6 @@ public:
 
 
 
-using namespace std;
 
 // GeometricalGraph =======================
 
@@ -224,7 +213,7 @@ template <typename T_DIST>
 int TopologicalGraph<T_DIST>::findVertexWithinRadius( int start, typename TopologicalGraph::Distance radius ) const
 {
     RandSelect rs( 1 );
-    int vertex;
+    int vertex = -1;
     for (int i = minVertexIndex; i <= maxVertexIndex; i++) {
         if (distance( start, nthClosestVertex( start, i ) ) < radius) {
             if (rs.isSelected()) {
@@ -290,7 +279,7 @@ void TopologicalGraph<T_DIST>::printDistSeqTable( std::ostream &os ) const
 }
 
 template <typename T_DIST>
-void TopologicalGraph<T_DIST>::printShortestDist( ostream &os ) const
+void TopologicalGraph<T_DIST>::printShortestDist( std::ostream &os ) const
 {
     for (int i = minVertexIndex; i <= maxVertexIndex; i++) {
         for (int j = minVertexIndex; j < maxVertexIndex; j++) {

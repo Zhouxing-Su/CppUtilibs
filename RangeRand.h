@@ -1,23 +1,5 @@
 /**
 *   usage:  create function object which can generate random integers between [lowerBound,upperBound].
-
-(example code)
-====================================================================
-#include <iostream>
-#include "RangeRand.h"
-
-using namespace std;
-
-int main( int argc, char **argv )
-{
-RangeRand r( 1, 10 );
-
-for (int i = 0; i < 20; i++) {
-cout << r() << endl;
-}
-return 0;
-}
-====================================================================
 */
 
 #ifndef RANGERAND_H

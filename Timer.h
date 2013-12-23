@@ -1,35 +1,6 @@
 /**
-*   usage:  record time in millisecond and record the related information into a vector.
-
-(example code)
-====================================================================
-#include <iostream>
-#include "Timer.h"
-
-using namespace std;
-
-void A() {}   // some procedure written by you.
-void B() {}   // some procedure written by you.
-
-int main( int argc, char **argv )
-{
-cout << Timer::getLocalTime() << endl;
-
-Timer timer;
-
-timer.record( Timer::INFO, string( "A start" ) );
-A();    // some procedure writen by you.
-timer.record( Timer::INFO, string( "A end" ) );
-timer.printAll( cout );
-
-timer.reset();
-timer.recordAndPrint( Timer::INFO, string( "B start" ), cout );
-B();
-timer.recordAndPrint( Timer::INFO, string( "B end" ), cout );
-
-return 0;
-}
-====================================================================
+*   usage : 1. record time in millisecond and record the related information into a vector.
+*           2. get current date and time.
 */
 
 #ifndef TIMER_H

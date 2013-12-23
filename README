@@ -1,0 +1,16 @@
+CPPutilibs
+==========
+some utility classes written by cpp.
+
+==========
+check the related header file to get the usage of the classes.
+check "Tester.cpp" for code example for using each class.
+
+==========
+Graph :
+
+RandSelect :
+
+RangeRand :
+
+Timer :
