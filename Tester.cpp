@@ -5,15 +5,33 @@ using namespace std;
 
 int main( int argc, char *argv[] )
 {
-    testTimer();
-    testRangeRand();
-    testRandSelect();
-    testGraph();
+    testDouble();
+    //testTimer();
+    //testRangeRand();
+    //testRandSelect();
+    //testGraph();
 
     return 0;
 }
 
 
+
+void testDouble()
+{
+    Double d( 10.000001 );
+    Double d1( 10 );
+    double d2( 10 );
+    double dd( 9.999999 );
+
+    d1 + d2;
+    d2 + d1;
+    d + d1;
+    cout << (d1 == d) << ',' << (d == d1) << endl;
+    cout << (d1 == d2) << ',' << (d2 == d1) << endl;
+    cout << (d == d2) << ',' << (d2 == d) << endl;
+    cout << (dd == d2) << ',' << (d2 == dd) << endl;
+    cout << &d << endl;
+}
 
 void testTimer()
 {
@@ -88,8 +106,8 @@ void testGraph()
     ug.printDistSeqTable( cout );
 
     int vertex = ug.nthClosestVertex( vrr(), vrr() );
-    vertex = ug.findVertexWithinRadius( vrr( ), coordRange );
-    int vnum = ug.findVertexNumWithinRadius( vrr( ), coordRange );
+    vertex = ug.findVertexWithinRadius( vrr(), coordRange );
+    int vnum = ug.findVertexNumWithinRadius( vrr(), coordRange );
     TopologicalGraph<double>::Distance dd = ug.distance( vrr(), vrr() );
 
 

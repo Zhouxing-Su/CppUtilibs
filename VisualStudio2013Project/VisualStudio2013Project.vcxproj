@@ -76,6 +76,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="..\Double.h" />
     <ClInclude Include="..\Graph.h" />
     <ClInclude Include="..\RandSelect.h" />
     <ClInclude Include="..\RangeRand.h" />
@@ -87,6 +88,7 @@
     <None Include="..\README" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\Double.cpp" />
     <ClCompile Include="..\RandSelect.cpp" />
     <ClCompile Include="..\RangeRand.cpp" />
     <ClCompile Include="..\Tester.cpp" />
