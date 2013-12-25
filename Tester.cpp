@@ -23,9 +23,9 @@ void testDouble()
     double d2( 10 );
     double dd( 9.999999 );
 
-    d1 + d2;
-    d2 + d1;
-    d + d1;
+    cout << d1 + d2 << endl;
+    cout << d2 + d1 << endl;
+    cout << d + d1 << endl;
     cout << (d1 == d) << ',' << (d == d1) << endl;
     cout << (d1 == d2) << ',' << (d2 == d1) << endl;
     cout << (d == d2) << ',' << (d2 == d) << endl;

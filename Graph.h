@@ -187,7 +187,7 @@ public:
 // TopologicalGraph =======================
 
 template <typename T_DIST>
-const typename TopologicalGraph<T_DIST>::Distance TopologicalGraph<T_DIST>::MAX_DISTANCE = (numeric_limits<T_DIST>::max() / 2);
+const typename TopologicalGraph<T_DIST>::Distance TopologicalGraph<T_DIST>::MAX_DISTANCE = (numeric_limits<T_DIST>::max() / static_cast<T_DIST>(2));
 
 template <typename T_DIST>
 const typename TopologicalGraph<T_DIST>::Distance TopologicalGraph<T_DIST>::MIN_DISTANCE = 0;
