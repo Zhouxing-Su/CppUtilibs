@@ -16,6 +16,7 @@
 #include <iomanip>
 #include <cmath>
 #include <limits>
+#include <typeinfo>
 #include "RandSelect.h"
 
 class Graph
@@ -98,6 +99,7 @@ public:
     static const Distance MAX_DISTANCE;
     static const Distance MIN_DISTANCE;
     static const int DEFAULT_MIN_VERTEX_INDEX = 1;
+    static const int MULTIPLICATION = 10000;
 
 
     const int minVertexIndex;
@@ -129,6 +131,10 @@ public:
     void printShortestDist( std::ostream &os ) const;
     const DistSeqTable& getDistSeqTable();
     void printDistSeqTable( std::ostream &os ) const;
+    bool multiplied() const
+    {
+        return isMultiplied;
+    }
 
 protected:
     TopologicalGraph( unsigned vertexNumber, int minVertexIndex );
@@ -143,6 +149,7 @@ protected:
     DistSeqTable distSeq;           // use elements within [minVertexIndex,maxVertexIndex]
     bool shortestDistSolved;
     bool distSeqSolved;
+    bool isMultiplied;
 
 private:
     const DistanceMatrix& getShortestPathByDijkstra();
@@ -196,7 +203,7 @@ const typename TopologicalGraph<T_DIST>::Distance TopologicalGraph<T_DIST>::MIN_
 
 template <typename T_DIST>
 TopologicalGraph<T_DIST>::TopologicalGraph( unsigned vn, int mvi )
-: Graph( vn ), minVertexIndex( mvi ), maxVertexIndex( vn + mvi - 1 ), vertexAllocNum( vn + mvi ),
+: Graph( vn ), minVertexIndex( mvi ), maxVertexIndex( vn + mvi - 1 ), vertexAllocNum( vn + mvi ), isMultiplied(false),
 adjMat( vn + mvi, vector<Distance>( vn + mvi, MAX_DISTANCE ) ), shortestDistSolved( false ), distSeqSolved( false )
 {
     for (int i = minVertexIndex; i <= maxVertexIndex; i++) {
@@ -441,14 +448,27 @@ template <typename T_DIST>
 UndirectedGraph<T_DIST>::UndirectedGraph( const GeometricalGraph &gg )
 : TopologicalGraph( gg.vertexNum, 0 )
 {
-    // calculate distance between each pair of points
-    for (unsigned i = 0; i < gg.vertexNum; i++) {
-        for (unsigned j = 0; j < i; j++) {
-            GeometricalGraph::Coord dx = gg.point( i ).x - gg.point( j ).x;
-            GeometricalGraph::Coord dy = gg.point( i ).y - gg.point( j ).y;
-            adjMat[i][j] = adjMat[j][i] = sqrt( dx*dx + dy*dy );
+    if (typeid(T_DIST) == typeid(unsigned)) {
+        isMultiplied = true;
+        // calculate distance between each pair of points
+        for (unsigned i = 0; i < gg.vertexNum; i++) {
+            for (unsigned j = 0; j < i; j++) {
+                GeometricalGraph::Coord dx = gg.point( i ).x - gg.point( j ).x;
+                GeometricalGraph::Coord dy = gg.point( i ).y - gg.point( j ).y;
+                adjMat[i][j] = adjMat[j][i] = MULTIPLICATION * sqrt( dx*dx + dy*dy );
+            }
+            adjMat[i][i] = 0;
         }
-        adjMat[i][i] = 0;
+    } else {
+        // calculate distance between each pair of points
+        for (unsigned i = 0; i < gg.vertexNum; i++) {
+            for (unsigned j = 0; j < i; j++) {
+                GeometricalGraph::Coord dx = gg.point( i ).x - gg.point( j ).x;
+                GeometricalGraph::Coord dy = gg.point( i ).y - gg.point( j ).y;
+                adjMat[i][j] = adjMat[j][i] = sqrt( dx*dx + dy*dy );
+            }
+            adjMat[i][i] = 0;
+        }
     }
     shortestDist = adjMat;
     shortestDistSolved = true;
