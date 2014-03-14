@@ -37,6 +37,7 @@ public:
 
     // static methods ===================
     static std::string getLocalTime();
+    static std::string getLocalTimeNO();    // with numbers only
 
     // member methods ===================
     Timer();    // get the start time

@@ -194,7 +194,7 @@ public:
 // TopologicalGraph =======================
 
 template <typename T_DIST>
-const typename TopologicalGraph<T_DIST>::Distance TopologicalGraph<T_DIST>::MAX_DISTANCE = (numeric_limits<T_DIST>::max() / static_cast<T_DIST>(2));
+const typename TopologicalGraph<T_DIST>::Distance TopologicalGraph<T_DIST>::MAX_DISTANCE = (std::numeric_limits<T_DIST>::max() / static_cast<T_DIST>(2));
 
 template <typename T_DIST>
 const typename TopologicalGraph<T_DIST>::Distance TopologicalGraph<T_DIST>::MIN_DISTANCE = 0;
@@ -204,7 +204,7 @@ const typename TopologicalGraph<T_DIST>::Distance TopologicalGraph<T_DIST>::MIN_
 template <typename T_DIST>
 TopologicalGraph<T_DIST>::TopologicalGraph( unsigned vn, int mvi )
 : Graph( vn ), minVertexIndex( mvi ), maxVertexIndex( vn + mvi - 1 ), vertexAllocNum( vn + mvi ), isMultiplied(false),
-adjMat( vn + mvi, vector<Distance>( vn + mvi, MAX_DISTANCE ) ), shortestDistSolved( false ), distSeqSolved( false )
+adjMat( vn + mvi, std::vector<Distance>( vn + mvi, MAX_DISTANCE ) ), shortestDistSolved( false ), distSeqSolved( false )
 {
     for (int i = minVertexIndex; i <= maxVertexIndex; i++) {
         adjMat[i][i] = 0;
@@ -316,7 +316,7 @@ const typename TopologicalGraph<T_DIST>::DistanceMatrix& TopologicalGraph<T_DIST
     // find the shortest path start from each vertex
     for (int startVertex = minVertexIndex; startVertex <= maxVertexIndex; startVertex++) {
         // create an array of flag to record whether a vertex is in the final set
-        vector<VertexState> vertexState( vertexAllocNum, VertexState::OUT_OF_SET );
+        std::vector<VertexState> vertexState( vertexAllocNum, VertexState::OUT_OF_SET );
         vertexState[startVertex] = VertexState::IN_SET;
         // loop (vertexNum-1) times to add every vertex into the final set
         for (int k = minVertexIndex; k < maxVertexIndex; k++) {
@@ -384,7 +384,7 @@ const typename TopologicalGraph<T_DIST>::DistSeqTable& TopologicalGraph<T_DIST>:
     };
 
     // init distSeq
-    vector<int> seq( vertexAllocNum );
+    std::vector<int> seq( vertexAllocNum );
     for (int i = minVertexIndex; i <= maxVertexIndex; i++) {
         seq[i] = i;
     }
@@ -403,7 +403,7 @@ template <typename T_DIST>
 const typename TopologicalGraph<T_DIST>::DistSeqTable& TopologicalGraph<T_DIST>::getDistSeqTableByInsertSort()
 {
     // init distSeq
-    vector<int> seq( vertexAllocNum );
+    std::vector<int> seq( vertexAllocNum );
     for (int i = minVertexIndex; i <= maxVertexIndex; i++) {
         seq[i] = i;
     }

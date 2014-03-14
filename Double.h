@@ -1,5 +1,5 @@
 /**
-*   usage : wrap the double to overcome the problems in comparison due to precision loss.
+*   usage : [deprecated] wrap the double to overcome the problems in comparison due to precision loss.
 *           you can set the error by accessing the static member 'error'.
 */
 
@@ -22,8 +22,8 @@ public:
     Double& operator=(double d) { value = d; return *this; }
     Double& operator+=(double d) { value += d; return *this; }
     Double& operator-=(double d) { value -= d; return *this; }
-    Double& operator*=(double d) { value *= value; return *this; }
-    Double& operator/=(double d) { value /= value; return *this; }
+    Double& operator*=(double d) { value *= d; return *this; }
+    Double& operator/=(double d) { value /= d; return *this; }
     Double& operator++() { ++value; return *this; }
     Double& operator--() { --value; return *this; }
     Double operator++(int) { return Double( value++ ); }
