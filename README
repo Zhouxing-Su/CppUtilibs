@@ -19,7 +19,9 @@ matrix representation, ajacent table representation
 
 [ RandSelect ] :
 
+
 [ RangeRand ] :
+
 
 [ Timer ] :
 
@@ -27,11 +29,16 @@ matrix representation, ajacent table representation
 CLASS LIST ( IN THE PLAN )
 ==============================
 [ Trie ] :
+dictionary tree
 
 [ SuffixTree ] :
 
+
 [ AVLTree ] :
+
 
 [ RedBlackTree ] :
 
+
 [ RationalNubmer ] :
+record numbers without accuracy loss

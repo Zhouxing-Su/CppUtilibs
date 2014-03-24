@@ -99,7 +99,7 @@ public:
     static const Distance MAX_DISTANCE;
     static const Distance MIN_DISTANCE;
     static const int DEFAULT_MIN_VERTEX_INDEX = 1;
-    static const int MULTIPLICATION = 10000;
+    static const Distance MULTIPLICATION = 10000;
 
 
     const int minVertexIndex;
@@ -110,7 +110,7 @@ public:
     // get the shortest distance between start and end
     Distance distance( int start, int end ) const
     {
-        return shortestDist[start][end];
+        return (isMultiplied ? (shortestDist[start][end] / MULTIPLICATION) : shortestDist[start][end]);
     }
 
     // get the Nth closest vertex from start
@@ -131,10 +131,6 @@ public:
     void printShortestDist( std::ostream &os ) const;
     const DistSeqTable& getDistSeqTable();
     void printDistSeqTable( std::ostream &os ) const;
-    bool multiplied() const
-    {
-        return isMultiplied;
-    }
 
 protected:
     TopologicalGraph( unsigned vertexNumber, int minVertexIndex );
@@ -203,7 +199,7 @@ const typename TopologicalGraph<T_DIST>::Distance TopologicalGraph<T_DIST>::MIN_
 
 template <typename T_DIST>
 TopologicalGraph<T_DIST>::TopologicalGraph( unsigned vn, int mvi )
-: Graph( vn ), minVertexIndex( mvi ), maxVertexIndex( vn + mvi - 1 ), vertexAllocNum( vn + mvi ), isMultiplied(false),
+: Graph( vn ), minVertexIndex( mvi ), maxVertexIndex( vn + mvi - 1 ), vertexAllocNum( vn + mvi ), isMultiplied( false ),
 adjMat( vn + mvi, std::vector<Distance>( vn + mvi, MAX_DISTANCE ) ), shortestDistSolved( false ), distSeqSolved( false )
 {
     for (int i = minVertexIndex; i <= maxVertexIndex; i++) {
