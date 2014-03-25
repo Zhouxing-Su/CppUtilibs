@@ -11,7 +11,9 @@
 #include <cstdlib>
 #include <ctime>
 
-class RandSelect
+#include "Random.h"
+
+class RandSelect : Random
 {
 public:
     // sometimes the first element is pre-selected with the posibility of 1,
@@ -29,8 +31,6 @@ public:
 
 private:
     int count;
-
-    static int seed;    // this is used for calling srand() only once and should not be used elsewhere !
 };
 
 

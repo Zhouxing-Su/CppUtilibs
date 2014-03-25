@@ -5,10 +5,10 @@ using namespace std;
 
 int main( int argc, char *argv[] )
 {
-    testDouble();
+    //testDouble();
     //testTimer();
-    //testRangeRand();
-    //testRandSelect();
+    testRangeRand();
+    testRandSelect();
     //testGraph();
 
     return 0;

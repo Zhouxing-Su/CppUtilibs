@@ -99,7 +99,7 @@ public:
     static const Distance MAX_DISTANCE;
     static const Distance MIN_DISTANCE;
     static const int DEFAULT_MIN_VERTEX_INDEX = 1;
-    static const Distance MULTIPLICATION = 10000;
+    static const int MULTIPLICATION = 10000;
 
 
     const int minVertexIndex;

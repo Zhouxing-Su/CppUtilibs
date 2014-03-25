@@ -9,7 +9,9 @@
 #include <cstdlib>
 #include <ctime>
 
-class RangeRand
+#include "Random.h"
+
+class RangeRand : Random
 {
 public:
     // type definitions ===================
@@ -30,7 +32,7 @@ public:
     int operator() ();
 
 private:
-    static int seed;    // this is used for calling srand() only once and should not be used elsewhere !
+
 };
 
 
