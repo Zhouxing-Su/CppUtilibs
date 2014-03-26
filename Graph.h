@@ -1,6 +1,9 @@
 /**
 *   usage : template for Geometrical Graph and Topological Graph.
 *           some basic related operation on graph is implemented.
+*
+*   note :  the template parameter T_DIST should be a class or type that has 
+*           compare operators , assignment operators and arithmatic operators.
 */
 
 #ifndef GRAPH_H
@@ -444,7 +447,7 @@ template <typename T_DIST>
 UndirectedGraph<T_DIST>::UndirectedGraph( const GeometricalGraph &gg )
 : TopologicalGraph( gg.vertexNum, 0 )
 {
-    if (typeid(T_DIST) == typeid(unsigned)) {
+    if (sizeof(T_DIST) <= sizeof(int) && typeid(T_DIST) != typeid(float)) { // for all integer type
         isMultiplied = true;
         // calculate distance between each pair of points
         for (unsigned i = 0; i < gg.vertexNum; i++) {
@@ -455,7 +458,7 @@ UndirectedGraph<T_DIST>::UndirectedGraph( const GeometricalGraph &gg )
             }
             adjMat[i][i] = 0;
         }
-    } else {
+    } else {    // for all types being able to represent rational numbers
         // calculate distance between each pair of points
         for (unsigned i = 0; i < gg.vertexNum; i++) {
             for (unsigned j = 0; j < i; j++) {
