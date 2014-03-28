@@ -74,7 +74,7 @@ void Timer::printAll( ostream &os ) const
     }
 }
 
-double Timer::getDuration() const
+double Timer::getTotalDuration() const
 {
     return ((timestamps.back().time - timestamps.front().time) / static_cast<double>(CLOCKS_PER_SEC));
 }

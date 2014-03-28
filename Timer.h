@@ -46,13 +46,14 @@ public:
     // clear all records and reset the start time
     void reset();
     // record current time and a message for the related event
-    void record( LogLevel level = LogLevel::INFO, const std::string &msg = std::string( ) );
+    void record( LogLevel level = LogLevel::INFO, const std::string &msg = std::string() );
     // call record() and print the record just inserted
     void recordAndPrint( LogLevel level, const std::string &msg, std::ostream &os );
     // print all record
     void printAll( std::ostream &os ) const;
-    // get duration
-    double getDuration() const;
+    // get duration from the first record to the last
+    double getTotalDuration() const;
+    // get duration from the record indexed start to end
     double getDuration( int start, int end ) const;
 
 private:
