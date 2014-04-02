@@ -2,7 +2,7 @@
 *   usage : template for Geometrical Graph and Topological Graph.
 *           some basic related operation on graph is implemented.
 *
-*   note :  the template parameter T_DIST should be a class or type that has 
+*   note :  the template parameter T_DIST should be a class or type that has
 *           compare operators , assignment operators and arithmatic operators.
 */
 
@@ -102,7 +102,6 @@ public:
     static const Distance MAX_DISTANCE;
     static const Distance MIN_DISTANCE;
     static const int DEFAULT_MIN_VERTEX_INDEX = 1;
-    static const int MULTIPLICATION = 10000;
 
 
     const int minVertexIndex;
@@ -113,7 +112,7 @@ public:
     // get the shortest distance between start and end
     Distance distance( int start, int end ) const
     {
-        return (isMultiplied ? (shortestDist[start][end] / MULTIPLICATION) : shortestDist[start][end]);
+        return shortestDist[start][end];
     }
 
     // get the Nth closest vertex from start
@@ -148,7 +147,6 @@ protected:
     DistSeqTable distSeq;           // use elements within [minVertexIndex,maxVertexIndex]
     bool shortestDistSolved;
     bool distSeqSolved;
-    bool isMultiplied;
 
 private:
     const DistanceMatrix& getShortestPathByDijkstra();
@@ -157,16 +155,33 @@ private:
     const DistSeqTable& getDistSeqTableByInsertSort();
 };
 
-template <typename T_DIST = unsigned>
+// DIST_MULTIPLICATION is used for improving the accuracy of distances
+template <typename T_DIST = unsigned, int DIST_MULTIPLICATION = 1000>
 class UndirectedGraph : public TopologicalGraph<T_DIST>
 {
 public:
+    static const int DistMultiplication = DIST_MULTIPLICATION;
+
+    bool isMultiplied() const
+    {
+        return multiplied;
+    }
+
+    // get the shortest distance between start and end without multiplication
+    Distance realDistance( int start, int end ) const
+    {
+        return (isMultiplied() ? (shortestDist[start][end] / DIST_MULTIPLICATION) : shortestDist[start][end]);
+    }
+
     // get a symmetrical adjMat
     UndirectedGraph( const ArcList &arcList, unsigned vertexNumber, int minVertexIndex = DEFAULT_MIN_VERTEX_INDEX );
     // making T_DIST double is recommanded, or the distances will got precision loss
     // ( the shortestDist will be generated automatically )
     UndirectedGraph( const GeometricalGraph& gg );
     ~UndirectedGraph();
+
+private:
+    bool multiplied;
 };
 
 template <typename T_DIST = unsigned>
@@ -202,7 +217,7 @@ const typename TopologicalGraph<T_DIST>::Distance TopologicalGraph<T_DIST>::MIN_
 
 template <typename T_DIST>
 TopologicalGraph<T_DIST>::TopologicalGraph( unsigned vn, int mvi )
-: Graph( vn ), minVertexIndex( mvi ), maxVertexIndex( vn + mvi - 1 ), vertexAllocNum( vn + mvi ), isMultiplied( false ),
+: Graph( vn ), minVertexIndex( mvi ), maxVertexIndex( vn + mvi - 1 ), vertexAllocNum( vn + mvi ),
 adjMat( vn + mvi, std::vector<Distance>( vn + mvi, MAX_DISTANCE ) ), shortestDistSolved( false ), distSeqSolved( false )
 {
     for (int i = minVertexIndex; i <= maxVertexIndex; i++) {
@@ -433,9 +448,9 @@ const typename TopologicalGraph<T_DIST>::DistSeqTable& TopologicalGraph<T_DIST>:
 
 
 // UndirectedGraph =======================
-template <typename T_DIST>
-UndirectedGraph<T_DIST>::UndirectedGraph( const ArcList &arcList, unsigned vn, int mvi )
-: TopologicalGraph( vn, mvi )
+template <typename T_DIST, int DIST_MULTIPLICATION>
+UndirectedGraph<T_DIST, DIST_MULTIPLICATION>::UndirectedGraph( const ArcList &arcList, unsigned vn, int mvi )
+: TopologicalGraph( vn, mvi ), multiplied( false )
 {
     for (ArcList::const_iterator iter = arcList.begin(); iter != arcList.end(); iter++) {
         adjMat[iter->startVertex][iter->endVertex] = iter->dist;
@@ -443,18 +458,18 @@ UndirectedGraph<T_DIST>::UndirectedGraph( const ArcList &arcList, unsigned vn, i
     }
 }
 
-template <typename T_DIST>
-UndirectedGraph<T_DIST>::UndirectedGraph( const GeometricalGraph &gg )
-: TopologicalGraph( gg.vertexNum, 0 )
+template <typename T_DIST, int DIST_MULTIPLICATION>
+UndirectedGraph<T_DIST, DIST_MULTIPLICATION>::UndirectedGraph( const GeometricalGraph &gg )
+: TopologicalGraph( gg.vertexNum, 0 ), multiplied( false )
 {
     if (sizeof(T_DIST) <= sizeof(int) && typeid(T_DIST) != typeid(float)) { // for all integer type
-        isMultiplied = true;
+        multiplied = true;
         // calculate distance between each pair of points
         for (unsigned i = 0; i < gg.vertexNum; i++) {
             for (unsigned j = 0; j < i; j++) {
                 GeometricalGraph::Coord dx = gg.point( i ).x - gg.point( j ).x;
                 GeometricalGraph::Coord dy = gg.point( i ).y - gg.point( j ).y;
-                adjMat[i][j] = adjMat[j][i] = MULTIPLICATION * sqrt( dx*dx + dy*dy );
+                adjMat[i][j] = adjMat[j][i] = static_cast<T_DIST>(DIST_MULTIPLICATION * sqrt( dx*dx + dy*dy ));
             }
             adjMat[i][i] = 0;
         }
@@ -464,7 +479,7 @@ UndirectedGraph<T_DIST>::UndirectedGraph( const GeometricalGraph &gg )
             for (unsigned j = 0; j < i; j++) {
                 GeometricalGraph::Coord dx = gg.point( i ).x - gg.point( j ).x;
                 GeometricalGraph::Coord dy = gg.point( i ).y - gg.point( j ).y;
-                adjMat[i][j] = adjMat[j][i] = sqrt( dx*dx + dy*dy );
+                adjMat[i][j] = adjMat[j][i] = static_cast<T_DIST>(sqrt( dx*dx + dy*dy ));
             }
             adjMat[i][i] = 0;
         }
@@ -473,8 +488,8 @@ UndirectedGraph<T_DIST>::UndirectedGraph( const GeometricalGraph &gg )
     shortestDistSolved = true;
 }
 
-template <typename T_DIST>
-UndirectedGraph<T_DIST>::~UndirectedGraph()
+template <typename T_DIST, int DIST_MULTIPLICATION>
+UndirectedGraph<T_DIST, DIST_MULTIPLICATION>::~UndirectedGraph()
 {
 }
 
