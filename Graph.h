@@ -2,8 +2,9 @@
 *   usage : template for Geometrical Graph and Topological Graph.
 *           some basic related operation on graph is implemented.
 *
-*   note :  the template parameter T_DIST should be a class or type that has
-*           compare operators , assignment operators and arithmatic operators.
+*   note :  1.  the template parameter T_DIST should be a class or type that has
+*               compare operators , assignment operators and arithmatic operators.
+*           2.  methods that tagged with "NOT_FINISH" must not be used!
 */
 
 #ifndef GRAPH_H
@@ -36,8 +37,8 @@ protected:
 class GeometricalGraph : public Graph
 {
 public:
-    typedef double Distance;
     typedef double Coord;
+
     class Point
     {
     public:
@@ -56,6 +57,10 @@ public:
     {
         return pointList[i];
     }
+
+    // regularize both the x and y of points to [0.0, 1.0]
+    // (NOT_FINISH)
+    void regularize();
 
 private:
     PointList pointList;
@@ -203,7 +208,10 @@ public:
 
 
 // GeometricalGraph =======================
+void GeometricalGraph::regularize()
+{
 
+}
 
 // TopologicalGraph =======================
 
