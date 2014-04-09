@@ -50,7 +50,15 @@ public:
     };
     typedef std::vector<Point> PointList;
 
-    GeometricalGraph( const PointList &pl ) : Graph( pl.size() ), pointList( pl ) {}
+    class Rectangle
+    {
+    public:
+        Rectangle( Coord l, Coord r, Coord t, Coord b ) : left( l ), right( r ), top( t ), bottom( b ) {}
+
+        Coord left, right, top, bottom;
+    };
+
+    GeometricalGraph( const PointList &pl );
     ~GeometricalGraph() {}
 
     const Point& point( int i ) const
@@ -62,8 +70,22 @@ public:
     // (NOT_FINISH)
     void regularize();
 
+    // shift all points to where the left bottom of the minimal covering rectangle
+    // of all points is located at the given coordinate
+    void shift( Point newLeftBottom );
+
+    // stretch or shrink coordinate of all points
+    void stretch( double xAmplification, double yAmplification );
+    void stretch( double amplification );
+
+    // get the minimal covering rectangle of all points
+    const Rectangle& getMinCoverRect();
+
 private:
     PointList pointList;
+
+    Rectangle minCoverRect;
+    bool minCoverRectSolved;
 };
 
 
@@ -208,9 +230,71 @@ public:
 
 
 // GeometricalGraph =======================
+GeometricalGraph::GeometricalGraph( const PointList &pl ) : Graph( pl.size() ),
+pointList( pl ), minCoverRect( pl[0].x, pl[0].y, pl[0].x, pl[0].y ), minCoverRectSolved( false )
+{
+}
+
 void GeometricalGraph::regularize()
 {
+    shift( Point( 0, 0 ) );
 
+}
+
+void GeometricalGraph::shift( Point newLeftBottom )
+{
+    getMinCoverRect();
+
+    Coord shiftLeft = minCoverRect.left - newLeftBottom.x;
+    Coord shiftDown = minCoverRect.bottom - newLeftBottom.y;
+
+    // move each point
+    for (PointList::iterator iter = pointList.begin(); iter != pointList.end(); iter++) {
+        iter->x -= shiftLeft;
+        iter->y -= shiftDown;
+    }
+
+    // update minimal covering rectangle
+    minCoverRect.left -= shiftLeft;
+    minCoverRect.right -= shiftLeft;
+    minCoverRect.top -= shiftDown;
+    minCoverRect.bottom -= shiftDown;
+}
+
+
+void GeometricalGraph::stretch( double xAmp, double yAmp )
+{
+    for (PointList::iterator iter = pointList.begin(); iter != pointList.end(); iter++) {
+        iter->x *= xAmp;
+        iter->y *= yAmp;
+    }
+}
+
+void GeometricalGraph::stretch( double amp )
+{
+    stretch( amp, amp );
+}
+
+const GeometricalGraph::Rectangle& GeometricalGraph::getMinCoverRect()
+{
+    if (!minCoverRectSolved) {
+        for (PointList::const_iterator iter = pointList.begin(); iter != pointList.end(); iter++) {
+            if (iter->x < minCoverRect.left) {
+                minCoverRect.left = iter->x;
+            } else if (iter->x > minCoverRect.right) {
+                minCoverRect.right = iter->x;
+            }
+            if (iter->y < minCoverRect.bottom) {
+                minCoverRect.bottom = iter->y;
+            } else if (iter->y>minCoverRect.top) {
+                minCoverRect.top = iter->y;
+            }
+        }
+
+        minCoverRectSolved = true;
+    }
+
+    return minCoverRect;
 }
 
 // TopologicalGraph =======================
