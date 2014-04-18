@@ -78,6 +78,7 @@
   <ItemGroup>
     <ClInclude Include="..\Double.h" />
     <ClInclude Include="..\Graph.h" />
+    <ClInclude Include="..\Log.h" />
     <ClInclude Include="..\Random.h" />
     <ClInclude Include="..\RandSelect.h" />
     <ClInclude Include="..\RangeRand.h" />

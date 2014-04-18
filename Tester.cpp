@@ -7,9 +7,10 @@ int main( int argc, char *argv[] )
 {
     //testDouble();
     //testTimer();
-    testRangeRand();
-    testRandSelect();
+    //testRangeRand();
+    //testRandSelect();
     //testGraph();
+    testLog();
 
     return 0;
 }
@@ -140,4 +141,10 @@ void testGraph()
     vertex = dg.findVertexWithinRadius( alrr(), drr() );
     vnum = dg.findVertexNumWithinRadius( alrr(), drr() );
     TopologicalGraph<>::Distance ud = dg.distance( alrr(), alrr() );
+}
+
+void testLog()
+{
+    Log<>::write( true, "test log true\n" );
+    Log<>::write( false, "test log false\n" );
 }
