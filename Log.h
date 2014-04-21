@@ -17,11 +17,11 @@ template <class T_OUTPUT = const char *>
 class Log
 {
 public:
-    static void write( bool condition, const T_OUTPUT &outputObject, std::ostream &os = std::cout )
+    static void write( const T_OUTPUT &outputObject, bool condition = true, std::ostream &os = std::cout )
     {
         #ifndef NDEBUG
         if( condition ){
-            os << outputObject;
+            os << outputObject << std::endl;
         }
         #endif
     }

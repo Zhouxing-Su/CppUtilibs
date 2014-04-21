@@ -145,6 +145,6 @@ void testGraph()
 
 void testLog()
 {
-    Log<>::write( true, "test log true\n" );
-    Log<>::write( false, "test log false\n" );
+    Log<>::write( "test log true\n", true );
+    Log<>::write( "test log false\n", false );
 }
