@@ -147,4 +147,6 @@ void testLog()
 {
     Log<>::write( "test log true\n", true );
     Log<>::write( "test log false\n", false );
+    Debug<>::write( "test debug true\n", true );
+    Debug<>::write( "test debug false\n", false );
 }

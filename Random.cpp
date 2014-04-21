@@ -3,7 +3,11 @@
 using namespace std;
 
 // record the random seed in case of future usage
-const unsigned int Random::seed = static_cast<unsigned int>(time( NULL ));
+unsigned int Random::seed = setSeed();
 
-// use this initialization expression as static initial blocks in java
-const int Random::init = (srand( seed ), 0);
+unsigned int Random::setSeed( unsigned int s )
+{
+    seed = s;
+    srand( seed );
+    return seed;
+}

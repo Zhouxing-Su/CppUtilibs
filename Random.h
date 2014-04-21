@@ -14,10 +14,14 @@
 class Random
 {
 public:
-    const static unsigned int seed;
+    static unsigned int setSeed( unsigned int seed = static_cast<unsigned int>(time( NULL )) );
+    static unsigned int getSeed()
+    {
+        return seed;
+    }
 
 private:
-    const static int init;  // used to init the rand seed, its value makes no sense
+    static unsigned int seed;
 };
 
 #define RANDOM_H
