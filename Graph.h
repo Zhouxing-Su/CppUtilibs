@@ -89,7 +89,7 @@ private:
 };
 
 
-template <typename T_DIST = unsigned>
+template <typename T_DIST = int>
 class TopologicalGraph : public Graph
 {
 public:
@@ -183,7 +183,7 @@ private:
 };
 
 // DIST_MULTIPLICATION is used for improving the accuracy of distances
-template <typename T_DIST = unsigned, int DIST_MULTIPLICATION = 1000>
+template <typename T_DIST = int, int DIST_MULTIPLICATION = 1000>
 class UndirectedGraph : public TopologicalGraph<T_DIST>
 {
 public:
@@ -211,7 +211,7 @@ private:
     bool multiplied;
 };
 
-template <typename T_DIST = unsigned>
+template <typename T_DIST = int>
 class DirectedGraph : public TopologicalGraph<T_DIST>
 {
 public:
