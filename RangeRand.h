@@ -19,9 +19,6 @@ public:
     // static constant ===================
 
     // member constant ===================
-    const int lowerBound;
-    const int upperBound;
-    const int range;
 
     // static methods ===================
 
@@ -29,9 +26,12 @@ public:
     RangeRand( int lowerBound = 0, int upperBound = RAND_MAX );
     ~RangeRand();
 
-    int operator() ();
+    int operator()();
 
 private:
+    int lowerBound;
+    int upperBound;
+    int range;
 
 };
 
