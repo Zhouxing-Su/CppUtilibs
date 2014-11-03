@@ -18,13 +18,13 @@ class RandSelect : Random
 public:
     // sometimes the first element is pre-selected with the posibility of 1,
     // so you can pass 2 into the constructor in this condition to leave out a isSelected() call.
-    RandSelect(int startCount = 1);
+    RandSelect(int startCount = 2);
     ~RandSelect();
 
     // call this for each of the N elements (N times in total) to judge whether each of them is selected.
     bool isSelected();  // only the last returned "true" means that element is selected finally.
     // start a new selection on another N elements
-    void reset( int startCount = 1 )
+    void reset( int startCount = 2 )
     {
         count = startCount;
     }
