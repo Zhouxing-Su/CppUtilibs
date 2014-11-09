@@ -14,7 +14,7 @@
 class Random
 {
 public:
-    static unsigned int setSeed( unsigned int seed = static_cast<unsigned int>(time( NULL )) );
+    static unsigned int setSeed( unsigned int seed = static_cast<unsigned int>(time( NULL ) + clock()) );
     static unsigned int getSeed()
     {
         return seed;
