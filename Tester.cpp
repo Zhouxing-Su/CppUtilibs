@@ -10,7 +10,8 @@ int main( int argc, char *argv[] )
     //testRangeRand();
     //testRandSelect();
     //testGraph();
-    testLog();
+    //testLog();
+    testBidirectionIndex();
 
     return 0;
 }
@@ -149,4 +150,42 @@ void testLog()
     Log<>::write( "test log false\n", false );
     Debug<>::write( "test debug true\n", true );
     Debug<>::write( "test debug false\n", false );
+}
+
+void testBidirectionIndex()
+{
+    BidirectionIndex bi( 10 );
+    bi.insert( 5 );
+    bi.insert( 9 );
+    bi.insert( 2 );
+    bi.insert( 8 );
+    bi.insert( 0 );
+    bi.insert( 9 );
+    //bi.insert( 10 );      // fail and crack
+    bi.eraseElement( 2 );
+    //bi.eraseElement( 4 ); // fail and crack
+    bi.eraseIndex( 1 );
+    //bi.eraseIndex( 8 );   // fail and crack
+    int i = bi.indexOf( 5 );
+    cout << i << endl;
+    //cout << bi.indexOf( 3 ) << endl;      // fail and crack
+    //cout << bi.elementAt( 8 ) << endl;    // fail and crack
+    cout << bi.elementAt( i ) << endl;
+
+    BidirectionIndex_Safe bis( 10, 1 );
+    bis.insert( 5 );
+    bis.insert( 9 );
+    bis.insert( 2 );
+    bis.insert( 8 );
+    bis.insert( 0 );        // fail but won't crack
+    bis.insert( 10 );
+    bis.eraseElement( 2 );
+    bis.eraseElement( 4 );  // fail but won't crack
+    bis.eraseIndex( 1 );
+    bis.eraseIndex( 8 );    // fail but won't crack
+    int j = bis.indexOf( 5 );
+    cout << j << endl;
+    cout << bis.indexOf( 3 ) << endl;   // fail but won't crack
+    cout << bis.elementAt( 8 ) << endl; // fail but won't crack
+    cout << bis.elementAt( j ) << endl;
 }

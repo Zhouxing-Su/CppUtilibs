@@ -76,6 +76,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="..\BidirectionIndex.h" />
     <ClInclude Include="..\Double.h" />
     <ClInclude Include="..\Graph.h" />
     <ClInclude Include="..\Log.h" />
@@ -90,6 +91,7 @@
     <None Include="..\README" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\BidirectionIndex.cpp" />
     <ClCompile Include="..\Double.cpp" />
     <ClCompile Include="..\Random.cpp" />
     <ClCompile Include="..\RandSelect.cpp" />

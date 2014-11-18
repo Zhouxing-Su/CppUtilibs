@@ -19,6 +19,11 @@ DirectedGraph, UndirectedGraph
 matrix representation, ajacent table representation
 some basic algorithm on graph
 
+[ BidirectionIndex ] :
+this can be used as an O(1) implementation of set<int>  
+when the integers are aggregate in certain range. 
+for example, vertex set in topological graph.
+
 [ RandSelect ] :
 make it possible to pick one element out of a sequence of elements 
 by same probability without recording all of them.
