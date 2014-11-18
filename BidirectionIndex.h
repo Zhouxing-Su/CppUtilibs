@@ -19,11 +19,9 @@ class BidirectionIndex
 public:
     static const int INVALID_INDEX = -1;
 
-    const int min;              // min value of elements
-    const int max;              // max value of elements
-
     BidirectionIndex( int size, int minValue = 0 )
-        :min( minValue ), max( minValue + size - 1 ), elementNum( 0 ), element( size ), index( size, INVALID_INDEX )
+        :min( minValue ), max( minValue + size - 1 ), elementNum( 0 ),
+        element( size ), index( size, INVALID_INDEX )
     {
     }
 
@@ -57,7 +55,13 @@ public:
         index[e - min] = INVALID_INDEX;
     }
 
+    // return number of inserted elements
+    int size() const { return elementNum; }
+
 protected:
+    int min;              // min value of elements
+    int max;              // max value of elements
+
     int elementNum;             // current number of elements
     std::vector<int> element;   // elements value, elementNum valid elements in it
     std::vector<int> index;     // elements index in element
