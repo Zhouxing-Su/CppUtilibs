@@ -8,10 +8,12 @@ int main( int argc, char *argv[] )
     //testDouble();
     //testTimer();
     //testRangeRand();
-    //testRandSelect();
+    testRandSelect();
     //testGraph();
     //testLog();
-    testBidirectionIndex();
+    //testBidirectionIndex();
+
+    system( "pause" );
 
     return 0;
 }
@@ -80,6 +82,13 @@ void testRandSelect()
         }
         cout << result << endl;
     }
+
+    int o[10] = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
+    vector<int> r = RandSelect::randSelect( 10, 4 );
+    for (int i = 0; i < 4; i++) {
+        cout << o[r[i]] << ' ';
+    }
+    cout << endl;
 }
 
 void testGraph()
