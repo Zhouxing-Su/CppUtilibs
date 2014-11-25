@@ -2,8 +2,8 @@
 *   usage : bidirection index for fixed size of numbers.
 *           for each number i, there should be (i == element[index[i]])
 *
-*   note :  1.  "size" indicate the max or total valid element number,
-*               while "elementNum" indicate the current inserted elements.
+*   note :  1.  "capacity" indicate the max or total valid element number which is different from std container,
+*               while "elementNum" and "size" indicate the current inserted elements.
 *           2.  index is count from 0, while element is between [min, max].
 *           3.  BidirectionIndex will not consider index out of range error.
 */
@@ -19,9 +19,9 @@ class BidirectionIndex
 public:
     static const int INVALID_INDEX = -1;
 
-    BidirectionIndex( int size, int minValue = 0 )
-        :min( minValue ), max( minValue + size - 1 ), elementNum( 0 ),
-        element( size ), index( size, INVALID_INDEX )
+    BidirectionIndex( int capacity, int minValue = 0 )
+        :min( minValue ), max( minValue + capacity - 1 ), elementNum( 0 ),
+        element( capacity ), index( capacity, INVALID_INDEX )
     {
     }
 
@@ -57,6 +57,21 @@ public:
 
     // return number of inserted elements
     int size() const { return elementNum; }
+
+    // keep the capacity but invalidate all elements and reset the size
+    void clear()
+    {
+        index = std::vector<int>( element.size(), INVALID_INDEX );
+        elementNum = 0;
+    }
+    // this implementation may be more efficient for a sparse data set
+    //void clear()
+    //{
+    //    for (int i = 0; i < elementNum; i++) {
+    //        index[element[i] - min] = INVALID_INDEX;
+    //    }
+    //    elementNum = 0;
+    //}
 
 protected:
     int min;              // min value of elements
