@@ -17,7 +17,7 @@
 class BidirectionIndex
 {
 public:
-    static const int INVALID_INDEX = -1;
+    static const int INVALID_INDEX;
 
     BidirectionIndex( int capacity, int minValue = 0 )
         :min( minValue ), max( minValue + capacity - 1 ), elementNum( 0 ),

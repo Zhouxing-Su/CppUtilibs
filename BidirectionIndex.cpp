@@ -3,6 +3,8 @@
 using namespace std;
 
 
+const int BidirectionIndex::INVALID_INDEX = -1;
+
 void BidirectionIndex_Safe::insert( int e )
 {
     if (isElementValid( e ) && !isElementExist( e )) {
