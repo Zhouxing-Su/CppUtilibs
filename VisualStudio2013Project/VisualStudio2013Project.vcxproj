@@ -93,6 +93,7 @@
   <ItemGroup>
     <ClCompile Include="..\BidirectionIndex.cpp" />
     <ClCompile Include="..\Double.cpp" />
+    <ClCompile Include="..\Log.cpp" />
     <ClCompile Include="..\Random.cpp" />
     <ClCompile Include="..\RandSelect.cpp" />
     <ClCompile Include="..\RangeRand.cpp" />
