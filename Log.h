@@ -14,29 +14,35 @@
 #include <iostream>
 #include <fstream>
 #include <vector>
+#include <string>
 
 
 // in main(), call setHandler() to register the crash handler
 // in every block you want to trace, declare local variable by "Trace t(SomeInfo)" to trace.
-// explicitly call printStack() or automatically print stack after crash.
-template <class T_OUTPUT = const char *>
+// explicitly call dumpCallStack() or automatically save stack to crashdump.txt after crash.
 class Trace
 {
 public:
-    static void setHandler( std::terminate_handler uth = printStack )
+    static const std::string DUMP_FILE_NAME;
+
+    static void setHandler( std::terminate_handler uth = dumpCallStack )
     {
         userTerminateHandler = uth;
         set_terminate( terminateHandler );
     }
 
-    static void printStack( std::ostream &os = std::cout )
+    static void dumpCallStack()
     {
-        for (int i = callStack.size() - 1; i >= 0; i--) {
-            os << callStack[i] << std::endl;
+        std::ofstream ofs( DUMP_FILE_NAME );
+
+        for (size_t i = 0; i < callStack.size(); i--) {
+            ofs << callStack[i] << std::endl;
         }
+
+        ofs.close();
     }
 
-    Trace( const T_OUTPUT &info )
+    Trace( const std::string &info )
     {
         callStack.push_back( info );
     }
@@ -55,7 +61,7 @@ private:
 
     static std::terminate_handler userTerminateHandler;
 
-    static std::vector<T_OUTPUT> callStack;
+    static std::vector<const std::string> callStack;
 };
 
 

@@ -1,8 +1,9 @@
 #include "Log.h"
 
 
-template <class T_OUTPUT = const char *>
-static std::terminate_handler Trace::userTerminateHandler;
+const std::string Trace::DUMP_FILE_NAME = "crashdump.txt";
 
-template <class T_OUTPUT = const char *>
-static std::vector<T_OUTPUT> Trace::callStack;
+
+std::terminate_handler Trace::userTerminateHandler;
+
+std::vector<const std::string> Trace::callStack;
