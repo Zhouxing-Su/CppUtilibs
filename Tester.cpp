@@ -2,13 +2,13 @@
 
 using namespace std;
 
-
 int main( int argc, char *argv[] )
 {
     //testDouble();
     //testTimer();
+    testRandom();
     //testRangeRand();
-    testRandSelect();
+    //testRandSelect();
     //testGraph();
     //testLog();
     //testBidirectionIndex();
@@ -52,6 +52,25 @@ void testTimer()
     timer.recordAndPrint( Timer::INFO, string( "5000 loop start" ), cout );
     for (int i = 0; i < 5000; i++) {}    // some time-consuming procedure writen by you.
     timer.recordAndPrint( Timer::INFO, string( "5000 loop end" ), cout );
+}
+
+void testRandom()
+{
+    vector<int> v = { 1, 2, 3, 4, 5, 6, 7, 8 };
+
+    for (int i = 0; i < 20; i++) {
+        cout << Random::rand() << endl;
+    }
+
+    Random::setSeq( v );
+    for (int i = 0; i < 20; i++) {
+        cout << Random::rand() << endl;
+    }
+
+    Random::setSeed();
+    for (int i = 0; i < 20; i++) {
+        cout << Random::rand() << endl;
+    }
 }
 
 void testRangeRand()
@@ -155,6 +174,10 @@ void testGraph()
 
 void testLog()
 {
+
+
+
+
     Log<>::write( "test log true\n", true );
     Log<>::write( "test log false\n", false );
     Debug<>::write( "test debug true\n", true );

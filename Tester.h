@@ -14,6 +14,7 @@
 
 void testDouble();
 void testTimer();
+void testRandom();
 void testRangeRand();
 void testRandSelect();
 void testGraph();
