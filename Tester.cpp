@@ -262,6 +262,9 @@ void testConvert()
 
 void testInteger()
 {
-    Integer i;
-    toType<int>( toString( i ) );
+    Integer integer;
+    int i = toType<int>( toString( integer ) );
+    string s( "123" );
+
+    integer = integer + s;
 }

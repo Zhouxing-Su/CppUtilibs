@@ -1,7 +1,7 @@
 /**
 *   usage : 1.  define a big integer which is harder to be overflow than int.
 *
-*   note :  1.
+*   note :  1.  should constructor be explicit ?
 */
 
 #ifndef INTEGER_H
