@@ -23,30 +23,33 @@
 
 #include "Random.h"
 
-class RandSelect : Random
+
+namespace szx
 {
-public:
-    // reandomly select selectNum elements from totalNum elements and return their indices
-    static std::vector<int> randSelect( int totalNum, int selectNum );
-
-
-    // sometimes the first element is pre-selected with the posibility of 1,
-    // so you can pass 2 into the constructor in this condition to leave out a isSelected() call.
-    RandSelect( int startCount = 2 );
-    ~RandSelect();
-
-    // call this for each of the N elements (N times in total) to judge whether each of them is selected.
-    bool isSelected();  // only the last returned "true" means that element is selected finally.
-    // start a new selection on another N elements
-    void reset( int startCount = 2 )
+    class RandSelect : Random
     {
-        count = startCount;
-    }
+    public:
+        // reandomly select selectNum elements from totalNum elements and return their indices
+        static std::vector<int> randSelect( int totalNum, int selectNum );
 
-private:
-    int count;
-};
 
+        // sometimes the first element is pre-selected with the posibility of 1,
+        // so you can pass 2 into the constructor in this condition to leave out a isSelected() call.
+        RandSelect( int startCount = 2 );
+        ~RandSelect();
+
+        // call this for each of the N elements (N times in total) to judge whether each of them is selected.
+        bool isSelected();  // only the last returned "true" means that element is selected finally.
+        // start a new selection on another N elements
+        void reset( int startCount = 2 )
+        {
+            count = startCount;
+        }
+
+    private:
+        int count;
+    };
+}
 
 
 #endif

@@ -10,6 +10,35 @@
       <Platform>Win32</Platform>
     </ProjectConfiguration>
   </ItemGroup>
+  <ItemGroup>
+    <None Include="..\LICENSE" />
+    <None Include="..\README" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\algorithm\BidirectionIndex.cpp" />
+    <ClCompile Include="..\log\Timer.cpp" />
+    <ClCompile Include="..\log\Trace.cpp" />
+    <ClCompile Include="..\random\Random.cpp" />
+    <ClCompile Include="..\random\RandSelect.cpp" />
+    <ClCompile Include="..\random\RangeRand.cpp" />
+    <ClCompile Include="..\Tester.cpp" />
+    <ClCompile Include="..\type\Double.cpp" />
+    <ClCompile Include="..\type\Integer.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\algorithm\BidirectionIndex.h" />
+    <ClInclude Include="..\algorithm\Graph.h" />
+    <ClInclude Include="..\log\Log.h" />
+    <ClInclude Include="..\log\Timer.h" />
+    <ClInclude Include="..\log\Trace.h" />
+    <ClInclude Include="..\random\Random.h" />
+    <ClInclude Include="..\random\RandSelect.h" />
+    <ClInclude Include="..\random\RangeRand.h" />
+    <ClInclude Include="..\Tester.h" />
+    <ClInclude Include="..\type\Convert.h" />
+    <ClInclude Include="..\type\Double.h" />
+    <ClInclude Include="..\type\Integer.h" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{A5E43E9E-E25D-439C-B8D0-0BCCA6AEA3A5}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
@@ -75,31 +104,6 @@
       <OptimizeReferences>true</OptimizeReferences>
     </Link>
   </ItemDefinitionGroup>
-  <ItemGroup>
-    <ClInclude Include="..\BidirectionIndex.h" />
-    <ClInclude Include="..\Double.h" />
-    <ClInclude Include="..\Graph.h" />
-    <ClInclude Include="..\Log.h" />
-    <ClInclude Include="..\Random.h" />
-    <ClInclude Include="..\RandSelect.h" />
-    <ClInclude Include="..\RangeRand.h" />
-    <ClInclude Include="..\Tester.h" />
-    <ClInclude Include="..\Timer.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="..\LICENSE" />
-    <None Include="..\README" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="..\BidirectionIndex.cpp" />
-    <ClCompile Include="..\Double.cpp" />
-    <ClCompile Include="..\Log.cpp" />
-    <ClCompile Include="..\Random.cpp" />
-    <ClCompile Include="..\RandSelect.cpp" />
-    <ClCompile Include="..\RangeRand.cpp" />
-    <ClCompile Include="..\Tester.cpp" />
-    <ClCompile Include="..\Timer.cpp" />
-  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

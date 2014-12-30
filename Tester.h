@@ -1,25 +1,47 @@
+/**
+*   usage : 1.  test all units in CPPutilibs.
+*
+*   note :  1.
+*/
 
 #ifndef TESTER_H
 #define TESTER_H
 
-#include <iostream>
 
-#include "Double.h"
-#include "Timer.h"
-#include "RangeRand.h"
-#include "RandSelect.h"
-#include "Graph.h"
-#include "Log.h"
-#include "BidirectionIndex.h"
+#include <iostream>
+#include <sstream>
+
+#include "type/Double.h"
+#include "type/Convert.h"
+#include "type/Integer.h"
+
+#include "random/Random.h"
+#include "random/RangeRand.h"
+#include "random/RandSelect.h"
+
+#include "algorithm/Graph.h"
+#include "algorithm/BidirectionIndex.h"
+
+#include "log/Timer.h"
+#include "log/Log.h"
+#include "log/Trace.h"
+
 
 void testDouble();
-void testTimer();
+void testConvert();
+void testInteger();
+
 void testRandom();
 void testRangeRand();
 void testRandSelect();
+
 void testGraph();
-void testLog();
 void testBidirectionIndex();
+
+void testTimer();
+void testLog();
+void testTrace();
+void f( int i );    // for testTrace()
 
 
 #endif

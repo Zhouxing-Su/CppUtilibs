@@ -1,80 +1,84 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="Source Files">
-      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
-      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    <Filter Include="algorithm">
+      <UniqueIdentifier>{46301c86-409c-4926-8087-0635f737c839}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files">
-      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
-      <Extensions>h;hh;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    <Filter Include="random">
+      <UniqueIdentifier>{4a48adca-72a2-42dc-8b68-29ebbb569d21}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Resource Files">
-      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
-      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    <Filter Include="log">
+      <UniqueIdentifier>{0569e31c-40ac-4956-8722-43cf0046c161}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="type">
+      <UniqueIdentifier>{91e85157-cdb7-4795-beb1-6343eb75b63c}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\Graph.h">
-      <Filter>Header Files</Filter>
+    <None Include="..\README" />
+    <None Include="..\LICENSE" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\Tester.h" />
+    <ClInclude Include="..\algorithm\BidirectionIndex.h">
+      <Filter>algorithm</Filter>
     </ClInclude>
-    <ClInclude Include="..\RandSelect.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="..\algorithm\Graph.h">
+      <Filter>algorithm</Filter>
     </ClInclude>
-    <ClInclude Include="..\RangeRand.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="..\log\Trace.h">
+      <Filter>log</Filter>
     </ClInclude>
-    <ClInclude Include="..\Tester.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="..\log\Log.h">
+      <Filter>log</Filter>
     </ClInclude>
-    <ClInclude Include="..\Timer.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="..\log\Timer.h">
+      <Filter>log</Filter>
     </ClInclude>
-    <ClInclude Include="..\Double.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="..\random\Random.h">
+      <Filter>random</Filter>
     </ClInclude>
-    <ClInclude Include="..\Random.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="..\random\RandSelect.h">
+      <Filter>random</Filter>
     </ClInclude>
-    <ClInclude Include="..\Log.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="..\random\RangeRand.h">
+      <Filter>random</Filter>
     </ClInclude>
-    <ClInclude Include="..\BidirectionIndex.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="..\type\Convert.h">
+      <Filter>type</Filter>
+    </ClInclude>
+    <ClInclude Include="..\type\Double.h">
+      <Filter>type</Filter>
+    </ClInclude>
+    <ClInclude Include="..\type\Integer.h">
+      <Filter>type</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\LICENSE">
-      <Filter>Resource Files</Filter>
-    </None>
-    <None Include="..\README">
-      <Filter>Resource Files</Filter>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="..\RandSelect.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="..\Tester.cpp" />
+    <ClCompile Include="..\algorithm\BidirectionIndex.cpp">
+      <Filter>algorithm</Filter>
     </ClCompile>
-    <ClCompile Include="..\RangeRand.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="..\log\Trace.cpp">
+      <Filter>log</Filter>
     </ClCompile>
-    <ClCompile Include="..\Tester.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="..\log\Timer.cpp">
+      <Filter>log</Filter>
     </ClCompile>
-    <ClCompile Include="..\Timer.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="..\random\Random.cpp">
+      <Filter>random</Filter>
     </ClCompile>
-    <ClCompile Include="..\Double.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="..\random\RandSelect.cpp">
+      <Filter>random</Filter>
     </ClCompile>
-    <ClCompile Include="..\Random.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="..\random\RangeRand.cpp">
+      <Filter>random</Filter>
     </ClCompile>
-    <ClCompile Include="..\BidirectionIndex.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="..\type\Double.cpp">
+      <Filter>type</Filter>
     </ClCompile>
-    <ClCompile Include="..\Log.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="..\type\Integer.cpp">
+      <Filter>type</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

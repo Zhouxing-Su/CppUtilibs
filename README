@@ -1,5 +1,5 @@
 CPPutilibs
-	by Kirk
+	by R.E.M.
 ==============================
 some utility classes written by cpp.
 
@@ -14,34 +14,64 @@ check "Tester.cpp" for code example for using each class.
 
 CLASS LIST ( IMPLEMENTED )
 ==============================
-[ Graph ] :
-DirectedGraph, UndirectedGraph
-matrix representation, ajacent table representation
-some basic algorithm on graph
+[[ algorithm ]]
+	[ BidirectionIndex ] :
+	this can be used as an O(1) implementation of set<int>  
+	when the integers are aggregate in certain range. 
+	for example, vertex set in topological graph.
 
-[ BidirectionIndex ] :
-this can be used as an O(1) implementation of set<int>  
-when the integers are aggregate in certain range. 
-for example, vertex set in topological graph.
+	[ Graph ] :
+	Geometrical Graph/Topological Graph,
+	DirectedGraph/UndirectedGraph,
+	matrix representation/ajacent table representation,
+	some basic algorithm on graph.
 
-[ RandSelect ] :
-make it possible to pick one element out of a sequence of elements 
-by same probability without recording all of them.
 
-[ RangeRand ] :
-select a integer in a range by same probability 
+[[ log ]]
+	[ Timer ] :
+	record a series of timestamps.
 
-[ Timer ] :
-record a series of timestamps.
+	[ Log ] :
+	make it easy to show log when debuging and 
+	avoid too much log in release version.
 
-[Log] :
-make it easy to show log when debuging and 
-avoid too much log in release version.
+	[ Trace ] :
+	record program running state and dump call stack after crash.
+
+
+[[ random ]]
+	[ Random ] :
+	base class of all random number generators.
+	provide initialization interface by seed or sequence.
+
+	[ RandSelect ] :
+	make it possible to pick one element out of a sequence of elements 
+	by same probability without recording all of them.
+	it can also select a certain number of elements out of a vector randomly.
+
+	[ RangeRand ] :
+	select a integer in a range by same probability.
+
+
+[[ type ]]
+	[ Convert ] :
+	convert between std::string and other type.
+
+	[ Double ] :
+	encaptured fundamental type double.
+	make it easier to compare two floating point number by tolerate some error.
+
+	[ Integer ] :
+	a big integer.
+
+	[ Rational ] :
+	rational number without precision loss.
+	
 
 CLASS LIST ( IN THE PLAN )
 ==============================
 [ Trie ] :
-dictionary tree
+dictionary tree.
 
 [ SuffixTree ] :
 
@@ -53,4 +83,4 @@ dictionary tree
 
 
 [ RationalNubmer ] :
-record numbers without accuracy loss
+record rational numbers without accuracy loss.

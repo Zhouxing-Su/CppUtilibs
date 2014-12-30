@@ -1,24 +1,28 @@
 #include "Tester.h"
 
+
 using namespace std;
+using namespace szx;
+
 
 int main( int argc, char *argv[] )
 {
     //testDouble();
     //testTimer();
-    testRandom();
+    //testRandom();
     //testRangeRand();
     //testRandSelect();
     //testGraph();
     //testLog();
     //testBidirectionIndex();
+    //testConvert();
+    //testTrace();
+    testInteger();
 
     system( "pause" );
 
     return 0;
 }
-
-
 
 void testDouble()
 {
@@ -156,7 +160,7 @@ void testGraph()
         int endVertex;
         do {
             endVertex = alrr();
-        } while (endVertex != startVertex);
+        } while (endVertex == startVertex);
         arcList.push_back( TopologicalGraph<>::Arc( startVertex, endVertex, drr() ) );
     }
 
@@ -174,10 +178,6 @@ void testGraph()
 
 void testLog()
 {
-
-
-
-
     Log<>::write( "test log true\n", true );
     Log<>::write( "test log false\n", false );
     Debug<>::write( "test debug true\n", true );
@@ -220,4 +220,48 @@ void testBidirectionIndex()
     cout << bis.indexOf( 3 ) << endl;   // fail but won't crack
     cout << bis.elementAt( 8 ) << endl; // fail but won't crack
     cout << bis.elementAt( j ) << endl;
+}
+
+void testTrace()
+{
+    Trace::setHandler();
+    f( 6 );
+}
+
+void f( int i )
+{
+    Trace t( "f()" );
+    if (i != 22) {
+        Trace t( "if" );
+        f( i + 1 );
+    }
+
+    for (int k = 0; k < 222; k++) {
+        ostringstream oss;
+        oss << k;
+        Trace t( "for, k=" + oss.str() );
+        if (k == 46) {
+            Trace::dumpCallStack( cout );
+            *(int*)0 = 1;   // crash
+        }
+    }
+}
+
+void testConvert()
+{
+    cout << (std::numeric_limits<string>::max)() << endl;
+
+    string s( "54321" );
+    int i = toType<int>( s );
+    cout << "i=" << i << endl;
+
+    i += 12345;
+    s = toString( i );
+    cout << "s=" << s << endl;
+}
+
+void testInteger()
+{
+    Integer i;
+    toType<int>( toString( i ) );
 }
