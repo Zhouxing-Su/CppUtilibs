@@ -38,6 +38,7 @@
     <ClInclude Include="..\type\Convert.h" />
     <ClInclude Include="..\type\Double.h" />
     <ClInclude Include="..\type\Integer.h" />
+    <ClInclude Include="..\type\VectorMD.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{A5E43E9E-E25D-439C-B8D0-0BCCA6AEA3A5}</ProjectGuid>

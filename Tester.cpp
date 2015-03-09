@@ -18,6 +18,7 @@ int main( int argc, char *argv[] )
     //testConvert();
     //testTrace();
     testInteger();
+    //testVectorMD();
 
     system( "pause" );
 
@@ -267,4 +268,35 @@ void testInteger()
     string s( "123" );
 
     integer = integer + s;
+}
+
+void testVectorMD()
+{
+    // traditional multi-dimensional vector
+    vector< vector< vector<int> > > vvv(
+        4, vector< vector<int> >(
+        3, vector<int>(
+        2, 1 ) ) );
+
+    // new multi-dimensional vector
+    // with a traditional way of initialization
+    VectorMD<int, 3> v3d(
+        4, VectorMD<int, 2>(
+        3, VectorMD<int>(
+        2, 1 ) ) );
+
+    // new multi-dimensional vector
+    // with a new way of initialization
+    vector<int> s = { 3, 4, 5, 6 };
+    VectorMD<int, 4> v4d( s, 2 );
+
+    // new multi-dimensional vector
+    // with a new way of simpler format of initialization
+    VectorMD<int, 2> v2d( { 7, 8 }, 3 );
+
+    // VectorMD inherits all operations from std::vector
+    v4d[1][2][3][4] = 0;
+    *(v3d[0][1].begin()) = 1;
+    v2d.at( 5 ).push_back( 4 );
+    v4d.pop_back();
 }

@@ -66,6 +66,9 @@ CLASS LIST ( IMPLEMENTED )
 
 	[ Rational ] :
 	rational number without precision loss.
+
+	[ VectorMD ] :
+	simplify multi-dimensional vector representation.
 	
 
 CLASS LIST ( IN THE PLAN )

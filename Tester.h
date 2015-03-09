@@ -14,6 +14,7 @@
 #include "type/Double.h"
 #include "type/Convert.h"
 #include "type/Integer.h"
+#include "type/VectorMD.h"
 
 #include "random/Random.h"
 #include "random/RangeRand.h"
@@ -30,6 +31,7 @@
 void testDouble();
 void testConvert();
 void testInteger();
+void testVectorMD();
 
 void testRandom();
 void testRangeRand();

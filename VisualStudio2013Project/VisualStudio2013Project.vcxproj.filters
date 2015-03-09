@@ -53,6 +53,9 @@
     <ClInclude Include="..\type\Integer.h">
       <Filter>type</Filter>
     </ClInclude>
+    <ClInclude Include="..\type\VectorMD.h">
+      <Filter>type</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Tester.cpp" />
