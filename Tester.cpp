@@ -300,3 +300,9 @@ void testVectorMD()
     v2d.at( 5 ).push_back( 4 );
     v4d.pop_back();
 }
+
+void testDirectory()
+{
+    Directory::MakeSureDirExist( "a/b/c/d/e" );
+    Directory::MakeSureDirExist( "a/b/c/f/g/" );
+}

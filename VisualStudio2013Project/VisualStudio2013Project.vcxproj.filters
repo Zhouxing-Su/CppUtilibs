@@ -13,6 +13,9 @@
     <Filter Include="type">
       <UniqueIdentifier>{91e85157-cdb7-4795-beb1-6343eb75b63c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="filesystem">
+      <UniqueIdentifier>{f736882f-5de8-4d59-8578-e08a83d694dc}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\README" />
@@ -56,6 +59,9 @@
     <ClInclude Include="..\type\VectorMD.h">
       <Filter>type</Filter>
     </ClInclude>
+    <ClInclude Include="..\filesystem\Directory.h">
+      <Filter>filesystem</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Tester.cpp" />
@@ -82,6 +88,9 @@
     </ClCompile>
     <ClCompile Include="..\type\Integer.cpp">
       <Filter>type</Filter>
+    </ClCompile>
+    <ClCompile Include="..\filesystem\Directory.cpp">
+      <Filter>filesystem</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

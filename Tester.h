@@ -11,6 +11,8 @@
 #include <iostream>
 #include <sstream>
 
+#include "filesystem/Directory.h"
+
 #include "type/Double.h"
 #include "type/Convert.h"
 #include "type/Integer.h"
@@ -27,6 +29,8 @@
 #include "log/Log.h"
 #include "log/Trace.h"
 
+
+void testDirectory();
 
 void testDouble();
 void testConvert();

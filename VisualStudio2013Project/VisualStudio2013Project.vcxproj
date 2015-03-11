@@ -16,6 +16,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\algorithm\BidirectionIndex.cpp" />
+    <ClCompile Include="..\filesystem\Directory.cpp" />
     <ClCompile Include="..\log\Timer.cpp" />
     <ClCompile Include="..\log\Trace.cpp" />
     <ClCompile Include="..\random\Random.cpp" />
@@ -28,6 +29,7 @@
   <ItemGroup>
     <ClInclude Include="..\algorithm\BidirectionIndex.h" />
     <ClInclude Include="..\algorithm\Graph.h" />
+    <ClInclude Include="..\filesystem\Directory.h" />
     <ClInclude Include="..\log\Log.h" />
     <ClInclude Include="..\log\Timer.h" />
     <ClInclude Include="..\log\Trace.h" />

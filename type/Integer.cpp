@@ -1,12 +1,15 @@
 #include "Integer.h"
 
 
+using namespace std;
+
+
 namespace szx
 {
-    const int szx::Integer::RADIX = 10000;
+    const int Integer::RADIX = 10000;
 
 
-    szx::Integer::Integer( int i )
+    Integer::Integer( int i )
     {
 
     }
@@ -16,78 +19,137 @@ namespace szx
 
     }
 
-    Integer& szx::Integer::operator+=(const Integer& n)
+    Integer& Integer::operator+=(const Integer& n)
     {
 
+        return *this;
     }
 
-    Integer& szx::Integer::operator-=(const Integer& n)
+    Integer& Integer::operator-=(const Integer& n)
     {
 
+        return *this;
     }
 
-    Integer& szx::Integer::operator*=(const Integer& n)
+    Integer& Integer::operator*=(const Integer& n)
     {
 
+        return *this;
     }
 
-    Integer& szx::Integer::operator/=(const Integer& n)
+    Integer& Integer::operator/=(const Integer& n)
     {
 
+        return *this;
     }
 
-    Integer& szx::Integer::operator%=(const Integer &n)
+    Integer& Integer::operator%=(const Integer &n)
     {
 
+        return *this;
     }
 
-    Integer& szx::Integer::operator++()
+    Integer& Integer::operator++()
     {
 
+        return *this;
     }
 
-    Integer& szx::Integer::operator++(int)
+    Integer Integer::operator++(int)
     {
-
+        Integer i( *this );
+        ++(*this);
+        return i;
     }
 
-    Integer& szx::Integer::operator--()
+    Integer& Integer::operator--()
     {
 
+        return *this;
     }
 
-    Integer& szx::Integer::operator--(int)
+    Integer Integer::operator--(int)
     {
-
+        Integer i( *this );
+        --(*this);
+        return i;
     }
 
-    bool szx::Integer::operator==(const Integer &n)
+    bool Integer::operator==(const Integer &n)
     {
 
+        return true;
     }
 
-    bool szx::Integer::operator!=(const Integer &n)
+    bool Integer::operator!=(const Integer &n)
     {
 
+        return true;
     }
 
-    bool szx::Integer::operator<(const Integer &n)
+    bool Integer::operator<(const Integer &n)
     {
 
+        return true;
     }
 
-    bool szx::Integer::operator>(const Integer &n)
+    bool Integer::operator>(const Integer &n)
     {
 
+        return true;
     }
 
-    bool szx::Integer::operator<=(const Integer &n)
+    bool Integer::operator<=(const Integer &n)
     {
 
+        return true;
     }
 
-    bool szx::Integer::operator>=(const Integer &n)
+    bool Integer::operator>=(const Integer &n)
     {
 
+        return true;
+    }
+
+    Integer operator+(const Integer &l, const Integer &r)
+    {
+        Integer i( l );
+        return  (i += r);
+    }
+
+    Integer operator-(const Integer &l, const Integer &r)
+    {
+        Integer i( l );
+        return  (i -= r);
+    }
+
+    Integer operator*(const Integer &l, const Integer &r)
+    {
+        Integer i( l );
+        return  (i *= r);
+    }
+
+    Integer operator/(const Integer &l, const Integer &r)
+    {
+        Integer i( l );
+        return  (i /= r);
+    }
+
+    Integer operator%(const Integer &l, const Integer &r)
+    {
+        Integer i( l );
+        return  (i %= r);
+    }
+
+    istream& operator>>(std::istream &is, const Integer &i)
+    {
+
+        return is;
+    }
+
+    ostream& operator<<(std::ostream &os, const Integer &i)
+    {
+
+        return os;
     }
 }

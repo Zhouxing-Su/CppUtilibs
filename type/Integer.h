@@ -39,8 +39,8 @@ namespace szx
 
         Integer& operator++();
         Integer& operator--();
-        Integer& operator++(int);
-        Integer& operator--(int);
+        Integer operator++(int);
+        Integer operator--(int);
 
         // comparison operator
         bool operator==(const Integer &n);
@@ -57,7 +57,7 @@ namespace szx
         friend Integer operator/(const Integer &l, const Integer &r);
         friend Integer operator%(const Integer &l, const Integer &r);
 
-        // I/O and convertion
+        // I/O and conversion
         friend std::istream& operator>>(std::istream &is, const Integer &i);
         friend std::ostream& operator<<(std::ostream &os, const Integer &i);
 

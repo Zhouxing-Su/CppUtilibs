@@ -61,18 +61,23 @@ CLASS LIST ( IMPLEMENTED )
 	encaptured fundamental type double.
 	make it easier to compare two floating point number by tolerate some error.
 
-	[ Integer ] :
-	a big integer.
-
-	[ Rational ] :
-	rational number without precision loss.
-
 	[ VectorMD ] :
 	simplify multi-dimensional vector representation.
+
+
+[[ filesystem ]]
+	[ Directory ] :
+	portable directory operation.
 	
 
 CLASS LIST ( IN THE PLAN )
 ==============================
+[ Integer ] :
+a big integer.
+
+[ Rational ] :
+rational number without precision loss.
+
 [ Trie ] :
 dictionary tree.
 
