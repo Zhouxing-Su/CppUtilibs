@@ -6,8 +6,8 @@ using namespace std;
 
 namespace szx
 {
-    const std::string Directory::mkdir_unixshell( "mkdir" );
-    const std::string Directory::mkdir_win32cmd( "mkdir -p" );
+    const std::string Directory::mkdir_unixshell( "mkdir " );
+    const std::string Directory::mkdir_win32cmd( "mkdir -p " );
 
 
     void Directory::MakeSureDirExist( const std::string &dir )
