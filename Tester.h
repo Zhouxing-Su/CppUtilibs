@@ -10,6 +10,7 @@
 
 #include <iostream>
 #include <sstream>
+#include <algorithm>
 
 #include "filesystem/Directory.h"
 
@@ -24,6 +25,7 @@
 
 #include "algorithm/Graph.h"
 #include "algorithm/BidirectionIndex.h"
+#include "algorithm/Counter.h"
 
 #include "log/Timer.h"
 #include "log/Log.h"
@@ -43,6 +45,7 @@ void testRandSelect();
 
 void testGraph();
 void testBidirectionIndex();
+void testCounter();
 
 void testTimer();
 void testLog();

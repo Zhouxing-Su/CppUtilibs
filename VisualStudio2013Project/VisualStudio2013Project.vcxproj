@@ -28,6 +28,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\algorithm\BidirectionIndex.h" />
+    <ClInclude Include="..\algorithm\Counter.h" />
     <ClInclude Include="..\algorithm\Graph.h" />
     <ClInclude Include="..\filesystem\Directory.h" />
     <ClInclude Include="..\log\Log.h" />

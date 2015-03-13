@@ -62,6 +62,9 @@
     <ClInclude Include="..\filesystem\Directory.h">
       <Filter>filesystem</Filter>
     </ClInclude>
+    <ClInclude Include="..\algorithm\Counter.h">
+      <Filter>algorithm</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Tester.cpp" />

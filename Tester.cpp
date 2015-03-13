@@ -17,8 +17,10 @@ int main( int argc, char *argv[] )
     //testBidirectionIndex();
     //testConvert();
     //testTrace();
-    testInteger();
     //testVectorMD();
+    //testDirectory();
+    //testCounter();
+    testInteger();
 
     system( "pause" );
 
@@ -305,4 +307,14 @@ void testDirectory()
 {
     Directory::MakeSureDirExist( "a/b/c/d/e" );
     Directory::MakeSureDirExist( "a/b/c/f/g/" );
+}
+
+void testCounter()
+{
+    Counter<int> c;
+
+    vector<int> v( 5 );
+    generate( v.begin(), v.end(), c );
+
+    for_each( v.begin(), v.end(), []( int val ){ cout << val << endl; } );
 }
