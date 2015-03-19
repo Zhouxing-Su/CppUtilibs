@@ -19,15 +19,21 @@ namespace szx
     {
     public:
         typedef int Digit;
+        enum Sign { NEGATIVE = -1, ZERO = 0, POSITIVE = 1 };
 
 
-        static const int RADIX;
+        static const int DigitLen = 4;
+        static const int RADIX = 10000;
 
 
         Integer( int i = 0 );
         Integer( const std::string &s );
 
-        // meta infomation
+        // meta information
+        static Sign getSign( int i );
+        static Sign getSign( const std::string &s );
+
+        Sign getSign() const;
         int getDigitNum() const;
 
         // assignments operator
@@ -62,6 +68,7 @@ namespace szx
         friend std::ostream& operator<<(std::ostream &os, const Integer &i);
 
     private:
+        Sign sign;
         std::vector<Digit> digits;
     };
 }
