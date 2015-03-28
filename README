@@ -26,6 +26,12 @@ CLASS LIST ( IMPLEMENTED )
 	matrix representation/ajacent table representation,
 	some basic algorithm on graph.
 
+	[ Counter ] :
+	auto incremental function object.
+
+	[ SetOperation ] :
+	operation on set such as contain.
+
 
 [[ log ]]
 	[ Timer ] :
@@ -67,13 +73,16 @@ CLASS LIST ( IMPLEMENTED )
 
 [[ filesystem ]]
 	[ Directory ] :
-	portable directory operation.
+	portable directory operations.
+
+	[ File ] :
+	file operations.
 	
 
 CLASS LIST ( IN THE PLAN )
 ==============================
 [ Integer ] :
-a big integer.
+ integer without precision loss.
 
 [ Rational ] :
 rational number without precision loss.

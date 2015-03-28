@@ -65,6 +65,12 @@
     <ClInclude Include="..\algorithm\Counter.h">
       <Filter>algorithm</Filter>
     </ClInclude>
+    <ClInclude Include="..\filesystem\File.h">
+      <Filter>filesystem</Filter>
+    </ClInclude>
+    <ClInclude Include="..\algorithm\SetOperation.h">
+      <Filter>algorithm</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Tester.cpp" />
@@ -93,6 +99,9 @@
       <Filter>type</Filter>
     </ClCompile>
     <ClCompile Include="..\filesystem\Directory.cpp">
+      <Filter>filesystem</Filter>
+    </ClCompile>
+    <ClCompile Include="..\filesystem\File.cpp">
       <Filter>filesystem</Filter>
     </ClCompile>
   </ItemGroup>

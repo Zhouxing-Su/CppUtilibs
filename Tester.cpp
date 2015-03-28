@@ -20,6 +20,8 @@ int main( int argc, char *argv[] )
     //testVectorMD();
     //testDirectory();
     //testCounter();
+    //testSetOperation();
+    //testFile();
     testInteger();
 
     system( "pause" );
@@ -317,4 +319,40 @@ void testCounter()
     generate( v.begin(), v.end(), c );
 
     for_each( v.begin(), v.end(), []( int val ){ cout << val << endl; } );
+}
+
+void testFile()
+{
+    cout << File::getLastNoneEmptyLine( "../TestCases/FileTest1.txt" ) << endl;
+    cout << File::getLastNoneEmptyLine( "../TestCases/FileTest2.txt" ) << endl;
+    cout << File::getLastNoneEmptyLine( "../TestCases/FileTest3.txt" ) << endl;
+}
+
+void testSetOperation()
+{
+    char a = 'a';
+    set<char> cs = { 'b', 'n', 'm' };
+    string s1 = "asd";
+    char s2[] = "zxc";
+
+    char target = 'a';
+    cout << contain<char>( a, target ) << endl;
+    cout << contain( cs, target ) << endl;
+    cout << contain( s1, target ) << endl;
+    cout << contain( s2, target ) << endl;
+    cout << contain( "test", target ) << endl;
+
+    target = 'b';
+    cout << contain<char>( a, target ) << endl;
+    cout << contain( cs, target ) << endl;
+    cout << contain( s1, target ) << endl;
+    cout << contain( s2, target ) << endl;
+    cout << contain( "test", target ) << endl;
+
+    target = 'c';
+    cout << contain<char>( a, target ) << endl;
+    cout << contain( cs, target ) << endl;
+    cout << contain( s1, target ) << endl;
+    cout << contain( s2, target ) << endl;
+    cout << contain( "test", target ) << endl;
 }

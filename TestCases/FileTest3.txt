@@ -1,0 +1,2 @@
+Time, Instance, Algorithm, RandSeed, Duration, ObjValue, Solution
+2015-03-27 Fri 22:51:56,n021w4_2[history-week1.txt][WD-n021w4-4.txt]

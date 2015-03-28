@@ -13,6 +13,7 @@
 #include <algorithm>
 
 #include "filesystem/Directory.h"
+#include "filesystem/File.h"
 
 #include "type/Double.h"
 #include "type/Convert.h"
@@ -26,6 +27,7 @@
 #include "algorithm/Graph.h"
 #include "algorithm/BidirectionIndex.h"
 #include "algorithm/Counter.h"
+#include "algorithm/SetOperation.h"
 
 #include "log/Timer.h"
 #include "log/Log.h"
@@ -33,6 +35,7 @@
 
 
 void testDirectory();
+void testFile();
 
 void testDouble();
 void testConvert();
@@ -46,6 +49,7 @@ void testRandSelect();
 void testGraph();
 void testBidirectionIndex();
 void testCounter();
+void testSetOperation();
 
 void testTimer();
 void testLog();
