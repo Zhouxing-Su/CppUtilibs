@@ -83,8 +83,8 @@ namespace szx
         int seqPointer;
 
     private:    // forbid to be used
-        Random( const Random& r ) {}
-        Random& operator=(const Random& r) { return *this; }
+        Random( const Random& ) {}
+        Random& operator=(const Random&) { return *this; }
 
     };
 }

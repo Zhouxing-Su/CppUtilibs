@@ -5,7 +5,7 @@ using namespace std;
 using namespace szx;
 
 
-int main( int argc, char *argv[] )
+int main()
 {
     //testDouble();
     //testTimer();

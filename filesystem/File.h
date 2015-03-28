@@ -37,7 +37,7 @@ namespace szx
                     is.seekg( 0 );
                     break;
                 }
-                c = is.peek();
+                c = static_cast<char>(is.peek());
             } while (contain( charSet, c ) == isComplement);
 
             return is;
