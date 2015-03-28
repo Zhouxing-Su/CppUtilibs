@@ -28,7 +28,7 @@ namespace szx
 
     void Trace::dumpCallStack( ostream &dumpFile )
     {
-        for (size_t i = 0; i < callStack.size(); i++) {
+        for (size_t i = 0; i < callStack.size(); ++i) {
             dumpFile << '[' << setw( 3 ) << i << "] " << callStack[i] << std::endl;
         }
     }

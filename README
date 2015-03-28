@@ -35,6 +35,9 @@ CLASS LIST ( IMPLEMENTED )
 
 [[ log ]]
 	[ Timer ] :
+	provide interface to check if timeout in single thread procedure.
+
+	[ TimeStamp ] :
 	record a series of timestamps.
 
 	[ Log ] :

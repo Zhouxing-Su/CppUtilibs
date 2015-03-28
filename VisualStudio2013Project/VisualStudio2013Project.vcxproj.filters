@@ -35,9 +35,6 @@
     <ClInclude Include="..\log\Log.h">
       <Filter>log</Filter>
     </ClInclude>
-    <ClInclude Include="..\log\Timer.h">
-      <Filter>log</Filter>
-    </ClInclude>
     <ClInclude Include="..\random\Random.h">
       <Filter>random</Filter>
     </ClInclude>
@@ -71,6 +68,12 @@
     <ClInclude Include="..\algorithm\SetOperation.h">
       <Filter>algorithm</Filter>
     </ClInclude>
+    <ClInclude Include="..\log\TimeStamp.h">
+      <Filter>log</Filter>
+    </ClInclude>
+    <ClInclude Include="..\log\Timer.h">
+      <Filter>log</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Tester.cpp" />
@@ -78,9 +81,6 @@
       <Filter>algorithm</Filter>
     </ClCompile>
     <ClCompile Include="..\log\Trace.cpp">
-      <Filter>log</Filter>
-    </ClCompile>
-    <ClCompile Include="..\log\Timer.cpp">
       <Filter>log</Filter>
     </ClCompile>
     <ClCompile Include="..\random\Random.cpp">
@@ -103,6 +103,9 @@
     </ClCompile>
     <ClCompile Include="..\filesystem\File.cpp">
       <Filter>filesystem</Filter>
+    </ClCompile>
+    <ClCompile Include="..\log\TimeStamp.cpp">
+      <Filter>log</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

@@ -17,7 +17,7 @@ namespace szx
 
     bool RandSelect::isSelected()
     {
-        return ((rand() % (count++)) == 0);
+        return ((rand() % (++count)) == 0);
     }
 
     vector<int> RandSelect::randSelect( int totalNum, int selectNum )
@@ -25,7 +25,7 @@ namespace szx
         vector<int> rIndex( selectNum );
         vector<int> originIndex( totalNum );
 
-        for (int i = 0; i < totalNum; i++) {
+        for (int i = 0; i < totalNum; ++i) {
             originIndex[i] = i;
         }
 

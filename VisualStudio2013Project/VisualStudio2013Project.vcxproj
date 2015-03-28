@@ -18,7 +18,7 @@
     <ClCompile Include="..\algorithm\BidirectionIndex.cpp" />
     <ClCompile Include="..\filesystem\Directory.cpp" />
     <ClCompile Include="..\filesystem\File.cpp" />
-    <ClCompile Include="..\log\Timer.cpp" />
+    <ClCompile Include="..\log\TimeStamp.cpp" />
     <ClCompile Include="..\log\Trace.cpp" />
     <ClCompile Include="..\random\Random.cpp" />
     <ClCompile Include="..\random\RandSelect.cpp" />
@@ -36,6 +36,7 @@
     <ClInclude Include="..\filesystem\File.h" />
     <ClInclude Include="..\log\Log.h" />
     <ClInclude Include="..\log\Timer.h" />
+    <ClInclude Include="..\log\TimeStamp.h" />
     <ClInclude Include="..\log\Trace.h" />
     <ClInclude Include="..\random\Random.h" />
     <ClInclude Include="..\random\RandSelect.h" />
@@ -102,7 +103,7 @@
       <Optimization>MaxSpeed</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
-      <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;WIN32;NDEBUG;_CONSOLE;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>

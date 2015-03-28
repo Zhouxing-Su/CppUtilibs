@@ -22,6 +22,7 @@ int main()
     //testCounter();
     //testSetOperation();
     //testFile();
+    //testTimer();
     testInteger();
 
     system( "pause" );
@@ -46,38 +47,38 @@ void testDouble()
     cout << &d << endl;
 }
 
-void testTimer()
+void testTimeStamp()
 {
-    cout << Timer::getLocalTime() << endl;
+    cout << TimeStamp::getLocalTime() << endl;
 
-    Timer timer;
+    TimeStamp timeStamp;
 
-    timer.record( Timer::INFO, string( "1000 loop start" ) );
-    for (int i = 0; i < 1000; i++) {}    // some time-consuming procedure writen by you.
-    timer.record( Timer::INFO, string( "1000 loop end" ) );
-    timer.printAll( cout );
+    timeStamp.record( TimeStamp::INFO, string( "1000 loop start" ) );
+    for (int i = 0; i < 1000; ++i) {}    // some time-consuming procedure written by you.
+    timeStamp.record( TimeStamp::INFO, string( "1000 loop end" ) );
+    timeStamp.printAll( cout );
 
-    timer.reset();
-    timer.recordAndPrint( Timer::INFO, string( "5000 loop start" ), cout );
-    for (int i = 0; i < 5000; i++) {}    // some time-consuming procedure writen by you.
-    timer.recordAndPrint( Timer::INFO, string( "5000 loop end" ), cout );
+    timeStamp.reset();
+    timeStamp.recordAndPrint( TimeStamp::INFO, string( "5000 loop start" ), cout );
+    for (int i = 0; i < 5000; ++i) {}    // some time-consuming procedure written by you.
+    timeStamp.recordAndPrint( TimeStamp::INFO, string( "5000 loop end" ), cout );
 }
 
 void testRandom()
 {
     vector<int> v = { 1, 2, 3, 4, 5, 6, 7, 8 };
 
-    for (int i = 0; i < 20; i++) {
+    for (int i = 0; i < 20; ++i) {
         cout << Random::rand() << endl;
     }
 
     Random::setSeq( v );
-    for (int i = 0; i < 20; i++) {
+    for (int i = 0; i < 20; ++i) {
         cout << Random::rand() << endl;
     }
 
     Random::setSeed();
-    for (int i = 0; i < 20; i++) {
+    for (int i = 0; i < 20; ++i) {
         cout << Random::rand() << endl;
     }
 }
@@ -86,7 +87,7 @@ void testRangeRand()
 {
     RangeRand r( 1, 10 );
 
-    for (int i = 0; i < 20; i++) {
+    for (int i = 0; i < 20; ++i) {
         cout << r() << endl;
     }
 }
@@ -96,7 +97,7 @@ void testRandSelect()
     int result = 0;
 
     RandSelect rs;
-    for (int i = 0; i < 10; i++) {
+    for (int i = 0; i < 10; ++i) {
         if (rs.isSelected()) {
             result = i;
         }
@@ -104,7 +105,7 @@ void testRandSelect()
     cout << result << endl;
 
     rs.reset( 2 );    // select 1 out of 11 elements (0-9 and the last selected number)
-    for (int i = 0; i < 10; i++) {
+    for (int i = 0; i < 10; ++i) {
         if (rs.isSelected()) {
             result = i;
         }
@@ -113,7 +114,7 @@ void testRandSelect()
 
     int o[10] = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
     vector<int> r = RandSelect::randSelect( 10, 4 );
-    for (int i = 0; i < 4; i++) {
+    for (int i = 0; i < 4; ++i) {
         cout << o[r[i]] << ' ';
     }
     cout << endl;
@@ -129,7 +130,7 @@ void testGraph()
 
     // generate a pointList
     GeometricalGraph::PointList pointList;
-    for (int i = 0; i < pointNum; i++) {
+    for (int i = 0; i < pointNum; ++i) {
         pointList.push_back( GeometricalGraph::Point( plrr(), plrr() ) );
     }
 
@@ -160,7 +161,7 @@ void testGraph()
 
     // generate an arcList for an directed graph with unsigned distance randomly
     TopologicalGraph<>::ArcList arcList;
-    for (int i = 0; i < arcNum; i++) {
+    for (int i = 0; i < arcNum; ++i) {
         int startVertex = alrr();
         int endVertex;
         do {
@@ -241,7 +242,7 @@ void f( int i )
         f( i + 1 );
     }
 
-    for (int k = 0; k < 222; k++) {
+    for (int k = 0; k < 222; ++k) {
         ostringstream oss;
         oss << k;
         Trace t( "for, k=" + oss.str() );
@@ -355,4 +356,19 @@ void testSetOperation()
     cout << contain( s1, target ) << endl;
     cout << contain( s2, target ) << endl;
     cout << contain( "test", target ) << endl;
+}
+
+void testTimer()
+{
+    Timer t( 1000 );
+    long long i = 0;
+
+    for (; t.isTimeOut(); ++i) {
+        for (int j = 0; j < 1000000; ++j) {
+            i = j;
+        }
+        cout << t.restTime() << endl;
+    }
+
+    cout << i << endl;
 }

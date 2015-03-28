@@ -70,7 +70,7 @@ namespace szx
         // this implementation may be more efficient for a sparse data set
         //void clear()
         //{
-        //    for (int i = 0; i < elementNum; i++) {
+        //    for (int i = 0; i < elementNum; ++i) {
         //        index[element[i] - min] = INVALID_INDEX;
         //    }
         //    elementNum = 0;

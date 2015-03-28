@@ -30,6 +30,7 @@
 #include "algorithm/SetOperation.h"
 
 #include "log/Timer.h"
+#include "log/TimeStamp.h"
 #include "log/Log.h"
 #include "log/Trace.h"
 
@@ -51,6 +52,7 @@ void testBidirectionIndex();
 void testCounter();
 void testSetOperation();
 
+void testTimeStamp();
 void testTimer();
 void testLog();
 void testTrace();

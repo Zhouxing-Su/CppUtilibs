@@ -1,4 +1,4 @@
-#include "Timer.h"
+#include "TimeStamp.h"
 
 
 using namespace std;
@@ -6,21 +6,21 @@ using namespace std;
 
 namespace szx
 {
-    const char Timer::logLevelMsg[3][12] = { "[ERROR] ", "[WARNING] ", "[INFO] " };
+    const char TimeStamp::logLevelMsg[3][12] = { "[ERROR] ", "[WARNING] ", "[INFO] " };
 
-    Timer::TimeStamp::TimeStamp( std::clock_t t, const std::string &m )
+    TimeStamp::Stamp::Stamp( std::clock_t t, const std::string &m )
         : time( t ), msg( m )
     {
     }
 
-    Timer::TimeStamp::~TimeStamp()
+    TimeStamp::Stamp::~Stamp()
     {
     }
 
 
 
 
-    string Timer::getLocalTime()
+    string TimeStamp::getLocalTime()
     {
         char buf[64];
 
@@ -31,7 +31,7 @@ namespace szx
         return string( buf );
     }
 
-    string Timer::getLocalTimeNO()
+    string TimeStamp::getLocalTimeNO()
     {
         char buf[64];
 
@@ -42,27 +42,27 @@ namespace szx
         return string( buf );
     }
 
-    Timer::Timer() : timestamps( 1, TimeStamp( clock(), string() ) )
+    TimeStamp::TimeStamp() : timestamps( 1, Stamp( clock(), string() ) )
     {
     }
 
 
-    Timer::~Timer()
+    TimeStamp::~TimeStamp()
     {
     }
 
-    void Timer::reset()
+    void TimeStamp::reset()
     {
         timestamps.clear();
-        timestamps.push_back( TimeStamp( clock(), string() ) );
+        timestamps.push_back( Stamp( clock(), string() ) );
     }
 
-    void Timer::record( LogLevel level, const std::string &msg )
+    void TimeStamp::record( LogLevel level, const std::string &msg )
     {
-        timestamps.push_back( TimeStamp( clock(), (logLevelMsg[level] + msg) ) );
+        timestamps.push_back( Stamp( clock(), (logLevelMsg[level] + msg) ) );
     }
 
-    void Timer::recordAndPrint( LogLevel level, const std::string &msg, std::ostream &os )
+    void TimeStamp::recordAndPrint( LogLevel level, const std::string &msg, std::ostream &os )
     {
         clock_t lastTime = timestamps.back().time;
         record( level, msg );
@@ -70,20 +70,20 @@ namespace szx
         os << "\n[time: " << ((timestamps.back().time - timestamps.front().time) / static_cast<double>(CLOCKS_PER_SEC)) << "s] " << timestamps.back().msg << endl;
     }
 
-    void Timer::printAll( ostream &os ) const
+    void TimeStamp::printAll( ostream &os ) const
     {
-        for (vector<TimeStamp>::const_iterator iter = (timestamps.begin() + 1); iter != timestamps.end(); iter++) {
+        for (vector<Stamp>::const_iterator iter = (timestamps.begin() + 1); iter != timestamps.end(); iter++) {
             os << "\n\t[duration: " << ((iter->time - (iter - 1)->time) / static_cast<double>(CLOCKS_PER_SEC)) << "s]\n";
             os << "\n[time: " << ((iter->time - timestamps.front().time) / static_cast<double>(CLOCKS_PER_SEC)) << "s] " << (iter->msg) << endl;
         }
     }
 
-    double Timer::getTotalDuration() const
+    double TimeStamp::getTotalDuration() const
     {
         return ((timestamps.back().time - timestamps.front().time) / static_cast<double>(CLOCKS_PER_SEC));
     }
 
-    double Timer::getDuration( int start, int end ) const
+    double TimeStamp::getDuration( int start, int end ) const
     {
         return ((timestamps[end].time - timestamps[start].time) / static_cast<double>(CLOCKS_PER_SEC));
     }

@@ -313,7 +313,7 @@ namespace szx
         : Graph( vn ), MAX_DISTANCE( maxDist ), MIN_DISTANCE( minDist ), minVertexIndex( mvi ), maxVertexIndex( vn + mvi - 1 ), vertexAllocNum( vn + mvi ),
         adjMat( vn + mvi, std::vector<Distance>( vn + mvi, maxDist ) ), shortestDistSolved( false ), distSeqSolved( false )
     {
-        for (int i = minVertexIndex; i <= maxVertexIndex; i++) {
+        for (int i = minVertexIndex; i <= maxVertexIndex; ++i) {
             adjMat[i][i] = 0;
         }
     }
@@ -328,7 +328,7 @@ namespace szx
     {
         RandSelect rs( 1 );
         int vertex = -1;
-        for (int i = minVertexIndex; i <= maxVertexIndex; i++) {
+        for (int i = minVertexIndex; i <= maxVertexIndex; ++i) {
             if (distance( start, nthClosestVertex( start, i ) ) < radius) {
                 if (rs.isSelected()) {
                     vertex = nthClosestVertex( start, i );
@@ -345,7 +345,7 @@ namespace szx
     int TopologicalGraph<T_DIST>::findVertexNumWithinRadius( int start, typename TopologicalGraph::Distance radius ) const
     {
         int i = minVertexIndex;
-        for (; i <= maxVertexIndex; i++) {
+        for (; i <= maxVertexIndex; ++i) {
             if (distance( start, nthClosestVertex( start, i ) ) >= radius) {
                 break;
             }
@@ -384,8 +384,8 @@ namespace szx
     template <typename T_DIST>
     void TopologicalGraph<T_DIST>::printDistSeqTable( std::ostream &os ) const
     {
-        for (int i = minVertexIndex; i <= maxVertexIndex; i++) {
-            for (int j = minVertexIndex; j < maxVertexIndex; j++) {
+        for (int i = minVertexIndex; i <= maxVertexIndex; ++i) {
+            for (int j = minVertexIndex; j < maxVertexIndex; ++j) {
                 os << shortestDist[i][j] << ',';
             }
             os << shortestDist[i][maxVertexIndex] << '\n';
@@ -395,8 +395,8 @@ namespace szx
     template <typename T_DIST>
     void TopologicalGraph<T_DIST>::printShortestDist( std::ostream &os ) const
     {
-        for (int i = minVertexIndex; i <= maxVertexIndex; i++) {
-            for (int j = minVertexIndex; j < maxVertexIndex; j++) {
+        for (int i = minVertexIndex; i <= maxVertexIndex; ++i) {
+            for (int j = minVertexIndex; j < maxVertexIndex; ++j) {
                 if (shortestDist[i][j] == MAX_DISTANCE) {
                     os << "x,";
                 } else {
@@ -426,10 +426,10 @@ namespace szx
             std::vector<VertexState> vertexState( vertexAllocNum, VertexState::OUT_OF_SET );
             vertexState[startVertex] = VertexState::IN_SET;
             // loop (vertexNum-1) times to add every vertex into the final set
-            for (int k = minVertexIndex; k < maxVertexIndex; k++) {
+            for (int k = minVertexIndex; k < maxVertexIndex; ++k) {
                 int closestVertex = 0;    // vertex with index of 0 is not used, so the distance will always be MAX_DISTANCE
                 // find the closest vertex outside the final set
-                for (int i = minVertexIndex; i <= maxVertexIndex; i++) {
+                for (int i = minVertexIndex; i <= maxVertexIndex; ++i) {
                     if (vertexState[i] == VertexState::OUT_OF_SET &&
                         shortestDist[startVertex][i] < shortestDist[startVertex][closestVertex]) {
                         closestVertex = i;
@@ -438,7 +438,7 @@ namespace szx
                 // add it into the final set
                 vertexState[closestVertex] = VertexState::IN_SET;
                 // update current shortest path from start vertex to vertexs outside of the final set
-                for (int i = minVertexIndex; i <= maxVertexIndex; i++) {
+                for (int i = minVertexIndex; i <= maxVertexIndex; ++i) {
                     Distance newDist = shortestDist[startVertex][closestVertex] + shortestDist[closestVertex][i];
                     if (vertexState[i] == VertexState::OUT_OF_SET &&
                         newDist < shortestDist[startVertex][i]) {
@@ -457,9 +457,9 @@ namespace szx
     {
         shortestDist = adjMat;
 
-        for (int i = minVertexIndex; i <= maxVertexIndex; i++) {
-            for (int j = minVertexIndex; j <= maxVertexIndex; j++) {
-                for (int k = minVertexIndex; k <= maxVertexIndex; k++) {
+        for (int i = minVertexIndex; i <= maxVertexIndex; ++i) {
+            for (int j = minVertexIndex; j <= maxVertexIndex; ++j) {
+                for (int k = minVertexIndex; k <= maxVertexIndex; ++k) {
                     Distance newDist = shortestDist[j][i] + shortestDist[i][k];
                     if (newDist < shortestDist[j][k]) {
                         shortestDist[j][k] = newDist;
@@ -492,13 +492,13 @@ namespace szx
 
         // init distSeq
         std::vector<int> seq( vertexAllocNum );
-        for (int i = minVertexIndex; i <= maxVertexIndex; i++) {
+        for (int i = minVertexIndex; i <= maxVertexIndex; ++i) {
             seq[i] = i;
         }
         distSeq = DistSeqTable( vertexAllocNum, seq );
 
         // do sort
-        for (int i = minVertexIndex; i <= maxVertexIndex; i++) {
+        for (int i = minVertexIndex; i <= maxVertexIndex; ++i) {
             DistCmp cmp( *this, i );
             sort( distSeq[i].begin() + minVertexIndex, distSeq[i].end(), cmp );
         }
@@ -511,15 +511,15 @@ namespace szx
     {
         // init distSeq
         std::vector<int> seq( vertexAllocNum );
-        for (int i = minVertexIndex; i <= maxVertexIndex; i++) {
+        for (int i = minVertexIndex; i <= maxVertexIndex; ++i) {
             seq[i] = i;
         }
         distSeq = DistSeqTable( vertexAllocNum, seq );
 
         // do sort
-        for (int i = minVertexIndex; i <= maxVertexIndex; i++) {
+        for (int i = minVertexIndex; i <= maxVertexIndex; ++i) {
             //  do insertion sort on each vertex
-            for (int j = minVertexIndex; j <= maxVertexIndex; j++) {
+            for (int j = minVertexIndex; j <= maxVertexIndex; ++j) {
                 int k = j;
                 for (Distance d = distance( i, j ); k > 0; k--) {
                     if (d < distance( i, distSeq[i][k - 1] )) {
@@ -558,8 +558,8 @@ namespace szx
         if (sizeof( T_DIST ) <= sizeof( int ) && typeid(T_DIST) != typeid(float)) { // for all integer type
             multiplied = true;
             // calculate distance between each pair of points
-            for (unsigned i = 0; i < gg.vertexNum; i++) {
-                for (unsigned j = 0; j < i; j++) {
+            for (unsigned i = 0; i < gg.vertexNum; ++i) {
+                for (unsigned j = 0; j < i; ++j) {
                     GeometricalGraph::Coord dx = gg.point( i ).x - gg.point( j ).x;
                     GeometricalGraph::Coord dy = gg.point( i ).y - gg.point( j ).y;
                     adjMat[i][j] = adjMat[j][i] = static_cast<T_DIST>(DIST_MULTIPLICATION * sqrt( dx*dx + dy*dy ));
@@ -568,8 +568,8 @@ namespace szx
             }
         } else {    // for all types being able to represent rational numbers
             // calculate distance between each pair of points
-            for (unsigned i = 0; i < gg.vertexNum; i++) {
-                for (unsigned j = 0; j < i; j++) {
+            for (unsigned i = 0; i < gg.vertexNum; ++i) {
+                for (unsigned j = 0; j < i; ++j) {
                     GeometricalGraph::Coord dx = gg.point( i ).x - gg.point( j ).x;
                     GeometricalGraph::Coord dy = gg.point( i ).y - gg.point( j ).y;
                     adjMat[i][j] = adjMat[j][i] = static_cast<T_DIST>(sqrt( dx*dx + dy*dy ));
