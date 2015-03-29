@@ -1,5 +1,4 @@
 #include "File.h"
-#include "../algorithm/SetOperation.h"
 
 
 using namespace std;

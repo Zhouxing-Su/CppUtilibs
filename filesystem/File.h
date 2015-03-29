@@ -20,10 +20,11 @@ namespace szx
     class File
     {
     public:
-        // if (isComplement == false), set the input position indicator to one 
-        //    character after the last appearance of any character in charSet.
+        // if (isComplement == false), set the input position indicator to 
+        //     the last appearance of any character in charSet.
         // else, set it to the last appearance of any character out of charSet.
         // that is, locate_last_of<true> has the meaning of locate_last_not_of.
+        // the search will start at (startDir + startOffset)
         template <const bool isComplement = false, typename CharSet >
         static std::istream& locate_last_of( std::istream& is, const CharSet &charSet,
             int startOffset = 0, std::ios_base::seekdir startDir = std::ios_base::cur )
