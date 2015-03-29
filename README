@@ -80,6 +80,11 @@ CLASS LIST ( IMPLEMENTED )
 
 	[ File ] :
 	file operations.
+
+
+[[ system ]]
+	[ System ] :
+	portable shell commands.
 	
 
 CLASS LIST ( IN THE PLAN )

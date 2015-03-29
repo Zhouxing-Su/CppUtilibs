@@ -12,38 +12,14 @@
 #include <cstdlib>
 #include <string>
 
+#include "../system/system.h"
+
 
 namespace szx
 {
-    namespace cmd
-    {
-        namespace common
-        {
-            extern const std::string redirectStdin;
-            extern const std::string redirectStdout;
-            extern const std::string redirectStderr;
-        }
-
-        namespace win32
-        {
-            extern const std::string mkdir;
-            extern const std::string nullDev;
-        }
-
-        namespace unix
-        {
-            extern const std::string mkdir;
-            extern const std::string nullDev;
-        }
-    }
-
     class Directory
     {
     public:
-        static std::string quote( const std::string &s )
-        {
-            return ('\"' + s + '\"');
-        }
         static void makeSureDirExist( const std::string &dir );
 
     private:

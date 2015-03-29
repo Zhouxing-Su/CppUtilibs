@@ -23,6 +23,7 @@
     <ClCompile Include="..\random\Random.cpp" />
     <ClCompile Include="..\random\RandSelect.cpp" />
     <ClCompile Include="..\random\RangeRand.cpp" />
+    <ClCompile Include="..\system\System.cpp" />
     <ClCompile Include="..\Tester.cpp" />
     <ClCompile Include="..\type\Double.cpp" />
     <ClCompile Include="..\type\Integer.cpp" />
@@ -41,6 +42,7 @@
     <ClInclude Include="..\random\Random.h" />
     <ClInclude Include="..\random\RandSelect.h" />
     <ClInclude Include="..\random\RangeRand.h" />
+    <ClInclude Include="..\system\System.h" />
     <ClInclude Include="..\Tester.h" />
     <ClInclude Include="..\type\Convert.h" />
     <ClInclude Include="..\type\Double.h" />
