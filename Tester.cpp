@@ -308,8 +308,8 @@ void testVectorMD()
 
 void testDirectory()
 {
-    Directory::MakeSureDirExist( "a/b/c/d/e" );
-    Directory::MakeSureDirExist( "a/b/c/f/g/" );
+    Directory::makeSureDirExist( "a/b/c/d/e" );
+    Directory::makeSureDirExist( "a/b/c/f/g/" );
 }
 
 void testCounter()

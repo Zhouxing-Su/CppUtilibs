@@ -6,16 +6,40 @@ using namespace std;
 
 namespace szx
 {
-    const std::string Directory::mkdir_win32cmd( "mkdir -p " );
-    const std::string Directory::mkdir_unixshell( "mkdir " );
-
-
-    void Directory::MakeSureDirExist( const std::string &dir )
-    {
+    using namespace cmd;
+    using namespace cmd::common;
 #ifdef WIN32
-        system( (mkdir_win32cmd + dir).c_str() );
+    using namespace cmd::win32;
 #else
-        system( (mkdir_unixshell + dir).c_str() );
+    using namespace cmd::Unix;
 #endif
+
+    namespace cmd
+    {
+        namespace common
+        {
+            const string redirectStdin( " 0< " );
+            const string redirectStdout( " 1> " );
+            const string redirectStderr( " 2> " );
+        }
+
+        namespace win32
+        {
+            const string mkdir( " mkdir " );
+            const string nullDev( " nul " );
+        }
+
+        namespace unix
+        {
+            const string mkdir( " mkdir -p " );
+            const string nullDev( " /dev/null " );
+        }
+    }
+
+
+    void Directory::makeSureDirExist( const string &dir )
+    {
+        string cmd( mkdir + quote( dir ) + redirectStderr + nullDev );
+        system( cmd.c_str() );
     }
 }
