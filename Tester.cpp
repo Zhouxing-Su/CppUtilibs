@@ -23,6 +23,7 @@ int main()
     //testSetOperation();
     //testFile();
     //testTimer();
+    testFileLock();
     testInteger();
 
     system( "pause" );
@@ -231,15 +232,15 @@ void testBidirectionIndex()
 void testTrace()
 {
     Trace::setHandler();
-    f( 6 );
+    f_testTrace( 6 );
 }
 
-void f( int i )
+void f_testTrace( int i )
 {
-    Trace t( "f()" );
+    Trace t( "f_testTrace()" );
     if (i != 22) {
         Trace t( "if" );
-        f( i + 1 );
+        f_testTrace( i + 1 );
     }
 
     for (int k = 0; k < 222; ++k) {
@@ -371,4 +372,44 @@ void testTimer()
     }
 
     cout << i << endl;
+}
+
+void testFileLock()
+{
+    FileLock::unlock( "../TestCases/FileLockTest1.txt" );
+
+    this_thread::sleep_for( chrono::milliseconds( 500 ) );
+
+    vector<thread> vt;
+    int threadNum = thread::hardware_concurrency() * 3 / 4;
+    threadNum += (threadNum == 0);
+    for (int i = 0; i < threadNum; ++i) {
+        vt.push_back( thread( f_testFileLock ) );
+    }
+
+    for (int i = 0; i < threadNum; ++i) {
+        vt[i].join();
+    }
+
+    FileLock::unlock( "../TestCases/FileLockTest1.txt" );
+}
+void f_testFileLock()
+{
+    FileLock fl( "../TestCases/FileLockTest1.txt" );
+    fl.lock();
+
+    ofstream ofs( "../TestCases/FileLockTest1.txt", ios::app );
+
+    ofs << "start 8 lines." << endl;
+    for (int i = 0; i < 8; ++i) {
+        ofs << "start a line with 4000 digits." << endl;
+        for (int j = 0; j < 1000; ++j) {
+            ofs << "9876";
+        }
+        ofs << endl << "end a line with 4000 digits." << endl;
+    }
+    ofs << "end 8 lines." << endl;
+
+    ofs.close();
+    fl.unlock();
 }

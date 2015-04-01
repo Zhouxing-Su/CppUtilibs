@@ -13,11 +13,11 @@
     <Filter Include="type">
       <UniqueIdentifier>{91e85157-cdb7-4795-beb1-6343eb75b63c}</UniqueIdentifier>
     </Filter>
-    <Filter Include="filesystem">
-      <UniqueIdentifier>{f736882f-5de8-4d59-8578-e08a83d694dc}</UniqueIdentifier>
-    </Filter>
     <Filter Include="system">
       <UniqueIdentifier>{96ef39d0-2b8f-44c3-b45e-5d452fe24dd6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="io">
+      <UniqueIdentifier>{f736882f-5de8-4d59-8578-e08a83d694dc}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -59,14 +59,8 @@
     <ClInclude Include="..\type\VectorMD.h">
       <Filter>type</Filter>
     </ClInclude>
-    <ClInclude Include="..\filesystem\Directory.h">
-      <Filter>filesystem</Filter>
-    </ClInclude>
     <ClInclude Include="..\algorithm\Counter.h">
       <Filter>algorithm</Filter>
-    </ClInclude>
-    <ClInclude Include="..\filesystem\File.h">
-      <Filter>filesystem</Filter>
     </ClInclude>
     <ClInclude Include="..\algorithm\SetOperation.h">
       <Filter>algorithm</Filter>
@@ -79,6 +73,15 @@
     </ClInclude>
     <ClInclude Include="..\system\System.h">
       <Filter>system</Filter>
+    </ClInclude>
+    <ClInclude Include="..\system\FileLock.h">
+      <Filter>system</Filter>
+    </ClInclude>
+    <ClInclude Include="..\system\Directory.h">
+      <Filter>system</Filter>
+    </ClInclude>
+    <ClInclude Include="..\io\File.h">
+      <Filter>io</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -104,17 +107,20 @@
     <ClCompile Include="..\type\Integer.cpp">
       <Filter>type</Filter>
     </ClCompile>
-    <ClCompile Include="..\filesystem\Directory.cpp">
-      <Filter>filesystem</Filter>
-    </ClCompile>
-    <ClCompile Include="..\filesystem\File.cpp">
-      <Filter>filesystem</Filter>
-    </ClCompile>
     <ClCompile Include="..\log\TimeStamp.cpp">
       <Filter>log</Filter>
     </ClCompile>
     <ClCompile Include="..\system\System.cpp">
       <Filter>system</Filter>
+    </ClCompile>
+    <ClCompile Include="..\system\FileLock.cpp">
+      <Filter>system</Filter>
+    </ClCompile>
+    <ClCompile Include="..\system\Directory.cpp">
+      <Filter>system</Filter>
+    </ClCompile>
+    <ClCompile Include="..\io\File.cpp">
+      <Filter>io</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

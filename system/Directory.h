@@ -12,7 +12,7 @@
 #include <cstdlib>
 #include <string>
 
-#include "../system/system.h"
+#include "system.h"
 
 
 namespace szx

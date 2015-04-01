@@ -16,13 +16,14 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\algorithm\BidirectionIndex.cpp" />
-    <ClCompile Include="..\filesystem\Directory.cpp" />
-    <ClCompile Include="..\filesystem\File.cpp" />
+    <ClCompile Include="..\io\File.cpp" />
     <ClCompile Include="..\log\TimeStamp.cpp" />
     <ClCompile Include="..\log\Trace.cpp" />
     <ClCompile Include="..\random\Random.cpp" />
     <ClCompile Include="..\random\RandSelect.cpp" />
     <ClCompile Include="..\random\RangeRand.cpp" />
+    <ClCompile Include="..\system\Directory.cpp" />
+    <ClCompile Include="..\system\FileLock.cpp" />
     <ClCompile Include="..\system\System.cpp" />
     <ClCompile Include="..\Tester.cpp" />
     <ClCompile Include="..\type\Double.cpp" />
@@ -33,8 +34,7 @@
     <ClInclude Include="..\algorithm\Counter.h" />
     <ClInclude Include="..\algorithm\Graph.h" />
     <ClInclude Include="..\algorithm\SetOperation.h" />
-    <ClInclude Include="..\filesystem\Directory.h" />
-    <ClInclude Include="..\filesystem\File.h" />
+    <ClInclude Include="..\io\File.h" />
     <ClInclude Include="..\log\Log.h" />
     <ClInclude Include="..\log\Timer.h" />
     <ClInclude Include="..\log\TimeStamp.h" />
@@ -42,6 +42,8 @@
     <ClInclude Include="..\random\Random.h" />
     <ClInclude Include="..\random\RandSelect.h" />
     <ClInclude Include="..\random\RangeRand.h" />
+    <ClInclude Include="..\system\Directory.h" />
+    <ClInclude Include="..\system\FileLock.h" />
     <ClInclude Include="..\system\System.h" />
     <ClInclude Include="..\Tester.h" />
     <ClInclude Include="..\type\Convert.h" />

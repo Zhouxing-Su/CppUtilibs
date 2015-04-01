@@ -12,8 +12,10 @@
 #include <sstream>
 #include <algorithm>
 
-#include "filesystem/Directory.h"
-#include "filesystem/File.h"
+#include "system/Directory.h"
+#include "system/FileLock.h"
+
+#include "io/File.h"
 
 #include "type/Double.h"
 #include "type/Convert.h"
@@ -36,6 +38,8 @@
 
 
 void testDirectory();
+void testFileLock();
+
 void testFile();
 
 void testDouble();
@@ -56,7 +60,9 @@ void testTimeStamp();
 void testTimer();
 void testLog();
 void testTrace();
-void f( int i );    // for testTrace()
 
+
+void f_testTrace( int i );
+void f_testFileLock();
 
 #endif

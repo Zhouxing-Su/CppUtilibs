@@ -66,7 +66,7 @@ namespace szx
         static Random rand;
 
     protected:
-        Random( int i = 0 ) {} // for inherited classed and static rand init
+        Random( int = 0 ) {} // for inherited classed and static rand init
 
     private:
         static int getIntFromRandSeq()
