@@ -6,26 +6,6 @@ using namespace std;
 
 namespace szx
 {
-    Integer::Integer( int i )
-        :sign( getSign( i ) )
-    {
-        i *= sign;
-
-        while (i != 0) {
-            digits.push_back( i % RADIX );
-            i /= RADIX;
-        }
-    }
-
-    Integer::Integer( const std::string &s )
-        :sign( getSign( s ) )
-    {
-        for (string::const_reverse_iterator iter = s.rbegin();
-            iter != s.rend(); iter++) {
-
-        }
-    }
-
     Integer::Sign Integer::getSign( int i )
     {
         if (i > 0) {
@@ -48,6 +28,27 @@ namespace szx
         }
     }
 
+    Integer::Integer( int i )
+        : sign( getSign( i ) )
+    {
+        i *= sign;
+
+        while (i != 0) {
+            digits.push_back( i % RADIX );
+            i /= RADIX;
+        }
+    }
+
+    Integer::Integer( const std::string &s )
+        : sign( getSign( s ) )
+    {
+        for (string::const_reverse_iterator iter = s.rbegin();
+            iter != s.rend(); iter++) {
+            // TODO:
+
+        }
+    }
+
     Integer::Sign Integer::getSign() const
     {
         return sign;
@@ -55,6 +56,7 @@ namespace szx
 
     int Integer::getDigitNum() const
     {
+        // TODO: the most significant digit may be 0
         return digits.size() * DigitLen;
     }
 

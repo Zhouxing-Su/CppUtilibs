@@ -19,19 +19,19 @@ namespace szx
     {
     public:
         typedef int Digit;
-        enum Sign { NEGATIVE = -1, ZERO = 0, POSITIVE = 1 };
 
+        enum Sign { NEGATIVE = -1, ZERO = 0, POSITIVE = 1 };
 
         static const int DigitLen = 4;
         static const int RADIX = 10000;
 
 
-        Integer( int i = 0 );
-        Integer( const std::string &s );
-
         // meta information
         static Sign getSign( int i );
         static Sign getSign( const std::string &s );
+
+        Integer( int i = 0 );
+        Integer( const std::string &s );
 
         Sign getSign() const;
         int getDigitNum() const;
