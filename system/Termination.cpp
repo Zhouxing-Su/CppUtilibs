@@ -17,7 +17,6 @@ namespace szx
 
     void Termination::peekTerminationCode( const std::string &terminationCode )
     {
-        new thread( waitTerminationCode, terminationCode );
+        thread( waitTerminationCode, terminationCode ).detach();
     }
-
 }
