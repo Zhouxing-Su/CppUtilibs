@@ -23,7 +23,8 @@ int main()
     //testSetOperation();
     //testFile();
     //testTimer();
-    testFileLock();
+    //testFileLock();
+    //testTermination();
     testInteger();
 
     system( "pause" );
@@ -412,4 +413,15 @@ void f_testFileLock()
 
     ofs.close();
     fl.unlock();
+}
+
+void testTermination()
+{
+    Termination::peekTerminationCode( "szx" );
+    //thread t( Termination::waitTerminationCode, "szx" );
+
+    while (true) {
+        cout << "0";
+        this_thread::sleep_for( chrono::milliseconds( 100 ) );
+    }
 }

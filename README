@@ -74,17 +74,20 @@ CLASS LIST ( IMPLEMENTED )
 	simplify multi-dimensional vector representation.
 
 
-[[ filesystem ]]
-	[ Directory ] :
-	portable directory operations.
-
+[[ io ]]
 	[ File ] :
 	file operations.
 
 
 [[ system ]]
+	[ Directory ] :
+	portable directory operations.
+
 	[ System ] :
 	portable shell commands.
+
+	[ Termination ] :
+	program termination control.
 	
 
 CLASS LIST ( IN THE PLAN )

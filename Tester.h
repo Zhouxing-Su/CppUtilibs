@@ -14,6 +14,7 @@
 
 #include "system/Directory.h"
 #include "system/FileLock.h"
+#include "system/Termination.h"
 
 #include "io/File.h"
 
@@ -39,6 +40,7 @@
 
 void testDirectory();
 void testFileLock();
+void testTermination();
 
 void testFile();
 

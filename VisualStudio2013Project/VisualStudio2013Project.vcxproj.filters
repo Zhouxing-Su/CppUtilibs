@@ -83,6 +83,9 @@
     <ClInclude Include="..\io\File.h">
       <Filter>io</Filter>
     </ClInclude>
+    <ClInclude Include="..\system\Termination.h">
+      <Filter>system</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Tester.cpp" />
@@ -121,6 +124,9 @@
     </ClCompile>
     <ClCompile Include="..\io\File.cpp">
       <Filter>io</Filter>
+    </ClCompile>
+    <ClCompile Include="..\system\Termination.cpp">
+      <Filter>system</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

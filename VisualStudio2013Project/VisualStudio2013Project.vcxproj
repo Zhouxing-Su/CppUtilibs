@@ -25,6 +25,7 @@
     <ClCompile Include="..\system\Directory.cpp" />
     <ClCompile Include="..\system\FileLock.cpp" />
     <ClCompile Include="..\system\System.cpp" />
+    <ClCompile Include="..\system\Termination.cpp" />
     <ClCompile Include="..\Tester.cpp" />
     <ClCompile Include="..\type\Double.cpp" />
     <ClCompile Include="..\type\Integer.cpp" />
@@ -45,6 +46,7 @@
     <ClInclude Include="..\system\Directory.h" />
     <ClInclude Include="..\system\FileLock.h" />
     <ClInclude Include="..\system\System.h" />
+    <ClInclude Include="..\system\Termination.h" />
     <ClInclude Include="..\Tester.h" />
     <ClInclude Include="..\type\Convert.h" />
     <ClInclude Include="..\type\Double.h" />
