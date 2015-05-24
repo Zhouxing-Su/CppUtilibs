@@ -37,9 +37,6 @@ CLASS LIST ( IMPLEMENTED )
 	[ Timer ] :
 	provide interface to check if timeout in single thread procedure.
 
-	[ TimeStamp ] :
-	record a series of timestamps.
-
 	[ Log ] :
 	make it easy to show log when debuging and 
 	avoid too much log in release version.

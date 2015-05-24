@@ -24,8 +24,8 @@ int main()
     //testFile();
     //testTimer();
     //testFileLock();
-    testTermination();
-    //testInteger();
+    //testTermination();
+    testInteger();
 
     return 0;
 }
@@ -45,23 +45,6 @@ void testDouble()
     cout << (d == d2) << ',' << (d2 == d) << endl;
     cout << (dd == d2) << ',' << (d2 == dd) << endl;
     cout << &d << endl;
-}
-
-void testTimeStamp()
-{
-    cout << TimeStamp::getLocalTime() << endl;
-
-    TimeStamp timeStamp;
-
-    timeStamp.record( TimeStamp::INFO, string( "1000 loop start" ) );
-    for (int i = 0; i < 1000; ++i) {}    // some time-consuming procedure written by you.
-    timeStamp.record( TimeStamp::INFO, string( "1000 loop end" ) );
-    timeStamp.printAll( cout );
-
-    timeStamp.reset();
-    timeStamp.recordAndPrint( TimeStamp::INFO, string( "5000 loop start" ), cout );
-    for (int i = 0; i < 5000; ++i) {}    // some time-consuming procedure written by you.
-    timeStamp.recordAndPrint( TimeStamp::INFO, string( "5000 loop end" ), cout );
 }
 
 void testRandom()
@@ -360,16 +343,19 @@ void testSetOperation()
 
 void testTimer()
 {
-    Timer t( 1000 );
+    Timer t( chrono::seconds( 10 ) );
     long long i = 0;
 
-    for (; t.isTimeOut(); ++i) {
+    Timer::Microsecond start = Timer::getCPUtime();
+    for (; !t.isTimeOut(); ++i) {
         for (int j = 0; j < 1000000; ++j) {
             i = j;
         }
-        cout << t.restTime() << endl;
+        cout << t.restTime().count() << endl;
     }
+    Timer::Microsecond end = Timer::getCPUtime();
 
+    cout << end - start << endl;
     cout << i << endl;
 }
 
@@ -420,5 +406,5 @@ void testTermination()
     do {
         cout << "0";
         this_thread::sleep_for( chrono::milliseconds( 100 ) );
-    } while (true);
+    } while (false);
 }

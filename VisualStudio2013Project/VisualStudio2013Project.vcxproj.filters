@@ -65,9 +65,6 @@
     <ClInclude Include="..\algorithm\SetOperation.h">
       <Filter>algorithm</Filter>
     </ClInclude>
-    <ClInclude Include="..\log\TimeStamp.h">
-      <Filter>log</Filter>
-    </ClInclude>
     <ClInclude Include="..\log\Timer.h">
       <Filter>log</Filter>
     </ClInclude>
@@ -109,9 +106,6 @@
     </ClCompile>
     <ClCompile Include="..\type\Integer.cpp">
       <Filter>type</Filter>
-    </ClCompile>
-    <ClCompile Include="..\log\TimeStamp.cpp">
-      <Filter>log</Filter>
     </ClCompile>
     <ClCompile Include="..\system\System.cpp">
       <Filter>system</Filter>
