@@ -22,7 +22,6 @@
     <ClCompile Include="..\random\RandSelect.cpp" />
     <ClCompile Include="..\random\RangeRand.cpp" />
     <ClCompile Include="..\system\Directory.cpp" />
-    <ClCompile Include="..\system\FileLock.cpp" />
     <ClCompile Include="..\system\System.cpp" />
     <ClCompile Include="..\system\Termination.cpp" />
     <ClCompile Include="..\Tester.cpp" />
@@ -42,7 +41,6 @@
     <ClInclude Include="..\random\RandSelect.h" />
     <ClInclude Include="..\random\RangeRand.h" />
     <ClInclude Include="..\system\Directory.h" />
-    <ClInclude Include="..\system\FileLock.h" />
     <ClInclude Include="..\system\System.h" />
     <ClInclude Include="..\system\Termination.h" />
     <ClInclude Include="..\Tester.h" />

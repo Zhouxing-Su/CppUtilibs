@@ -11,39 +11,41 @@
 
 namespace szx
 {
-    template <typename T = int>
-    class Counter
+
+template <typename T = int>
+class Counter
+{
+public:
+    Counter( const T &start = -1, const T &stepNum = 1 ) : count( start ), step( stepNum ) {}
+
+    T operator()()
     {
-    public:
-        Counter( const T &start = -1, const T &stepNum = 1 ) : count( start ), step( stepNum ) {}
+        return (count += step);
+    }
 
-        T operator()()
-        {
-            return (count += step);
-        }
+private:
+    T count;
+    T step;
+};
 
-    private:
-        T count;
-        T step;
-    };
-
-    template<typename T = int>
-    class LoopCounter : public Counter < T >
+template<typename T = int>
+class LoopCounter : public Counter < T >
+{
+public:
+    LoopCounter( const T &modular, const T &start = -1, const T&stepNum = 1 )
+        : Counter( start, stepNum ), mod( modular )
     {
-    public:
-        LoopCounter( const T &modular, const T &start = -1, const T&stepNum = 1 )
-            : Counter( start, stepNum ), mod( modular )
-        {
-        }
+    }
 
-        T operator()()
-        {
-            return (count += step) %= mod;
-        }
+    T operator()()
+    {
+        return (count += step) %= mod;
+    }
 
-    private:
-        T mod;
-    };
+private:
+    T mod;
+};
+
 }
 
 

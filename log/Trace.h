@@ -47,55 +47,57 @@
 
 namespace szx
 {
-    class Trace
-    {
-    public:
-        static const std::string DUMP_FILE_NAME;
+
+class Trace
+{
+public:
+    static const std::string DUMP_FILE_NAME;
 
 #ifdef WIN32
-        typedef LONG CrashHandler( struct _EXCEPTION_POINTERS *ExInfo );
+    typedef LONG CrashHandler( struct _EXCEPTION_POINTERS *ExInfo );
 
-        static CrashHandler defaultHandler_Win32;
+    static CrashHandler defaultHandler_Win32;
 
-        static void setHandler( CrashHandler userCrashHandler = defaultHandler_Win32 )
-        {
-            SetUnhandledExceptionFilter( (LPTOP_LEVEL_EXCEPTION_FILTER)userCrashHandler );
-        }
+    static void setHandler( CrashHandler userCrashHandler = defaultHandler_Win32 )
+    {
+        SetUnhandledExceptionFilter( (LPTOP_LEVEL_EXCEPTION_FILTER)userCrashHandler );
+    }
 
 #else   // unix like systems
-        typedef void CrashHandler( int signum, siginfo_t* info, void*ptr );
+    typedef void CrashHandler( int signum, siginfo_t* info, void*ptr );
 
-        static CrashHandler defaultHandler_Unix;
+    static CrashHandler defaultHandler_Unix;
 
-        static void setHandler( CrashHandler userCrashHandler = defaultHandler_Unix )
-        {
-            struct sigaction action;
-            memset( &action, 0, sizeof( action ) );
-            action.sa_sigaction = userCrashHandler;
-            action.sa_flags = SA_SIGINFO;
-            if (sigaction( SIGSEGV, &action, NULL ) < 0) {
-                perror( "sigaction" );
-            }
+    static void setHandler( CrashHandler userCrashHandler = defaultHandler_Unix )
+    {
+        struct sigaction action;
+        memset( &action, 0, sizeof( action ) );
+        action.sa_sigaction = userCrashHandler;
+        action.sa_flags = SA_SIGINFO;
+        if (sigaction( SIGSEGV, &action, NULL ) < 0) {
+            perror( "sigaction" );
         }
+    }
 
 #endif  // WIN32
 
-        static void dumpCallStack( std::ostream &dumpFile );
-        static void dumpCallStack( const std::string &dumpFileName = DUMP_FILE_NAME );
+    static void dumpCallStack( std::ostream &dumpFile );
+    static void dumpCallStack( const std::string &dumpFileName = DUMP_FILE_NAME );
 
-        Trace( const std::string &info )
-        {
-            callStack.push_back( info );
-        }
+    Trace( const std::string &info )
+    {
+        callStack.push_back( info );
+    }
 
-        ~Trace()
-        {
-            callStack.pop_back();
-        }
+    ~Trace()
+    {
+        callStack.pop_back();
+    }
 
-    private:
-        static std::vector<const std::string> callStack;
-    };
+private:
+    static std::vector<const std::string> callStack;
+};
+
 }
 
 

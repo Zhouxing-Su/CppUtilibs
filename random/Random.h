@@ -20,73 +20,75 @@
 
 namespace szx
 {
-    class Random
+
+class Random
+{
+public:
+    typedef int( *RandGenerator )();
+
+
+    static unsigned int genSeed()
     {
-    public:
-        typedef int( *RandGenerator )();
+        return static_cast<unsigned int>(time( NULL ) + clock());
+    }
+
+    static int setSeed( unsigned int s = genSeed() )
+    {
+        rand.seed = s;
+        rand.gen = std::rand;
+        std::srand( s );
+        // return int for initializing random seed in default behavior
+        return static_cast<int>(s);
+    }
+
+    static unsigned int getSeed()
+    {
+        return rand.seed;
+    }
+
+    static void setSeq( const std::vector<int> &seq )
+    {
+        rand.randSeq = seq;
+        rand.seqPointer = 0;
+        rand.gen = getIntFromRandSeq;
+    }
+
+    static const std::vector<int>& getSeq()
+    {
+        return rand.randSeq;
+    }
+
+    int operator()()
+    {
+        return gen();
+    }
 
 
-        static unsigned int genSeed()
-        {
-            return static_cast<unsigned int>(time( NULL ) + clock());
-        }
+    static Random rand;
 
-        static int setSeed( unsigned int s = genSeed() )
-        {
-            rand.seed = s;
-            rand.gen = std::rand;
-            std::srand( s );
-            // return int for initializing random seed in default behavior
-            return static_cast<int>(s);
-        }
+protected:
+    Random( int = 0 ) {} // for inherited classed and static rand init
 
-        static unsigned int getSeed()
-        {
-            return rand.seed;
-        }
+private:
+    static int getIntFromRandSeq()
+    {
+        rand.seqPointer %= rand.randSeq.size();
+        return rand.randSeq[rand.seqPointer++];
+    }
 
-        static void setSeq( const std::vector<int> &seq )
-        {
-            rand.randSeq = seq;
-            rand.seqPointer = 0;
-            rand.gen = getIntFromRandSeq;
-        }
+    RandGenerator gen;
 
-        static const std::vector<int>& getSeq()
-        {
-            return rand.randSeq;
-        }
+    unsigned int seed;
 
-        int operator()()
-        {
-            return gen();
-        }
+    std::vector<int> randSeq;
+    int seqPointer;
 
+private:    // forbid to be used
+    Random( const Random& ) {}
+    Random& operator=(const Random&) { return *this; }
 
-        static Random rand;
+};
 
-    protected:
-        Random( int = 0 ) {} // for inherited classed and static rand init
-
-    private:
-        static int getIntFromRandSeq()
-        {
-            rand.seqPointer %= rand.randSeq.size();
-            return rand.randSeq[rand.seqPointer++];
-        }
-
-        RandGenerator gen;
-
-        unsigned int seed;
-
-        std::vector<int> randSeq;
-        int seqPointer;
-
-    private:    // forbid to be used
-        Random( const Random& ) {}
-        Random& operator=(const Random&) { return *this; }
-
-    };
 }
 
 

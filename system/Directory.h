@@ -17,14 +17,13 @@
 
 namespace szx
 {
-    class Directory
-    {
-    public:
-        static void makeSureDirExist( const std::string &dir );
 
-    private:
+class Directory
+{
+public:
+    static void makeSureDirExist( const std::string &dir );
+};
 
-    };
 }
 
 

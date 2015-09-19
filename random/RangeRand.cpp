@@ -6,18 +6,20 @@ using namespace std;
 
 namespace szx
 {
-    RangeRand::RangeRand( int lb, int ub ) : lowerBound( lb ), upperBound( ub ), range( (ub > lb) ? (ub - lb + 1) : 1 )
-    {
-    }
+
+RangeRand::RangeRand( int lb, int ub ) : lowerBound( lb ), upperBound( ub ), range( (ub > lb) ? (ub - lb + 1) : 1 )
+{
+}
 
 
-    RangeRand::~RangeRand()
-    {
-    }
+RangeRand::~RangeRand()
+{
+}
 
 
-    int RangeRand::operator() ()
-    {
-        return ((rand() % range) + lowerBound);
-    }
+int RangeRand::operator() ()
+{
+    return ((rand() % range) + lowerBound);
+}
+
 }

@@ -3,5 +3,7 @@
 
 namespace szx
 {
-    double Double::error = 0.00001;
+
+double Double::error = 0.00001;
+
 }

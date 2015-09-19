@@ -14,29 +14,30 @@
 
 namespace szx
 {
-    class RangeRand : Random
-    {
-    public:
-        // type definitions ===================
 
-        // static constant ===================
+class RangeRand : Random
+{
+public:
+    // type definitions ===================
 
-        // member constant ===================
+    // static constant ===================
 
-        // static methods ===================
+    // member constant ===================
 
-        // member methods ===================
-        RangeRand( int lowerBound = 0, int upperBound = RAND_MAX );
-        ~RangeRand();
+    // static methods ===================
 
-        int operator()();
+    // member methods ===================
+    RangeRand( int lowerBound = 0, int upperBound = RAND_MAX );
+    ~RangeRand();
 
-    private:
-        int lowerBound;
-        int upperBound;
-        int range;
+    int operator()();
 
-    };
+private:
+    int lowerBound;
+    int upperBound;
+    int range;
+};
+
 }
 
 

@@ -11,9 +11,10 @@
 #include <iostream>
 #include <sstream>
 #include <algorithm>
+#include <thread>
+#include <chrono>
 
 #include "system/Directory.h"
-#include "system/FileLock.h"
 #include "system/Termination.h"
 
 #include "io/File.h"
@@ -63,6 +64,5 @@ void testTrace();
 
 
 void f_testTrace( int i );
-void f_testFileLock();
 
 #endif

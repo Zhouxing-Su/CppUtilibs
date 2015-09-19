@@ -16,22 +16,24 @@
 
 namespace szx
 {
-    template <typename T_INPUT>
-    std::string toString( const T_INPUT &in )
-    {
-        std::ostringstream oss;
-        oss << in;
-        return oss.str();
-    }
 
-    template <typename T_OUTPUT>
-    T_OUTPUT toType( const std::string& s )
-    {
-        std::istringstream iss( s );
-        T_OUTPUT output;
-        iss >> output;
-        return output;
-    }
+template <typename T_INPUT>
+std::string toString( const T_INPUT &in )
+{
+    std::ostringstream oss;
+    oss << in;
+    return oss.str();
+}
+
+template <typename T_OUTPUT>
+T_OUTPUT toType( const std::string& s )
+{
+    std::istringstream iss( s );
+    T_OUTPUT output;
+    iss >> output;
+    return output;
+}
+
 }
 
 

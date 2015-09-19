@@ -6,5 +6,7 @@ using namespace std;
 
 namespace szx
 {
-    Random Random::rand( setSeed() );
+
+Random Random::rand( setSeed() );
+
 }

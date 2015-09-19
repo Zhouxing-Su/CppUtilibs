@@ -71,9 +71,6 @@
     <ClInclude Include="..\system\System.h">
       <Filter>system</Filter>
     </ClInclude>
-    <ClInclude Include="..\system\FileLock.h">
-      <Filter>system</Filter>
-    </ClInclude>
     <ClInclude Include="..\system\Directory.h">
       <Filter>system</Filter>
     </ClInclude>
@@ -108,9 +105,6 @@
       <Filter>type</Filter>
     </ClCompile>
     <ClCompile Include="..\system\System.cpp">
-      <Filter>system</Filter>
-    </ClCompile>
-    <ClCompile Include="..\system\FileLock.cpp">
       <Filter>system</Filter>
     </ClCompile>
     <ClCompile Include="..\system\Directory.cpp">
