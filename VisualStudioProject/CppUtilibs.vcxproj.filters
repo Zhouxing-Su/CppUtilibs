@@ -80,6 +80,9 @@
     <ClInclude Include="..\system\Termination.h">
       <Filter>system</Filter>
     </ClInclude>
+    <ClInclude Include="..\system\Memory.h">
+      <Filter>system</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Tester.cpp" />

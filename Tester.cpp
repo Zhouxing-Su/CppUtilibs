@@ -25,6 +25,7 @@ int main()
     //testTimer();
     //testFileLock();
     //testTermination();
+    //testMemory();
     testInteger();
 
     return 0;
@@ -367,4 +368,10 @@ void testTermination()
         cout << "0";
         this_thread::sleep_for( chrono::milliseconds( 100 ) );
     } while (false);
+}
+
+void testMemory() {
+    cout << Memory::getAvailablePhysicalMemory() << endl
+        << Memory::getTotalPhysicalMemory() << endl
+        << Memory::getMemoryStatus().dwMemoryLoad << endl;
 }

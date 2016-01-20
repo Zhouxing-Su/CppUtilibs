@@ -41,6 +41,7 @@
     <ClInclude Include="..\random\RandSelect.h" />
     <ClInclude Include="..\random\RangeRand.h" />
     <ClInclude Include="..\system\Directory.h" />
+    <ClInclude Include="..\system\Memory.h" />
     <ClInclude Include="..\system\System.h" />
     <ClInclude Include="..\system\Termination.h" />
     <ClInclude Include="..\Tester.h" />

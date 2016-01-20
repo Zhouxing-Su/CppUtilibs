@@ -12,20 +12,11 @@
 
 
 #ifdef WIN32
-/*
-* Win32FaultHandler
-* Install and implement a Windows Exception handler that will be called,
-*/
 #include <Windows.h>
-#else   // unix like systems
-/*
-* SignalHandler
-* Install and implement a unix/posix signal handler that will be called,
-* if the OS determines a programm fault.
-*/
+#else // unix like systems
 #include <signal.h>
 #include <ucontext.h>
-#endif  //WIN32
+#endif // WIN32
 
 
 #include <cstdlib>
@@ -47,15 +38,16 @@ public:
 
     static CrashHandler defaultHandler_Win32;
 
+    /// Install and implement a Windows Exception handler that will be called.
     static void setHandler(CrashHandler userCrashHandler = defaultHandler_Win32) {
         SetUnhandledExceptionFilter((LPTOP_LEVEL_EXCEPTION_FILTER)userCrashHandler);
     }
-
-    #else   // unix like systems
+    #else // unix like systems
     typedef void CrashHandler(int signum, siginfo_t* info, void*ptr);
 
     static CrashHandler defaultHandler_Unix;
 
+    /// Install and implement a unix/posix signal handler that will be called.
     static void setHandler(CrashHandler userCrashHandler = defaultHandler_Unix) {
         struct sigaction action;
         memset(&action, 0, sizeof(action));
@@ -65,19 +57,14 @@ public:
             perror("sigaction");
         }
     }
-
-    #endif  // WIN32
+    #endif // WIN32
 
     static void dumpCallStack(std::ostream &dumpFile);
     static void dumpCallStack(const std::string &dumpFileName = DUMP_FILE_NAME);
 
-    Trace(const std::string &info) {
-        callStack.push_back(info);
-    }
+    Trace(const std::string &info) { callStack.push_back(info); }
 
-    ~Trace() {
-        callStack.pop_back();
-    }
+    ~Trace() { callStack.pop_back(); }
 
 private:
     static std::vector<std::string> callStack;
