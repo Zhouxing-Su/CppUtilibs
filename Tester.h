@@ -24,6 +24,7 @@
 #include "type/Convert.h"
 #include "type/Integer.h"
 #include "type/VectorMD.h"
+#include "type/Arr.h"
 
 #include "random/Random.h"
 #include "random/RangeRand.h"
@@ -33,6 +34,7 @@
 #include "algorithm/BidirectionIndex.h"
 #include "algorithm/Counter.h"
 #include "algorithm/SetOperation.h"
+#include "algorithm/String.h"
 
 #include "log/Timer.h"
 #include "log/Log.h"
@@ -50,6 +52,7 @@ void testDouble();
 void testConvert();
 void testInteger();
 void testVectorMD();
+void testArr();
 
 void testRandom();
 void testRangeRand();
@@ -59,6 +62,7 @@ void testGraph();
 void testBidirectionIndex();
 void testCounter();
 void testSetOperation();
+void testString();
 
 void testTimer();
 void testLog();

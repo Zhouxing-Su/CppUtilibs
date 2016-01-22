@@ -33,6 +33,7 @@
     <ClInclude Include="..\algorithm\Counter.h" />
     <ClInclude Include="..\algorithm\Graph.h" />
     <ClInclude Include="..\algorithm\SetOperation.h" />
+    <ClInclude Include="..\algorithm\String.h" />
     <ClInclude Include="..\io\File.h" />
     <ClInclude Include="..\log\Log.h" />
     <ClInclude Include="..\log\Timer.h" />
@@ -45,6 +46,7 @@
     <ClInclude Include="..\system\System.h" />
     <ClInclude Include="..\system\Termination.h" />
     <ClInclude Include="..\Tester.h" />
+    <ClInclude Include="..\type\Arr.h" />
     <ClInclude Include="..\type\Convert.h" />
     <ClInclude Include="..\type\Double.h" />
     <ClInclude Include="..\type\Integer.h" />

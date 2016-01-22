@@ -83,6 +83,12 @@
     <ClInclude Include="..\system\Memory.h">
       <Filter>system</Filter>
     </ClInclude>
+    <ClInclude Include="..\algorithm\String.h">
+      <Filter>algorithm</Filter>
+    </ClInclude>
+    <ClInclude Include="..\type\Arr.h">
+      <Filter>type</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Tester.cpp" />

@@ -1,4 +1,4 @@
-CPPutilibs
+CppUtilibs
 	by R.E.M.
 ==============================
 some utility classes written by cpp.
@@ -31,6 +31,9 @@ CLASS LIST ( IMPLEMENTED )
 
 	[ SetOperation ] :
 	operation on set such as contain.
+
+	[ String ] :
+	string processing algorithms.
 
 
 [[ log ]]
@@ -70,6 +73,9 @@ CLASS LIST ( IMPLEMENTED )
 	[ VectorMD ] :
 	simplify multi-dimensional vector representation.
 
+	[ Arr ] :
+	dynamic allocated array follows RAII idiom.
+
 
 [[ io ]]
 	[ File ] :
@@ -85,6 +91,9 @@ CLASS LIST ( IMPLEMENTED )
 
 	[ Termination ] :
 	program termination control.
+
+	[ Memory ] :
+	memory status reporter.
 	
 
 CLASS LIST ( IN THE PLAN )

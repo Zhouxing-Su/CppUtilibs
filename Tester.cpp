@@ -26,6 +26,8 @@ int main()
     //testFileLock();
     //testTermination();
     //testMemory();
+    //testArr();
+    //testString();
     testInteger();
 
     return 0;
@@ -290,6 +292,18 @@ void testVectorMD()
     v4d.pop_back();
 }
 
+void testArr() {
+    Arr2D<int> a(4, 3);
+    for (int i = 0; i < a.size1(); ++i) {
+        for (int j = 0; j < a.size2(); ++j) {
+            a.at(i, j) = i + j;
+        }
+    }
+    for (auto i = a.begin(); i != a.end(); ++i) {
+        cout << *i << endl;
+    }
+}
+
 void testDirectory()
 {
     Directory::makeSureDirExist( "a/b/c/d/e" );
@@ -340,6 +354,12 @@ void testSetOperation()
     cout << contain( s1, target ) << endl;
     cout << contain( s2, target ) << endl;
     cout << contain( "test", target ) << endl;
+}
+
+void testString() {
+    cout << String::shortestEditDistance(
+        "AGTCTGACGC", 
+        "AGTAAGTAGGC") << endl;
 }
 
 void testTimer()
