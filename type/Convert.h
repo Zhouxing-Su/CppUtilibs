@@ -17,6 +17,11 @@
 namespace szx
 {
 
+/// if there is `#define x  y`, VERBATIM_STRINGIFY(x) will get "x".
+#define VERBATIM_STRINGIFY(x)  #x
+/// if there is `#define x  y`, RESOLVED_STRINGIFY(x) will get "y".
+#define RESOLVED_STRINGIFY(x)  VERBATIM_STRINGIFY(x)
+
 template <typename T_INPUT>
 std::string toString( const T_INPUT &in )
 {
