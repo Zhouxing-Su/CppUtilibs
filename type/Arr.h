@@ -36,6 +36,7 @@ public:
 
     Arr& operator=(const Arr &a) {
         if (this != &a) {
+            clear();
             init(a.len);
             copyData(a.arr);
         }
@@ -51,18 +52,21 @@ public:
         return *this;
     }
 
-    ~Arr() {
-        delete[] arr;
-        arr = nullptr;
-    }
+    ~Arr() { clear(); }
 
     /// allocate memory if it has not been init before.
     bool init(IndexType length) {
-        if (arr == nullptr) {
+        if (arr == nullptr) { // avoid re-init and memory leak.
             allocate(length);
             return true;
         }
         return false;
+    }
+
+    /// remove all items.
+    void clear() {
+        delete[] arr;
+        arr = nullptr;
     }
 
     /// set all data to 0.
@@ -120,6 +124,7 @@ public:
 
     Arr2D& operator=(const Arr2D &a) {
         if (this != &a) {
+            clear();
             init(a.len1, a.len2);
             copyData(a.arr);
         }
@@ -137,14 +142,11 @@ public:
         return *this;
     }
 
-    ~Arr2D() {
-        delete[] arr;
-        arr = nullptr;
-    }
+    ~Arr2D() { clear(); }
 
     /// allocate memory if it has not been init before.
     bool init(IndexType length1, IndexType length2) {
-        if (arr == nullptr) {
+        if (arr == nullptr) { // avoid re-init and memory leak.
             allocate(length1, length2);
             return true;
         }
@@ -205,6 +207,7 @@ public:
 
     Arr3D& operator=(const Arr3D &a) {
         if (this != &a) {
+            clear();
             init(a.len1, a.len2, a.len3);
             copyData(a.arr);
         }
@@ -224,14 +227,11 @@ public:
         return *this;
     }
 
-    ~Arr3D() {
-        delete[] arr;
-        arr = nullptr;
-    }
+    ~Arr3D() { clear(); }
 
     /// allocate memory if it has not been init before.
     bool init(IndexType length1, IndexType length2, IndexType length3) {
-        if (arr == nullptr) {
+        if (arr == nullptr) { // avoid re-init and memory leak.
             allocate(length1, length2, length3);
             return true;
         }
