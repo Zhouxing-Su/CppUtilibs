@@ -18,6 +18,7 @@ class Arr {
 public:
     /// it is always valid before copy assignment due to no reallocation.
     using Iterator = T*;
+    using ConstIterator = T const *;
 
     explicit Arr() : arr(nullptr), len(0) {}
     explicit Arr(IndexType length) { allocate(length); }
@@ -77,8 +78,8 @@ public:
 
     Iterator begin() { return arr; }
     Iterator end() { return (arr + len); }
-    const Iterator begin() const { return arr; }
-    const Iterator end() const { return (arr + len); }
+    ConstIterator begin() const { return arr; }
+    ConstIterator end() const { return (arr + len); }
     T& front() { return at(0); }
     T& back() { return at(len - 1); }
     const T& front() const { return at(0); }
@@ -163,8 +164,8 @@ public:
     using Arr<T, IndexType>::back;
     Iterator begin(IndexType i1) { return arr + (i1 * len2); }
     Iterator end(IndexType i1) { return arr + (i1 * len2) + len2; }
-    const Iterator begin(IndexType i1) const { return arr + (i1 * len2); }
-    const Iterator end(IndexType i1) const { return arr + (i1 * len2) + len2; }
+    ConstIterator begin(IndexType i1) const { return arr + (i1 * len2); }
+    ConstIterator end(IndexType i1) const { return arr + (i1 * len2) + len2; }
     T& front(IndexType i1) { return at(i1, 0); }
     T& back(IndexType i1) { return at(i1, len - 1); }
     const T& front(IndexType i1) const { return at(i1, 0); }
@@ -244,10 +245,14 @@ public:
 
     using Arr<T, IndexType>::begin;
     using Arr<T, IndexType>::end;
-    Iterator begin(IndexType i1) const { return arr + (i1 * len2len3); }
-    Iterator end(IndexType i1) const { return arr + (i1 * len2len3) + len2len3; }
-    Iterator begin(IndexType i1, IndexType i2) const { return arr + (i1 * len2len3 + i2 * len3); }
-    Iterator end(IndexType i1, IndexType i2) const { return arr + (i1 * len2len3 + i2 * len3) + len3; }
+    Iterator begin(IndexType i1) { return arr + (i1 * len2len3); }
+    Iterator end(IndexType i1) { return arr + (i1 * len2len3) + len2len3; }
+    Iterator begin(IndexType i1, IndexType i2) { return arr + (i1 * len2len3 + i2 * len3); }
+    Iterator end(IndexType i1, IndexType i2) { return arr + (i1 * len2len3 + i2 * len3) + len3; }
+    ConstIterator begin(IndexType i1) const { return arr + (i1 * len2len3); }
+    ConstIterator end(IndexType i1) const { return arr + (i1 * len2len3) + len2len3; }
+    ConstIterator begin(IndexType i1, IndexType i2) const { return arr + (i1 * len2len3 + i2 * len3); }
+    ConstIterator end(IndexType i1, IndexType i2) const { return arr + (i1 * len2len3 + i2 * len3) + len3; }
 
     IndexType size1() const { return len1; }
     IndexType size2() const { return len2; }
