@@ -154,9 +154,11 @@ public:
         return false;
     }
 
+    IndexType getFlatIndex(IndexType i1, IndexType i2) const { return (i1 * len2 + i2); }
+
     using Arr<T, IndexType>::at;
-    T& at(IndexType i1, IndexType i2) { return arr[i1 * len2 + i2]; }
-    const T& at(IndexType i1, IndexType i2) const { return arr[i1 * len2 + i2]; }
+    T& at(IndexType i1, IndexType i2) { return arr[getFlatIndex(i1, i2)]; }
+    const T& at(IndexType i1, IndexType i2) const { return arr[getFlatIndex(i1, i2)]; }
 
     using Arr<T, IndexType>::begin;
     using Arr<T, IndexType>::end;
@@ -239,9 +241,11 @@ public:
         return false;
     }
 
+    IndexType getFlatIndex(IndexType i1, IndexType i2, IndexType i3) const { return (i1 * len2len3 + i2 * len3 + i3); }
+
     using Arr<T, IndexType>::at;
-    T& at(IndexType i1, IndexType i2, IndexType i3) { return arr[i1 * len2len3 + i2 * len3 + i3]; }
-    const T& at(IndexType i1, IndexType i2, IndexType i3) const { return arr[i1 * len2len3 + i2 * len3 + i3]; }
+    T& at(IndexType i1, IndexType i2, IndexType i3) { return arr[getFlatIndex(i1, i2, i3)]; }
+    const T& at(IndexType i1, IndexType i2, IndexType i3) const { return arr[getFlatIndex(i1, i2, i3)]; }
 
     using Arr<T, IndexType>::begin;
     using Arr<T, IndexType>::end;
