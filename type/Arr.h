@@ -73,6 +73,9 @@ public:
     /// set all data to 0.
     void reset() { memset(arr, 0, sizeof(T) * len); }
 
+    T& operator[](IndexType i) { return arr[i]; }
+    const T& operator[](IndexType i) const { return arr[i]; }
+
     T& at(IndexType i) { return arr[i]; }
     const T& at(IndexType i) const { return arr[i]; }
 

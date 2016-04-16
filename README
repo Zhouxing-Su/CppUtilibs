@@ -35,6 +35,9 @@ CLASS LIST ( IMPLEMENTED )
 	[ String ] :
 	string processing algorithms.
 
+	[ DijkstraPathGenerator ] :
+	dijkstra shortest path algorithm with configurable termination condition.
+
 
 [[ log ]]
 	[ Timer ] :
@@ -75,6 +78,9 @@ CLASS LIST ( IMPLEMENTED )
 
 	[ Arr ] :
 	dynamic allocated array follows RAII idiom.
+
+	[ PriorityQueue ] :
+	priority queue implemented by heap or red-black tree.
 
 
 [[ io ]]

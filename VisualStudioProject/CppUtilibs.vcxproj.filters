@@ -89,6 +89,12 @@
     <ClInclude Include="..\type\Arr.h">
       <Filter>type</Filter>
     </ClInclude>
+    <ClInclude Include="..\type\PriorityQueue.h">
+      <Filter>type</Filter>
+    </ClInclude>
+    <ClInclude Include="..\algorithm\DijkstraPathGenerator.h">
+      <Filter>algorithm</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Tester.cpp" />

@@ -31,6 +31,7 @@
   <ItemGroup>
     <ClInclude Include="..\algorithm\BidirectionIndex.h" />
     <ClInclude Include="..\algorithm\Counter.h" />
+    <ClInclude Include="..\algorithm\DijkstraPathGenerator.h" />
     <ClInclude Include="..\algorithm\Graph.h" />
     <ClInclude Include="..\algorithm\SetOperation.h" />
     <ClInclude Include="..\algorithm\String.h" />
@@ -50,6 +51,7 @@
     <ClInclude Include="..\type\Convert.h" />
     <ClInclude Include="..\type\Double.h" />
     <ClInclude Include="..\type\Integer.h" />
+    <ClInclude Include="..\type\PriorityQueue.h" />
     <ClInclude Include="..\type\VectorMD.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
