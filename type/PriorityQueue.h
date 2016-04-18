@@ -18,96 +18,93 @@
 
 namespace szx {
 
-template<typename T, typename LessPriorityPred = std::less<T>>
-class PriorityQueue {
+template<typename T>
+class PriorityQueueBase {
 public:
-    #if SZX_CPPUTILIBS_PRIORITY_QUEUE_USE_HEAP
+    virtual void add(const T &e) = 0;
+    virtual void remove(const T &e) = 0;
+    virtual void reorder() = 0;
+
+    virtual T top() const = 0;
+    virtual void pop() = 0;
+    virtual void push(const T &e) = 0;
+
+    virtual void clear() = 0;
+    virtual bool empty() const = 0;
+};
+
+template<typename T, typename GreaterPriorityPred = std::greater<T>>
+class PriorityQueueUsingSet : public PriorityQueueBase<T> {
+public:
+    using ContainerType = std::set<T, GreaterPriorityPred>;
+
+
+    explicit PriorityQueueUsingSet(const GreaterPriorityPred &greaterPred = std::greater<T>()) :
+        container(greaterPred) {}
+
+    explicit PriorityQueueUsingSet(const ContainerType itemContainer, const GreaterPriorityPred &greaterPred = std::greater<T>()) :
+        container(itemContainer.begin(), itemContainer.end(), greaterPred) {}
+
+    void add(const T &e) { container.insert(e); }
+
+    void remove(const T &e) { container.erase(e); }
+
+    void reorder() {}
+
+    T top() const { return *container.begin(); }
+
+    void pop() { container.erase(container.begin()); }
+
+    void push(const T &e) { container.insert(e); }
+
+    void clear() { container.clear(); }
+
+    bool empty() const { return container.empty(); }
+
+    const ContainerType& getContainer() const { return container; }
+
+private:
+    ContainerType container;
+};
+
+template<typename T, typename LessPriorityPred = std::less<T>>
+class PriorityQueueUsingHeap : public PriorityQueueBase<T> {
+public:
     using ContainerType = std::vector<T>;
-    #else
-    using ContainerType = std::set<T, LessPriorityPred>;
-    #endif // SZX_CPPUTILIBS_PRIORITY_QUEUE_USE_HEAP
 
 
-    explicit PriorityQueue(const LessPriorityPred &lessPred = std::less<T>()) :
-        #if SZX_CPPUTILIBS_PRIORITY_QUEUE_USE_HEAP
-        container(), pred(lessPred)
-        #else
-        container(lessPred)
-        #endif // SZX_CPPUTILIBS_PRIORITY_QUEUE_USE_HEAP
-    {}
+    explicit PriorityQueueUsingHeap(const LessPriorityPred &lessPred = std::less<T>()) :
+        container(), pred(lessPred) {}
 
-    explicit PriorityQueue(const ContainerType itemContainer, const LessPriorityPred &lessPred = std::less<T>()) :
-        #if SZX_CPPUTILIBS_PRIORITY_QUEUE_USE_HEAP
-        container(itemContainer), pred(lessPred)
-        #else
-        container(itemContainer.begin(), itemContainer.end(), lessPred)
-        #endif // SZX_CPPUTILIBS_PRIORITY_QUEUE_USE_HEAP
-    {}
+    explicit PriorityQueueUsingHeap(const ContainerType itemContainer, const LessPriorityPred &lessPred = std::less<T>()) :
+        container(itemContainer), pred(lessPred) {}
 
-    #if SZX_CPPUTILIBS_PRIORITY_QUEUE_USE_HEAP
     void setLessPred(const LessPriorityPred &lessPred) {
         pred = lessPred;
         reorder();
     }
-    #else
-    #endif // SZX_CPPUTILIBS_PRIORITY_QUEUE_USE_HEAP
 
-    /// [Inordered]
     /// reorder() must be invoked before [Ordered] methods calls after add() is executed.
-    void add(const T &e) {
-        #if SZX_CPPUTILIBS_PRIORITY_QUEUE_USE_HEAP
-        container.push_back(e);
-        #else
-        container.insert(e);
-        #endif // SZX_CPPUTILIBS_PRIORITY_QUEUE_USE_HEAP
-    }
+    void add(const T &e) { container.push_back(e); }
 
-    /// [Inordered]
     /// reorder() must be invoked before [Ordered] methods calls after remove() is executed.
-    void remove(const T &e) {
-        #if SZX_CPPUTILIBS_PRIORITY_QUEUE_USE_HEAP
-        // TODO[szx][5]: find and erase?
-        #else
-        container.erase(e);
-        #endif // SZX_CPPUTILIBS_PRIORITY_QUEUE_USE_HEAP
+    void remove(const T &e) { 
+        std::swap(*std::find(container.begin(), container.end(), e), container.back()); 
+        container.pop_back();
     }
 
-    /// [Inordered]
-    void reorder() {
-        #if SZX_CPPUTILIBS_PRIORITY_QUEUE_USE_HEAP
-        std::make_heap(container.begin(), container.end(), pred);
-        #else
-        // nothing to be done.
-        #endif // SZX_CPPUTILIBS_PRIORITY_QUEUE_USE_HEAP
-    }
+    void reorder() { std::make_heap(container.begin(), container.end(), pred); }
 
-    /// [Ordered]
-    T top() const {
-        #if SZX_CPPUTILIBS_PRIORITY_QUEUE_USE_HEAP
-        return container.front();
-        #else
-        return *container.begin();
-        #endif // SZX_CPPUTILIBS_PRIORITY_QUEUE_USE_HEAP
-    }
+    T top() const { return container.front(); }
 
-    /// [Ordered]
     void pop() {
-        #if SZX_CPPUTILIBS_PRIORITY_QUEUE_USE_HEAP
         std::pop_heap(container.begin(), container.end(), pred);
         container.pop_back();
-        #else
-        container.erase(container.begin());
-        #endif // SZX_CPPUTILIBS_PRIORITY_QUEUE_USE_HEAP
     }
 
-    /// [Ordered]
     void push(const T &e) {
-        #if SZX_CPPUTILIBS_PRIORITY_QUEUE_USE_HEAP
         container.push_back(e);
         std::push_heap(container.begin(), container.end(), pred);
-        #else
-        container.insert(e);
-        #endif // SZX_CPPUTILIBS_PRIORITY_QUEUE_USE_HEAP
     }
 
     void clear() { container.clear(); }
@@ -118,11 +115,11 @@ public:
 
 private:
     ContainerType container;
-    #if SZX_CPPUTILIBS_PRIORITY_QUEUE_USE_HEAP
     LessPriorityPred pred;
-    #else
-    #endif // SZX_CPPUTILIBS_PRIORITY_QUEUE_USE_HEAP
 };
+
+template<typename T, typename GreaterPriorityPred = std::greater<T>>
+class PriorityQueue : public PriorityQueueUsingSet<T, std::greater<T>()> {};
 
 }
 

@@ -25,6 +25,7 @@
 #include "type/Integer.h"
 #include "type/VectorMD.h"
 #include "type/Arr.h"
+#include "type/PriorityQueue.h"
 
 #include "random/Random.h"
 #include "random/RangeRand.h"
@@ -35,6 +36,7 @@
 #include "algorithm/Counter.h"
 #include "algorithm/SetOperation.h"
 #include "algorithm/String.h"
+#include "algorithm/DijkstraPathGenerator.h"
 
 #include "log/Timer.h"
 #include "log/Log.h"
@@ -53,6 +55,7 @@ void testConvert();
 void testInteger();
 void testVectorMD();
 void testArr();
+void testPriorityQueue();
 
 void testRandom();
 void testRangeRand();
@@ -63,6 +66,7 @@ void testBidirectionIndex();
 void testCounter();
 void testSetOperation();
 void testString();
+void testDijkstraPathGenerator();
 
 void testTimer();
 void testLog();

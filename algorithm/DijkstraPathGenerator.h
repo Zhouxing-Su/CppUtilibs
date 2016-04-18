@@ -18,6 +18,10 @@ namespace szx {
 template<typename ID = int, typename Weight = int>
 class DijkstraPathGenerator {
 public:
+    static constexpr int InvalidId = -1;
+    static constexpr int MaxWeight = (1 << 20);
+
+
     struct Edge {
         ID dst;
         ID weight;
@@ -32,6 +36,7 @@ public:
         #endif // USE_HEAP
         const std::vector<Weight> &dist;
     };
+
 
     DijkstraPathGenerator(const std::vector<std::vector<Edge>> &adjList, ID src, const std::vector<bool> &isNodeRemoved)
         : adjacencyList(adjList), source(src), nodeRemoved(isNodeRemoved),
@@ -150,7 +155,11 @@ private:
 
     std::vector<Weight> dist;
     std::vector<ID> prevNode;
-    PriorityQueue<ID, Cmp> unvisitedNodes;
+    #if USE_HEAP
+    PriorityQueueUsingHeap<ID, Cmp> unvisitedNodes;
+    #else
+    PriorityQueueUsingSet<ID, Cmp> unvisitedNodes;
+    #endif // USE_HEAP
 };
 
 }
