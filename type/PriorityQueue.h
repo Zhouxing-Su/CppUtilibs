@@ -39,10 +39,10 @@ public:
     using ContainerType = std::set<T, GreaterPriorityPred>;
 
 
-    explicit PriorityQueueUsingSet(const GreaterPriorityPred &greaterPred = std::greater<T>()) :
+    explicit PriorityQueueUsingSet(const GreaterPriorityPred &greaterPred = GreaterPriorityPred()) :
         container(greaterPred) {}
 
-    explicit PriorityQueueUsingSet(const ContainerType itemContainer, const GreaterPriorityPred &greaterPred = std::greater<T>()) :
+    explicit PriorityQueueUsingSet(const ContainerType itemContainer, const GreaterPriorityPred &greaterPred = GreaterPriorityPred()) :
         container(itemContainer.begin(), itemContainer.end(), greaterPred) {}
 
     void add(const T &e) { container.insert(e); }
@@ -73,10 +73,10 @@ public:
     using ContainerType = std::vector<T>;
 
 
-    explicit PriorityQueueUsingHeap(const LessPriorityPred &lessPred = std::less<T>()) :
+    explicit PriorityQueueUsingHeap(const LessPriorityPred &lessPred = LessPriorityPred()) :
         container(), pred(lessPred) {}
 
-    explicit PriorityQueueUsingHeap(const ContainerType itemContainer, const LessPriorityPred &lessPred = std::less<T>()) :
+    explicit PriorityQueueUsingHeap(const ContainerType itemContainer, const LessPriorityPred &lessPred = LessPriorityPred()) :
         container(itemContainer), pred(lessPred) {}
 
     void setLessPred(const LessPriorityPred &lessPred) {

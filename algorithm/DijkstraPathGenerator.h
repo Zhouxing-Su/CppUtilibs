@@ -96,6 +96,7 @@ public:
 
     template<typename T_Pred>
     ID next(const T_Pred &isTarget) {
+        if (unvisitedNodes.empty()) { return InvalidId; }
         for (;;) {
             ID lastNode = unvisitedNodes.top();
 
