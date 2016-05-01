@@ -9,6 +9,7 @@
 
 
 #include <algorithm>
+#include <initializer_list>
 
 
 namespace szx {
@@ -23,9 +24,11 @@ public:
     explicit Arr() : arr(nullptr), len(0) {}
     explicit Arr(IndexType length) { allocate(length); }
     explicit Arr(IndexType length, T *data) : arr(data), len(length) {}
-    explicit Arr(IndexType length, const T &defaultValue) {
-        allocate(length);
+    explicit Arr(IndexType length, const T &defaultValue) : Arr(length) {
         std::fill(arr, arr + length, defaultValue);
+    }
+    explicit Arr(std::initializer_list<T> l) : Arr(static_cast<IndexType>(l.size())) {
+        std::copy(l.begin(), l.end(), arr);
     }
 
     Arr(const Arr &a) : Arr(a.len) {
@@ -114,8 +117,7 @@ class Arr2D : public Arr<T, IndexType> {
 public:
     explicit Arr2D() : len1(0), len2(0) {}
     explicit Arr2D(IndexType length1, IndexType length2) { allocate(length1, length2); }
-    explicit Arr2D(IndexType length1, IndexType length2, const T &defaultValue) {
-        allocate(length1, length2);
+    explicit Arr2D(IndexType length1, IndexType length2, const T &defaultValue) : Arr2D(length1, length2) {
         std::fill(arr, arr + len, defaultValue);
     }
 
