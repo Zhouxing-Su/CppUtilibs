@@ -134,8 +134,5 @@
     <ClCompile Include="..\system\Termination.cpp">
       <Filter>system</Filter>
     </ClCompile>
-    <ClCompile Include="..\random\RandSample.cpp">
-      <Filter>random</Filter>
-    </ClCompile>
   </ItemGroup>
 </Project>
