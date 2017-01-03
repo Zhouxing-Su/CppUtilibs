@@ -19,6 +19,7 @@
     <ClCompile Include="..\io\File.cpp" />
     <ClCompile Include="..\log\Trace.cpp" />
     <ClCompile Include="..\random\Random.cpp" />
+    <ClCompile Include="..\random\RandSample.cpp" />
     <ClCompile Include="..\random\RandSelect.cpp" />
     <ClCompile Include="..\random\RangeRand.cpp" />
     <ClCompile Include="..\system\Directory.cpp" />
@@ -40,6 +41,7 @@
     <ClInclude Include="..\log\Timer.h" />
     <ClInclude Include="..\log\Trace.h" />
     <ClInclude Include="..\random\Random.h" />
+    <ClInclude Include="..\random\RandSample.h" />
     <ClInclude Include="..\random\RandSelect.h" />
     <ClInclude Include="..\random\RangeRand.h" />
     <ClInclude Include="..\system\Directory.h" />

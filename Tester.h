@@ -30,6 +30,7 @@
 #include "random/Random.h"
 #include "random/RangeRand.h"
 #include "random/RandSelect.h"
+#include "random/RandSample.h"
 
 #include "algorithm/Graph.h"
 #include "algorithm/BidirectionIndex.h"
@@ -60,6 +61,7 @@ void testPriorityQueue();
 void testRandom();
 void testRangeRand();
 void testRandSelect();
+void testRandSample();
 
 void testGraph();
 void testBidirectionIndex();

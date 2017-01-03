@@ -11,6 +11,7 @@ int main() {
     //testRandom();
     //testRangeRand();
     //testRandSelect();
+    //testRandSample();
     //testGraph();
     //testLog();
     //testBidirectionIndex();
@@ -101,6 +102,33 @@ void testRandSelect() {
         cout << o[r[i]] << ' ';
     }
     cout << endl;
+}
+
+void testRandSample() {
+    enum { Population = 20, TargetNum = 10 };
+
+    random_device rd;
+    unsigned seed = rd();
+    mt19937 rgen0(seed), rgen1(seed);
+
+    int count[Population + 1] = { 0 };
+    for (int i = 0; i < 1000000; ++i) {
+        RandSample rs0(rgen0, TargetNum);
+        RandSample rs1(rgen1, TargetNum);
+        int r[TargetNum + 1] = { 0 };
+        for (int j = 1; j <= Population; ++j) {
+            int index = rs0.isPicked();
+            r[index] = j;
+
+            if (index != (rs1.replaceIndex() + 1)) {
+                cout << "error" << endl;
+            }
+        }
+        for (int j = 1; j <= TargetNum; ++j) { ++count[r[j]]; }
+    }
+    for (int i = 1; i <= Population; ++i) {
+        cout << count[i] << endl;
+    }
 }
 
 void testGraph() {

@@ -95,6 +95,9 @@
     <ClInclude Include="..\algorithm\DijkstraPathGenerator.h">
       <Filter>algorithm</Filter>
     </ClInclude>
+    <ClInclude Include="..\random\RandSample.h">
+      <Filter>random</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Tester.cpp" />
@@ -130,6 +133,9 @@
     </ClCompile>
     <ClCompile Include="..\system\Termination.cpp">
       <Filter>system</Filter>
+    </ClCompile>
+    <ClCompile Include="..\random\RandSample.cpp">
+      <Filter>random</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

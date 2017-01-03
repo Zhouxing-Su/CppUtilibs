@@ -61,6 +61,9 @@ CLASS LIST ( IMPLEMENTED )
 	by same probability without recording all of them.
 	it can also select a certain number of elements out of a vector randomly.
 
+	[ RandSample ] :
+	an online algorithm for sampling targetNum items from a data stream.
+
 	[ RangeRand ] :
 	select a integer in a range by same probability.
 
