@@ -114,7 +114,7 @@ void testRandSample() {
     int count[Population + 1] = { 0 };
     for (int i = 0; i < 1000000; ++i) {
         RandSample rs0(rgen0, TargetNum);
-        RandSample rs1(rgen1, TargetNum);
+        RandSample_Static<TargetNum> rs1(rgen1);
         int r[TargetNum + 1] = { 0 };
         for (int j = 1; j <= Population; ++j) {
             int index = rs0.isPicked();
