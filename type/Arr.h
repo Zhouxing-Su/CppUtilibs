@@ -21,6 +21,8 @@ public:
     using Iterator = T*;
     using ConstIterator = T const *;
 
+    enum ResetOption { AllBits0 = 0, AllBits1 = -1 };
+
     explicit Arr() : arr(nullptr), len(0) {}
     explicit Arr(IndexType length) { allocate(length); }
     explicit Arr(IndexType length, T *data) : arr(data), len(length) {}
@@ -34,9 +36,7 @@ public:
     Arr(const Arr &a) : Arr(a.len) {
         if (this != &a) { copyData(a.arr); }
     }
-    Arr(Arr &&a) : Arr() {
-        *this = std::move(a);
-    }
+    Arr(Arr &&a) : Arr(a.len, a.arr) { a.arr = nullptr; }
 
     Arr& operator=(const Arr &a) {
         if (this != &a) {
@@ -73,8 +73,8 @@ public:
         arr = nullptr;
     }
 
-    /// set all data to 0.
-    void reset() { memset(arr, 0, sizeof(T) * len); }
+    /// set all data to val. any value other than 0 or -1 is undefined behavior.
+    void reset(ResetOption val = ResetOption::AllBits0) { memset(arr, val, sizeof(T) * len); }
 
     T& operator[](IndexType i) { return arr[i]; }
     const T& operator[](IndexType i) const { return arr[i]; }
@@ -92,18 +92,20 @@ public:
     const T& back() const { return at(len - 1); }
 
     IndexType size() const { return len; }
+    bool empty() const { return (len == 0); }
 
 protected:
     /// must not be called except init.
     void allocate(IndexType length) {
-        arr = new T[length];
+        // TODO[szx][2]: length > (1 << 32)?
+        arr = new T[static_cast<size_t>(length)];
         len = length;
     }
 
     void copyData(T *data) {
         // TODO[szx][1]: what if data is shorter than arr?
         // OPTIMIZE[szx][8]: use memcpy() if all callers are POD type.
-        copy(data, data + len, arr);
+        std::copy(data, data + len, arr);
     }
 
 
@@ -117,6 +119,8 @@ class Arr2D : public Arr<T, IndexType> {
 public:
     explicit Arr2D() : len1(0), len2(0) {}
     explicit Arr2D(IndexType length1, IndexType length2) { allocate(length1, length2); }
+    explicit Arr2D(IndexType length1, IndexType length2, T *data)
+        : Arr(length1 * length2, data), len1(length1), len2(length2) {}
     explicit Arr2D(IndexType length1, IndexType length2, const T &defaultValue) : Arr2D(length1, length2) {
         std::fill(arr, arr + len, defaultValue);
     }
@@ -124,9 +128,7 @@ public:
     Arr2D(const Arr2D &a) : Arr2D(a.len1, a.len2) {
         if (this != &a) { copyData(a.arr); }
     }
-    Arr2D(Arr2D &&a) : Arr2D() {
-        *this = std::move(a);
-    }
+    Arr2D(Arr2D &&a) : Arr2D(a.len1, a.len2, a.arr) { a.arr = nullptr; }
 
     Arr2D& operator=(const Arr2D &a) {
         if (this != &a) {
@@ -186,8 +188,7 @@ protected:
     void allocate(IndexType length1, IndexType length2) {
         len1 = length1;
         len2 = length2;
-        len = length1 * length2;
-        arr = new T[len];
+        Arr<T, IndexType>::allocate(length1 * length2);
     }
 
 
@@ -201,6 +202,8 @@ class Arr3D : public Arr<T, IndexType> {
 public:
     explicit Arr3D() : len1(0), len2(0), len3(0), len2len3(0) {}
     explicit Arr3D(IndexType length1, IndexType length2, IndexType length3) { allocate(length1, length2, length3); }
+    explicit Arr3D(IndexType length1, IndexType length2, IndexType length3, T *data)
+        : Arr(length1 * length2 * length3, data), len1(length1), len2(length2), len3(length3), len2len3(length2 * length3) {}
     explicit Arr3D(IndexType length1, IndexType length2, IndexType length3, const T &defaultValue) {
         allocate(length1, length2, length3);
         std::fill(arr, arr + len, defaultValue);
@@ -209,9 +212,7 @@ public:
     Arr3D(const Arr3D &a) : Arr3D(a.len1, a.len2, a.len3) {
         if (this != &a) { copyData(a.arr); }
     }
-    Arr3D(Arr3D &&a) : Arr3D() {
-        *this = std::move(a);
-    }
+    Arr3D(Arr3D &&a) : Arr3D(a.len1, a.len2, a.len3, a.arr) { a.arr = nullptr; }
 
     Arr3D& operator=(const Arr3D &a) {
         if (this != &a) {
@@ -274,8 +275,7 @@ protected:
         len2 = length2;
         len3 = length3;
         len2len3 = len2 * len3;
-        len = length1 * len2len3;
-        arr = new T[len];
+        Arr<T, IndexType>::allocate(length1 * len2len3);
     }
 
 
