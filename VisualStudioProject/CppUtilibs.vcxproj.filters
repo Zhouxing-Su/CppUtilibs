@@ -19,6 +19,9 @@
     <Filter Include="io">
       <UniqueIdentifier>{f736882f-5de8-4d59-8578-e08a83d694dc}</UniqueIdentifier>
     </Filter>
+    <Filter Include="math">
+      <UniqueIdentifier>{87d57cc2-312a-43da-964b-ae007d766f73}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\README" />
@@ -42,9 +45,6 @@
       <Filter>random</Filter>
     </ClInclude>
     <ClInclude Include="..\random\RandSelect.h">
-      <Filter>random</Filter>
-    </ClInclude>
-    <ClInclude Include="..\random\RangeRand.h">
       <Filter>random</Filter>
     </ClInclude>
     <ClInclude Include="..\type\Convert.h">
@@ -98,6 +98,18 @@
     <ClInclude Include="..\random\RandSample.h">
       <Filter>random</Filter>
     </ClInclude>
+    <ClInclude Include="..\math\Math.h">
+      <Filter>math</Filter>
+    </ClInclude>
+    <ClInclude Include="..\math\Oscillator.h">
+      <Filter>math</Filter>
+    </ClInclude>
+    <ClInclude Include="..\type\ConsecutiveNonNegativeIdMap.h">
+      <Filter>type</Filter>
+    </ClInclude>
+    <ClInclude Include="..\type\LoopQueue.h">
+      <Filter>type</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Tester.cpp" />
@@ -107,13 +119,7 @@
     <ClCompile Include="..\log\Trace.cpp">
       <Filter>log</Filter>
     </ClCompile>
-    <ClCompile Include="..\random\Random.cpp">
-      <Filter>random</Filter>
-    </ClCompile>
     <ClCompile Include="..\random\RandSelect.cpp">
-      <Filter>random</Filter>
-    </ClCompile>
-    <ClCompile Include="..\random\RangeRand.cpp">
       <Filter>random</Filter>
     </ClCompile>
     <ClCompile Include="..\type\Double.cpp">

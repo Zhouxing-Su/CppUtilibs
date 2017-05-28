@@ -53,8 +53,7 @@ CLASS LIST ( IMPLEMENTED )
 
 [[ random ]]
 	[ Random ] :
-	base class of all random number generators.
-	provide initialization interface by seed or sequence.
+	wrap a random number generator with some simple probability distrubution.
 
 	[ RandSelect ] :
 	make it possible to pick one element out of a sequence of elements 
@@ -63,9 +62,6 @@ CLASS LIST ( IMPLEMENTED )
 
 	[ RandSample ] :
 	an online algorithm for sampling targetNum items from a data stream.
-
-	[ RangeRand ] :
-	select a integer in a range by same probability.
 
 
 [[ type ]]

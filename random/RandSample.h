@@ -10,18 +10,16 @@
 
 #include <random>
 
+#include "Random.h"
+
 
 namespace szx {
 
-// count | 1 2 3 4 ...  k   k+1   k+2   k+3  ...  n
-// ------|------------------------------------------
-// index | 0 1 2 3 ... k-1   k    k+1   k+2  ... n-1
-// prob. | 1 1 1 1 ...  1  k/k+1 k/k+2 k/k+3 ... k/n
 // if the TargetNum is not known when compiling, use RandSample_Dynamic.
 template<const int TargetNum>
 class RandSample_Static {
 public:
-    RandSample_Static(std::mt19937 &randomNumberGenerator) : rgen(randomNumberGenerator), pickCount(0) {}
+    RandSample_Static(Random &randomNumberGenerator) : rgen(randomNumberGenerator), pickCount(0) {}
 
     // return 0 for not picked.
     // return an integer i \in [1, TargetNum] if it is the i_th item in the picked set.
@@ -29,7 +27,7 @@ public:
         if ((++pickCount) <= TargetNum) {
             return pickCount;
         } else {
-            int i = (rgen() % pickCount) + 1;
+            int i = rgen.pick(pickCount) + 1;
             return (i <= TargetNum) ? i : 0;
         }
     }
@@ -40,13 +38,13 @@ public:
         if (pickCount < TargetNum) {
             return pickCount++;
         } else {
-            int i = (rgen() % (++pickCount));
+            int i = rgen.pick(++pickCount);
             return (i < TargetNum) ? i : -1;
         }
     }
 
-private:
-    std::mt19937 &rgen;
+protected:
+    Random &rgen;
     int pickCount;
 };
 
@@ -54,7 +52,7 @@ private:
 // if the TargetNum is known when compiling, use RandSample_Static to speed up.
 class RandSample_Dynamic {
 public:
-    RandSample_Dynamic(std::mt19937 &randomNumberGenerator, int targetNumber)
+    RandSample_Dynamic(Random &randomNumberGenerator, int targetNumber)
         : rgen(randomNumberGenerator), targetNum(targetNumber), pickCount(0) {}
 
     // return 0 for not picked.
@@ -63,7 +61,7 @@ public:
         if ((++pickCount) <= targetNum) {
             return pickCount;
         } else {
-            int i = (rgen() % pickCount) + 1;
+            int i = rgen.pick(pickCount) + 1;
             return (i <= targetNum) ? i : 0;
         }
     }
@@ -74,7 +72,7 @@ public:
         if (pickCount < targetNum) {
             return pickCount++;
         } else {
-            int i = (rgen() % (++pickCount));
+            int i = rgen.pick(++pickCount);
             return (i < targetNum) ? i : -1;
         }
     }
@@ -83,13 +81,17 @@ public:
         pickCount = 0;
     }
 
-private:
-    std::mt19937 &rgen;
-    int pickCount;
+protected:
+    Random &rgen;
     int targetNum;
+    int pickCount;
 };
 
 
+// count | 1 2 3 4 ...  k   k+1   k+2   k+3  ...  n
+// ------|------------------------------------------
+// index | 0 1 2 3 ... k-1   k    k+1   k+2  ... n-1
+// prob. | 1 1 1 1 ...  1  k/k+1 k/k+2 k/k+3 ... k/n
 using RandSample = RandSample_Dynamic;
 
 }

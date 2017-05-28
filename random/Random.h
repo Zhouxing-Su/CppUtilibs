@@ -1,96 +1,54 @@
-/**
-*   usage : singleton class with function object rand.
-*           other class using rand() should inherit this class to ensure that
-*           the global random seed is only initialized once.
-*           1. setSeed() for release build, getSeed() for logging. this is the default behavior.
-*           2. setSeq() for cross-platform debuging when you need same random sequence.
-*              ( rand() in windows and linux will produce different sequence even they got the same seed )
-*
-*   problem :
-*           1.
-*/
+////////////////////////////////
+/// usage : 1.	a simple wrapper for a random number generator.
+/// 
+/// note  : 1.	
+////////////////////////////////
 
-#ifndef RANDOM_H
+#ifndef SZX_CPPUTILIBS_RANDOM_H
+#define SZX_CPPUTILIBS_RANDOM_H
 
+
+#include <random>
 
 #include <ctime>
-#include <cstdlib>
-#include <vector>
 
 
-namespace szx
-{
+namespace szx {
 
-class Random
-{
+class Random {
 public:
-    typedef int( *RandGenerator )();
+    using Generator = std::mt19937;
 
 
-    static unsigned int genSeed()
-    {
-        return static_cast<unsigned int>(time( NULL ) + clock());
+    Random(int seed) : rgen(seed) {}
+    Random() : rgen(generateSeed()) {}
+
+
+    static int generateSeed() {
+        return static_cast<int>(std::time(nullptr) + std::clock());
     }
 
-    static int setSeed( unsigned int s = genSeed() )
-    {
-        rand.seed = s;
-        rand.gen = std::rand;
-        std::srand( s );
-        // return int for initializing random seed in default behavior
-        return static_cast<int>(s);
+    Generator::result_type operator()() { return rgen(); }
+
+    // pick with probability of (numerator / denominator).
+    bool isPicked(unsigned numerator, unsigned denominator) {
+        return ((rgen() % denominator) < numerator);
     }
 
-    static unsigned int getSeed()
-    {
-        return rand.seed;
+    // pick from [min, max).
+    int pick(int min, int max) {
+        return ((rgen() % (max - min)) + min);
     }
-
-    static void setSeq( const std::vector<int> &seq )
-    {
-        rand.randSeq = seq;
-        rand.seqPointer = 0;
-        rand.gen = getIntFromRandSeq;
+    // pick from [0, max).
+    int pick(int max) {
+        return (rgen() % max);
     }
-
-    static const std::vector<int>& getSeq()
-    {
-        return rand.randSeq;
-    }
-
-    int operator()()
-    {
-        return gen();
-    }
-
-
-    static Random rand;
 
 protected:
-    Random( int = 0 ) {} // for inherited classed and static rand init
-
-private:
-    static int getIntFromRandSeq()
-    {
-        rand.seqPointer %= rand.randSeq.size();
-        return rand.randSeq[rand.seqPointer++];
-    }
-
-    RandGenerator gen;
-
-    unsigned int seed;
-
-    std::vector<int> randSeq;
-    int seqPointer;
-
-private:    // forbid to be used
-    Random( const Random& ) {}
-    Random& operator=(const Random&) { return *this; }
-
+    Generator rgen;
 };
 
 }
 
 
-#define RANDOM_H
-#endif
+#endif // SZX_CPPUTILIBS_RANDOM_H

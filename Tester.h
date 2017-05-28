@@ -26,9 +26,10 @@
 #include "type/VectorMD.h"
 #include "type/Arr.h"
 #include "type/PriorityQueue.h"
+#include "type/ConsecutiveNonNegativeIdMap.h"
+#include "type/LoopQueue.h"
 
 #include "random/Random.h"
-#include "random/RangeRand.h"
 #include "random/RandSelect.h"
 #include "random/RandSample.h"
 
@@ -43,9 +44,11 @@
 #include "log/Log.h"
 #include "log/Trace.h"
 
+#include "math/Math.h"
+#include "math/Oscillator.h"
+
 
 void testDirectory();
-void testFileLock();
 void testTermination();
 void testMemory();
 
@@ -57,9 +60,10 @@ void testInteger();
 void testVectorMD();
 void testArr();
 void testPriorityQueue();
+void testConsecutiveNonNegativeIdMap();
+void testLoopQueue();
 
 void testRandom();
-void testRangeRand();
 void testRandSelect();
 void testRandSample();
 
@@ -74,6 +78,8 @@ void testTimer();
 void testLog();
 void testTrace();
 
+void testMath();
+void testOscillator();
 
 void f_testTrace( int i );
 

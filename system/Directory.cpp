@@ -7,6 +7,7 @@ using namespace std;
 namespace szx
 {
 
+using namespace cmd::common;
 #ifdef WIN32
 using cmd::win32::mkdir;
 using cmd::win32::nullDev;
@@ -18,7 +19,7 @@ using cmd::Unix::nullDev;
 
 void Directory::makeSureDirExist( const string &dir )
 {
-    string cmd( mkdir + quote( dir ) + cmd::common::redirectStderr + nullDev );
+    string cmd( mkdir + quote( dir ) + redirectStderr + nullDev );
     system( cmd.c_str() );
 }
 

@@ -31,6 +31,10 @@ int main() {
     testInteger();
     //testPriorityQueue();
     //testDijkstraPathGenerator();
+    //testMath();
+    //testOscillator();
+    //testConsecutiveNonNegativeIdMap();
+    //testLoopQueue();
 
     return 0;
 }
@@ -52,28 +56,10 @@ void testDouble() {
 }
 
 void testRandom() {
-    vector<int> v = { 1, 2, 3, 4, 5, 6, 7, 8 };
+    Random rd(Random::generateSeed());
 
     for (int i = 0; i < 20; ++i) {
-        cout << Random::rand() << endl;
-    }
-
-    Random::setSeq(v);
-    for (int i = 0; i < 20; ++i) {
-        cout << Random::rand() << endl;
-    }
-
-    Random::setSeed();
-    for (int i = 0; i < 20; ++i) {
-        cout << Random::rand() << endl;
-    }
-}
-
-void testRangeRand() {
-    RangeRand r(1, 10);
-
-    for (int i = 0; i < 20; ++i) {
-        cout << r() << endl;
+        cout << rd() << " " << rd.pick(100) << " " << rd.pick(100, 200) << " " << rd.isPicked(2, 5) << endl;
     }
 }
 
@@ -109,7 +95,7 @@ void testRandSample() {
 
     random_device rd;
     unsigned seed = rd();
-    mt19937 rgen0(seed), rgen1(seed);
+    Random rgen0(seed), rgen1(seed);
 
     int count[Population + 1] = { 0 };
     for (int i = 0; i < 1000000; ++i) {
@@ -132,11 +118,13 @@ void testRandSample() {
 }
 
 void testGraph() {
+    Random rd;
+
     // ====== usage for an GeometricalGraph ======
     const int pointNum = 20;
     const int coordRange = 10;
-    RangeRand plrr(-coordRange, coordRange);
-    RangeRand vrr(0, pointNum - 1);
+    auto plrr = [&]() { return rd.pick(-coordRange, coordRange + 1); };
+    auto vrr = [&]() { return rd.pick(0, pointNum); };
 
     // generate a pointList
     GeometricalGraph::PointList pointList;
@@ -166,8 +154,8 @@ void testGraph() {
     const unsigned nodeNum = 10;
     const unsigned arcNum = 20;
     const int minVertexIndex = 1;
-    RangeRand alrr(minVertexIndex, nodeNum + minVertexIndex - 1);
-    RangeRand drr(1, 255);
+    auto alrr = [&]() { return rd.pick(minVertexIndex, nodeNum + minVertexIndex); };
+    auto drr = [&]() { return rd.pick(1, 256); };
 
     // generate an arcList for an directed graph with unsigned distance randomly
     TopologicalGraph<>::ArcList arcList;
@@ -193,10 +181,18 @@ void testGraph() {
 }
 
 void testLog() {
-    Log<>::write("test log true\n", true);
-    Log<>::write("test log false\n", false);
-    Debug<>::write("test debug true\n", true);
-    Debug<>::write("test debug false\n", false);
+    enum LogType {
+        SzxTestFunctionA = Log::Debug,
+        SzxTestFunctionB = Log::Info,
+        AsdTestClassC = Log::On,
+        AsdTestClassD = Log::Off,
+    };
+
+    Log(LogType::SzxTestFunctionA) << "some debug information left by szx." << endl;
+    Log(LogType::SzxTestFunctionB, cout) << "some trivial information from szx." << endl;
+
+    Log(LogType::AsdTestClassC) << "some useful information given by asd." << endl;
+    Log(LogType::AsdTestClassD) << "some useless information from asd." << endl;
 }
 
 void testBidirectionIndex() {
@@ -343,6 +339,39 @@ void testPriorityQueue() {
     cout << pqs->empty() << endl;
 }
 
+void testConsecutiveNonNegativeIdMap() {
+    ConsecutiveNonNegativeIdMap<int> idMap(20);
+
+    vector<int> aid = { 3543, 6434, 897454, 75646, 246584, 1654 };
+    vector<int> cid;
+
+    for (auto iter = aid.begin(); iter != aid.end(); ++iter) {
+        cid.push_back(idMap.toConsecutiveId(*iter));
+        cout << *iter << " -> " << cid.back() << endl;
+    }
+    for (auto iter = cid.begin(); iter != cid.end(); ++iter) {
+        cout << *iter << " -> " << idMap.toArbitraryId(*iter) << endl;
+    }
+}
+
+void testLoopQueue() {
+    LoopQueue<int> lq(5);
+
+    lq.pushBack(1);
+    lq.pushBack(2);
+
+    for (int i = 3; i < 8; ++i) {
+        lq.pushBack(i);
+        lq.popFront();
+        lq.pushBack(++i);
+    }
+
+    while (!lq.empty()) {
+        cout << lq.front() << endl;
+        lq.popFront();
+    }
+}
+
 void testDirectory() {
     Directory::makeSureDirExist("a/b/c/d/e");
     Directory::makeSureDirExist("a/b/c/f/g/");
@@ -412,20 +441,24 @@ void testDijkstraPathGenerator() {
     cout << endl;
 }
 
+#if SZX_CPPUTILIBS_TIMER_CPP_STYLE
+ostream& operator<<(ostream &os, Timer::Millisecond ms) { return os << ms.count(); }
+#endif // SZX_CPPUTILIBS_TIMER_CPP_STYLE
+
 void testTimer() {
     Timer t(chrono::seconds(10));
     long long i = 0;
 
-    Timer::Microsecond start = Timer::getCPUtime();
+    Timer::TimePoint start = Timer::Clock::now();
     for (; !t.isTimeOut(); ++i) {
         for (int j = 0; j < 1000000; ++j) {
             i = j;
         }
-        cout << t.restTime().count() << endl;
+        cout << t.restMilliseconds() << endl;
     }
-    Timer::Microsecond end = Timer::getCPUtime();
+    Timer::TimePoint end = Timer::Clock::now();
 
-    cout << end - start << endl;
+    cout << Timer::durationInMillisecond(start, end) << endl;
     cout << i << endl;
 }
 
@@ -442,4 +475,132 @@ void testMemory() {
     cout << Memory::getAvailablePhysicalMemory() << endl
         << Memory::getTotalPhysicalMemory() << endl
         << Memory::getMemoryStatus().dwMemoryLoad << endl;
+}
+
+
+static void testMathLog2() {
+    std::mt19937 rgen(Random::generateSeed());
+    int len = 100000000;
+    std::vector<unsigned> r(len);
+    std::vector<unsigned> v(len);
+    for (auto i = 0; i < len; ++i) { v[i] = rgen(); }
+    Timer::TimePoint start, end;
+    int testItem = rgen() % len;
+
+    start = Timer::Clock::now();
+    for (auto i = 0; i < len; ++i) {
+        r[i] = v[i];
+    }
+    end = Timer::Clock::now();
+    cout << r[testItem] << " emptyLoop " << Timer::durationInMillisecond(start, end).count() << std::endl;
+
+    start = Timer::Clock::now();
+    for (auto i = 0; i < len; ++i) {
+        r[i] = static_cast<int>(std::log2(v[i]));
+    }
+    end = Timer::Clock::now();
+    cout << r[testItem] << " std::log2 " << Timer::durationInMillisecond(start, end).count() << std::endl;
+
+    start = Timer::Clock::now();
+    for (auto i = 0; i < len; ++i) {
+        r[i] = Math::Impl::log2v1(v[i]);
+    }
+    end = Timer::Clock::now();
+    cout << r[testItem] << " log2v1 " << Timer::durationInMillisecond(start, end).count() << std::endl;
+
+    start = Timer::Clock::now();
+    for (auto i = 0; i < len; ++i) {
+        r[i] = Math::Impl::log2v2(v[i]);
+    }
+    end = Timer::Clock::now();
+    cout << r[testItem] << " log2v2 " << Timer::durationInMillisecond(start, end).count() << std::endl;
+
+    start = Timer::Clock::now();
+    for (auto i = 0; i < len; ++i) {
+        r[i] = Math::Impl::log2v3(v[i]);
+    }
+    end = Timer::Clock::now();
+    cout << r[testItem] << " log2v3 " << Timer::durationInMillisecond(start, end).count() << std::endl;
+
+    start = Timer::Clock::now();
+    for (auto i = 0; i < len; ++i) {
+        r[i] = Math::Impl::log2v4(v[i]);
+    }
+    end = Timer::Clock::now();
+    cout << r[testItem] << " log2v4 " << Timer::durationInMillisecond(start, end).count() << std::endl;
+
+    start = Timer::Clock::now();
+    for (auto i = 0; i < len; ++i) {
+        r[i] = Math::Impl::log2v5(v[i]);
+    }
+    end = Timer::Clock::now();
+    cout << r[testItem] << " log2v5 " << Timer::durationInMillisecond(start, end).count() << std::endl;
+
+    start = Timer::Clock::now();
+    for (auto i = 0; i < len; ++i) {
+        r[i] = Math::Impl::log2v6(v[i]);
+    }
+    end = Timer::Clock::now();
+    cout << r[testItem] << " log2v6 " << Timer::durationInMillisecond(start, end).count() << std::endl;
+}
+
+static void testMathUpdateMinMax() {
+    int i = 0;
+    if (Math::updateMin(i, 0)) {
+        cout << "i has been updated to" << i << endl;
+    }
+    if (Math::updateMin(i, 10)) {
+        cout << "i has been updated to" << i << endl;
+    }
+    if (Math::updateMin(i, -2)) {
+        cout << "i has been updated to" << i << endl;
+    }
+    if (Math::updateMax(i, 3)) {
+        cout << "i has been updated to" << i << endl;
+    }
+    if (Math::updateMax(i, -5)) {
+        cout << "i has been updated to" << i << endl;
+    }
+    if (Math::updateMax(i, 3)) {
+        cout << "i has been updated to" << i << endl;
+    }
+}
+
+static void testMathNormalize() {
+    vector<int> v = { 58, 9999, 6587, 354, 1984, 3989 };
+
+    Math::normalize(v, 100000);
+    for (auto iter = v.begin(); iter != v.end(); ++iter) {
+        cout << *iter << " ";
+    }
+    cout << endl;
+
+    Math::normalize(v, 1000);
+    for (auto iter = v.begin(); iter != v.end(); ++iter) {
+        cout << *iter << " ";
+    }
+    cout << endl;
+}
+
+void testMath() {
+    cout << Math::round(1.7) << " " << Math::round(2.1) << endl;
+
+    cout << Math::power2(0) << " " << Math::power2(1) << " " << Math::power2(4) << " " << Math::power2(-2) << endl;
+
+    testMathLog2();
+
+    testMathUpdateMinMax();
+
+    cout << Math::average(6, 2, 4, 3) << endl;
+
+    testMathNormalize();
+}
+
+void testOscillator() {
+    Oscillator<int> oscillator(-4, 9, 3, Oscillator<int>::Direction::Down, 1);
+
+    for (; oscillator != oscillator.end(); ++oscillator) {
+        cout << oscillator++ << endl;
+        cout << oscillator << endl;
+    }
 }

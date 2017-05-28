@@ -1,72 +1,59 @@
-/**
-*   usage : 1.  show debug information when NDEBUG macro is not defined.
-*               compatible with visual studio when switching build target between Debug and Release,
-*               or you can toggle NDEBUG macro below to switch it.
-*           2.  show log.
-*
-*   note :  1.  the T_OUTPUT must get an "operator<<" to print information about it.
-*/
+////////////////////////////////
+/// usage : 1.	switchable log printer.
+/// 
+/// note  : 1.	
+////////////////////////////////
 
-#ifndef LOG_H
-#define LOG_H
+#ifndef SZX_CPPUTILIBS_LOG_H
+#define SZX_CPPUTILIBS_LOG_H
 
 
-#include <cstdlib>
 #include <iostream>
-#include <fstream>
-#include <vector>
-#include <string>
 
 
-namespace szx
-{
+namespace szx {
 
-template <class T_OUTPUT = const char *>
-class Log
-{
+class Log {
 public:
-    static void write( const T_OUTPUT &outputObject, bool condition = true, std::ostream &os = std::cout )
-    {
-        if (condition) {
-            os << outputObject;
-        }
-    }
-
-    static void writeln( const T_OUTPUT &outputObject, bool condition = true, std::ostream &os = std::cout )
-    {
-        if (condition) {
-            os << outputObject << std::endl;
-        }
-    }
-};
+    using Manipulator = std::ostream& (*)(std::ostream&);
 
 
-// toggle comment on this macro to switch whether log or not
-//#define NDEBUG
-template <class T_OUTPUT = const char *>
-class Debug
-{
-public:
-    static void write( const T_OUTPUT &outputObject, bool condition = true, std::ostream &os = std::cout )
-    {
-#ifndef NDEBUG
-        if (condition) {
-            os << outputObject;
-        }
-#endif
+    enum Level {
+        On,
+        Off, // the default state if not specified.
+
+        Fatal = On,
+        Error = On,
+        Warning = On,
+        Debug = On,
+        Info, // = Off.
+    };
+
+
+    static bool isTurnedOn(int level) { return (level == On); }
+    static bool isTurnedOff(int level) { return !isTurnedOn(level); }
+
+
+    Log(int logLevel, std::ostream &logFile) : level(logLevel), os(logFile) {}
+    Log(int logLevel) : Log(logLevel, std::cerr) {}
+
+
+    template<typename T>
+    Log& operator<<(const T &obj) {
+        if (isTurnedOn(level)) { os << obj; }
+        return *this;
+    }
+    Log& operator<<(Manipulator manip) {
+        if (isTurnedOn(level)) { os << manip; }
+        return *this;
     }
 
-    static void writeln( const T_OUTPUT &outputObject, bool condition = true, std::ostream &os = std::cout )
-    {
-#ifndef NDEBUG
-        if (condition) {
-            os << outputObject << std::endl;
-        }
-#endif
-    }
+protected:
+    int level;
+    std::ostream &os;
 };
 
 }
 
 
-#endif
+#endif // SZX_CPPUTILIBS_LOG_H
