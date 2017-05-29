@@ -17,6 +17,8 @@
 #include "system/Directory.h"
 #include "system/Termination.h"
 #include "system/Memory.h"
+#include "system/Semaphore.h"
+#include "system/ThreadPool.h"
 
 #include "io/File.h"
 
@@ -51,6 +53,8 @@
 void testDirectory();
 void testTermination();
 void testMemory();
+void testSemaphore();
+void testThreadPool();
 
 void testFile();
 
@@ -81,6 +85,5 @@ void testTrace();
 void testMath();
 void testOscillator();
 
-void f_testTrace( int i );
 
 #endif

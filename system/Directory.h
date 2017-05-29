@@ -1,30 +1,27 @@
-/**
-*   usage : 1. portable simplify directory operation.
-*
-*   note :  1. not efficient and secure.
-*           2. add space on the border of commands.
-*/
+////////////////////////////////
+/// usage : 1.	portable simplify directory operation.
+/// 
+/// note  : 1.  not efficient and secure.
+///         2.  add space on the border of commands.
+////////////////////////////////
 
-#ifndef DIRECTORY_H
-#define DIRECTORY_H
+#ifndef SZX_CPPUTILIBS_DIRECTORY_H
+#define SZX_CPPUTILIBS_DIRECTORY_H
 
 
-#include <cstdlib>
 #include <string>
 
-#include "system.h"
 
+namespace szx {
 
-namespace szx
-{
-
-class Directory
-{
+class Directory {
 public:
-    static void makeSureDirExist( const std::string &dir );
+    static void makeSureDirExist(const std::string &dir);
+
+    static std::string quote(const std::string &s) { return ('\"' + s + '\"'); }
 };
 
 }
 
 
-#endif
+#endif // SZX_CPPUTILIBS_DIRECTORY_H

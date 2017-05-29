@@ -327,7 +327,8 @@ TopologicalGraph<T_DIST>::~TopologicalGraph()
 template <typename T_DIST>
 int TopologicalGraph<T_DIST>::findVertexWithinRadius( int start, typename TopologicalGraph::Distance radius ) const
 {
-    RandSelect rs( 1 );
+    Random rd;
+    RandSelect rs( rd, RandSelect::StartCount::NoPreseletedElement );
     int vertex = -1;
     for (int i = minVertexIndex; i <= maxVertexIndex; ++i) {
         if (distance( start, nthClosestVertex( start, i ) ) < radius) {

@@ -1,26 +1,26 @@
 #include "Directory.h"
 
+#include <cstdlib>
+
+#include "System.h"
+
 
 using namespace std;
 
 
-namespace szx
-{
+namespace szx {
 
 using namespace cmd::common;
-#ifdef WIN32
-using cmd::win32::mkdir;
-using cmd::win32::nullDev;
+#ifdef _OS_MS_WINDOWS
+using namespace cmd::win32;
 #else
-using cmd::Unix::mkdir;
-using cmd::Unix::nullDev;
-#endif
+using namespace cmd::unix;
+#endif // _OS_MS_WINDOWS
 
 
-void Directory::makeSureDirExist( const string &dir )
-{
-    string cmd( mkdir + quote( dir ) + redirectStderr + nullDev );
-    system( cmd.c_str() );
+void Directory::makeSureDirExist(const string &dir) {
+    string cmd(Mkdir + quote(dir) + RedirectStderr + NullDev);
+    system(cmd.c_str());
 }
 
 }

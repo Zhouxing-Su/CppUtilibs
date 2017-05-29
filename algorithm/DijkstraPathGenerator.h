@@ -118,7 +118,7 @@ public:
                     #if USE_HEAP
                     unvisitedNodes.add(i->dst);
                     #else
-                    unvisitedNodes.push(i->dst);
+                    unvisitedNodes.push(i->dst, newDist);
                     #endif // USE_HEAP
                 }
             }
@@ -146,7 +146,7 @@ private:
         dist[source] = 0;
         std::fill(prevNode.begin(), prevNode.end(), InvalidId);
         unvisitedNodes.clear();
-        unvisitedNodes.push(source);
+        unvisitedNodes.push(source, 0);
     }
 
 
@@ -157,9 +157,9 @@ private:
     std::vector<Weight> dist;
     std::vector<ID> prevNode;
     #if USE_HEAP
-    PriorityQueueUsingHeap<ID, Cmp> unvisitedNodes;
+    impl::PriorityQueue::HeapImpl<ID, Cmp> unvisitedNodes;
     #else
-    PriorityQueueUsingSet<ID, Cmp> unvisitedNodes;
+    impl::PriorityQueue::SetImpl<ID, Cmp> unvisitedNodes;
     #endif // USE_HEAP
 };
 

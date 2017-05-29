@@ -1,8 +1,34 @@
 #include "Tester.h"
 
+#include <future>
+
+
+namespace ap { // atomic print.
+
+static std::mutex printMutex;
+
+template<typename Info>
+void print(const char *msg, Info info) {
+    printMutex.lock();  std::cerr << msg << " " << info << std::endl; printMutex.unlock();
+}
+
+template<typename Duration>
+void printSleepPrint(const char *msg, Duration duration) {
+    print(msg, "begin");
+    if (duration > 0us) {
+        std::this_thread::sleep_for(duration);
+    } else {
+        std::this_thread::yield();
+    }
+    print(msg, "end");
+}
+
+}
+
 
 using namespace std;
 using namespace szx;
+using namespace ap;
 
 
 int main() {
@@ -35,6 +61,8 @@ int main() {
     //testOscillator();
     //testConsecutiveNonNegativeIdMap();
     //testLoopQueue();
+    //testSemaphore();
+    //testThreadPool();
 
     return 0;
 }
@@ -66,7 +94,8 @@ void testRandom() {
 void testRandSelect() {
     int result = 0;
 
-    RandSelect rs;
+    Random rd;
+    RandSelect rs(rd, RandSelect::StartCount::NoPreseletedElement);
     for (int i = 0; i < 10; ++i) {
         if (rs.isSelected()) {
             result = i;
@@ -74,20 +103,16 @@ void testRandSelect() {
     }
     cout << result << endl;
 
-    rs.reset(2);    // select 1 out of 11 elements (0-9 and the last selected number)
-    for (int i = 0; i < 10; ++i) {
-        if (rs.isSelected()) {
+    rs.reset(RandSelect::StartCount::WithPreseletedElement);
+    for (int i = 10; i >= 0; --i) {
+        if (rs.isMinimal(result, i)) {
             result = i;
+            cout << result << endl;
+        } else{
+            cout << "skip " << i << endl;
         }
-        cout << result << endl;
     }
-
-    int o[10] = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
-    vector<int> r = RandSelect::randSelect(10, 4);
-    for (int i = 0; i < 4; ++i) {
-        cout << o[r[i]] << ' ';
-    }
-    cout << endl;
+    cout << result << endl;
 }
 
 void testRandSample() {
@@ -147,6 +172,7 @@ void testGraph() {
     vertex = ug.findVertexWithinRadius(vrr(), coordRange);
     int vnum = ug.findVertexNumWithinRadius(vrr(), coordRange);
     TopologicalGraph<double>::Distance dd = ug.distance(vrr(), vrr());
+    cout << dd << endl;
 
 
 
@@ -178,6 +204,7 @@ void testGraph() {
     vertex = dg.findVertexWithinRadius(alrr(), drr());
     vnum = dg.findVertexNumWithinRadius(alrr(), drr());
     TopologicalGraph<>::Distance ud = dg.distance(alrr(), alrr());
+    cout << ud << endl;
 }
 
 void testLog() {
@@ -232,27 +259,27 @@ void testBidirectionIndex() {
     cout << bis.elementAt(j) << endl;
 }
 
-void testTrace() {
-    Trace::setHandler();
-    f_testTrace(6);
-}
-
-void f_testTrace(int i) {
-    Trace t("f_testTrace()");
+static void testTrace_f(int i) {
+    Trace t0("testTrace_f()");
     if (i != 22) {
-        Trace t("if");
-        f_testTrace(i + 1);
+        Trace t1("if");
+        testTrace_f(i + 1);
     }
 
     for (int k = 0; k < 222; ++k) {
         ostringstream oss;
         oss << k;
-        Trace t("for, k=" + oss.str());
+        Trace t1("for, k=" + oss.str());
         if (k == 46) {
             Trace::dumpCallStack(cout);
             *(int*)0 = 1;   // crash
         }
     }
+}
+
+void testTrace() {
+    Trace::setHandler();
+    testTrace_f(6);
 }
 
 void testConvert() {
@@ -318,25 +345,23 @@ void testArr() {
 }
 
 void testPriorityQueue() {
-    PriorityQueueBase<int> *pqh = new PriorityQueueUsingHeap<int>();
-    PriorityQueueBase<int> *pqs = new PriorityQueueUsingSet<int>();
+    impl::PriorityQueue::BucketL1Impl<double> pqb(10);
+    PriorityQueue<int> pqs;
 
-    pqh->add(1);
-    pqh->add(3);
-    pqh->add(0);
-    pqh->remove(1);
-    pqh->reorder();
-    pqh->push(2);
-    pqh->push(4);
-    cout << pqh->top() << endl;
-    while (!pqh->empty()) {
-        pqs->push(pqh->top());
-        pqh->pop();
+    pqb.push(1.0, 1);
+    pqb.push(3.0, 3);
+    pqb.push(0.0, 0);
+    pqb.push(2.0, 2);
+    pqb.push(4.0, 4);
+    cout << pqb.top() << endl;
+    while (!pqb.empty()) {
+        pqs.push(pqb.topPriority(), pqb.topPriority());
+        pqb.pop();
     }
-    pqs->remove(4);
-    cout << pqs->top() << endl;
-    pqs->clear();
-    cout << pqs->empty() << endl;
+    pqs.remove(4);
+    cout << pqs.top() << endl;
+    pqs.clear();
+    cout << pqs.empty() << endl;
 }
 
 void testConsecutiveNonNegativeIdMap() {
@@ -477,6 +502,106 @@ void testMemory() {
         << Memory::getMemoryStatus().dwMemoryLoad << endl;
 }
 
+void testSemaphore() {
+    Semaphore semaphore(2);
+
+    for (int i = 0; i < 8; ++i) {
+        thread([&semaphore, i]() {
+            semaphore.wait();
+            print("t", i);
+        }).detach();
+    }
+
+    this_thread::sleep_for(1s);
+
+    for (int i = 0; i < 8; ++i) {
+        thread([&semaphore, i]() {
+            this_thread::sleep_for(chrono::milliseconds(i * 500));
+            semaphore.notify();
+        }).detach();
+    }
+
+    this_thread::sleep_for(5s);
+}
+
+static void testThreadPool_f1() {
+    printSleepPrint("f1", 2s);
+}
+static void testThreadPool_f2(int &i) {
+    printSleepPrint("f2", 1000ms);
+    ++i;
+}
+
+void testThreadPool() {
+    struct {
+        void operator()(int k) {
+            printSleepPrint("f3", 2s);
+            i = k;
+        }
+        int i;
+    } f3 = { 0 };
+    struct {
+        void operator()() {
+            printSleepPrint("f4", 1s);
+            ++i;
+        }
+        int i;
+    } f4 = { 0 };
+    struct F5 {
+        void operator()() const {
+            printSleepPrint("f5", 0h);
+            ++i;
+        }
+        mutable int i;
+    } f5o = { 0 };
+    const F5 &f5(f5o);
+
+    int f2i = 0;
+
+    packaged_task<int(void)> timer([]() {
+        int sec = 0;
+        for (; sec < 7; ++sec) {
+            print("--------", sec);
+            this_thread::sleep_for(1s);
+        }
+        return sec;
+    });
+    future<int> duration(timer.get_future());
+
+    this_thread::sleep_for(500ms);
+
+    print("f2.i=", f2i);
+    print("f3.i=", f3.i);
+    print("f4.i=", f4.i);
+    print("f5.i=", f5.i);
+
+    ThreadPool<impl::ThreadPool::QueueImpl> tp(3);
+    tp.push(timer);
+
+    {
+        ThreadPool<impl::ThreadPool::SingleSlotImpl> tp0(4);
+        tp0.push([]() { printSleepPrint("f0", 0.05min); });
+        tp0.push(testThreadPool_f1);
+        tp0.push(std::bind(testThreadPool_f2, std::ref(f2i)));
+        print("tp0(4)", "all jobs are pushed");
+    } // automatic pending.
+
+    tp.push(std::bind(std::ref(f3), 1));
+    tp.push(f4);
+    tp.push(f5);
+    print("tp(3)", "all jobs are pushed");
+
+    //tp.pend(); // comment this line to test force stopping.
+    tp.stop(); // f5 will be abandoned without pend().
+
+    print("f2.i=", f2i);
+    print("f3.i=", f3.i);
+    print("f4.i=", f4.i);
+    print("f5.i=", f5.i);
+
+    print("duration=", duration.get());
+}
+
 
 static void testMathLog2() {
     std::mt19937 rgen(Random::generateSeed());
@@ -503,42 +628,42 @@ static void testMathLog2() {
 
     start = Timer::Clock::now();
     for (auto i = 0; i < len; ++i) {
-        r[i] = Math::Impl::log2v1(v[i]);
+        r[i] = impl::Math::log2v1(v[i]);
     }
     end = Timer::Clock::now();
     cout << r[testItem] << " log2v1 " << Timer::durationInMillisecond(start, end).count() << std::endl;
 
     start = Timer::Clock::now();
     for (auto i = 0; i < len; ++i) {
-        r[i] = Math::Impl::log2v2(v[i]);
+        r[i] = impl::Math::log2v2(v[i]);
     }
     end = Timer::Clock::now();
     cout << r[testItem] << " log2v2 " << Timer::durationInMillisecond(start, end).count() << std::endl;
 
     start = Timer::Clock::now();
     for (auto i = 0; i < len; ++i) {
-        r[i] = Math::Impl::log2v3(v[i]);
+        r[i] = impl::Math::log2v3(v[i]);
     }
     end = Timer::Clock::now();
     cout << r[testItem] << " log2v3 " << Timer::durationInMillisecond(start, end).count() << std::endl;
 
     start = Timer::Clock::now();
     for (auto i = 0; i < len; ++i) {
-        r[i] = Math::Impl::log2v4(v[i]);
+        r[i] = impl::Math::log2v4(v[i]);
     }
     end = Timer::Clock::now();
     cout << r[testItem] << " log2v4 " << Timer::durationInMillisecond(start, end).count() << std::endl;
 
     start = Timer::Clock::now();
     for (auto i = 0; i < len; ++i) {
-        r[i] = Math::Impl::log2v5(v[i]);
+        r[i] = impl::Math::log2v5(v[i]);
     }
     end = Timer::Clock::now();
     cout << r[testItem] << " log2v5 " << Timer::durationInMillisecond(start, end).count() << std::endl;
 
     start = Timer::Clock::now();
     for (auto i = 0; i < len; ++i) {
-        r[i] = Math::Impl::log2v6(v[i]);
+        r[i] = impl::Math::log2v6(v[i]);
     }
     end = Timer::Clock::now();
     cout << r[testItem] << " log2v6 " << Timer::durationInMillisecond(start, end).count() << std::endl;

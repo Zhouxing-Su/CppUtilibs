@@ -110,6 +110,18 @@
     <ClInclude Include="..\type\LoopQueue.h">
       <Filter>type</Filter>
     </ClInclude>
+    <ClInclude Include="..\system\Exception.h">
+      <Filter>system</Filter>
+    </ClInclude>
+    <ClInclude Include="..\system\Madro.h">
+      <Filter>system</Filter>
+    </ClInclude>
+    <ClInclude Include="..\system\ThreadPool.h">
+      <Filter>system</Filter>
+    </ClInclude>
+    <ClInclude Include="..\system\Semaphore.h">
+      <Filter>system</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Tester.cpp" />
@@ -119,17 +131,11 @@
     <ClCompile Include="..\log\Trace.cpp">
       <Filter>log</Filter>
     </ClCompile>
-    <ClCompile Include="..\random\RandSelect.cpp">
-      <Filter>random</Filter>
-    </ClCompile>
     <ClCompile Include="..\type\Double.cpp">
       <Filter>type</Filter>
     </ClCompile>
     <ClCompile Include="..\type\Integer.cpp">
       <Filter>type</Filter>
-    </ClCompile>
-    <ClCompile Include="..\system\System.cpp">
-      <Filter>system</Filter>
     </ClCompile>
     <ClCompile Include="..\system\Directory.cpp">
       <Filter>system</Filter>

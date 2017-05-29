@@ -58,7 +58,6 @@ CLASS LIST ( IMPLEMENTED )
 	[ RandSelect ] :
 	make it possible to pick one element out of a sequence of elements 
 	by same probability without recording all of them.
-	it can also select a certain number of elements out of a vector randomly.
 
 	[ RandSample ] :
 	an online algorithm for sampling targetNum items from a data stream.
@@ -79,7 +78,13 @@ CLASS LIST ( IMPLEMENTED )
 	dynamic allocated array follows RAII idiom.
 
 	[ PriorityQueue ] :
-	priority queue implemented by heap or red-black tree.
+	priority queue implemented by bucket, red-black tree or heap.
+
+	[ LoopQueue ] :
+	loop queue for the cases that the max number of items in queue is known.
+
+	[ ConsecutiveNonNegativeIdMap ] :
+	a number mapping utility.
 
 
 [[ io ]]
@@ -99,6 +104,23 @@ CLASS LIST ( IMPLEMENTED )
 
 	[ Memory ] :
 	memory status reporter.
+
+	[ Exception ] :
+	complement common exception types in STL.
+
+	[ Semaphore ] :
+	a useful mechanism for synchronization.
+
+	[ ThreadPool ] :
+	a simple thread pool with restarting, pending and stopping.
+
+
+[[ math ]]
+	[ Math ] :
+	basic arithmetics.
+
+	[ Oscillator ] :
+	a number generator with an oscillating pattern.
 	
 
 CLASS LIST ( IN THE PLAN )
@@ -119,7 +141,3 @@ dictionary tree.
 
 
 [ RedBlackTree ] :
-
-
-[ RationalNubmer ] :
-record rational numbers without accuracy loss.

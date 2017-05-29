@@ -18,9 +18,7 @@
     <ClCompile Include="..\algorithm\BidirectionIndex.cpp" />
     <ClCompile Include="..\io\File.cpp" />
     <ClCompile Include="..\log\Trace.cpp" />
-    <ClCompile Include="..\random\RandSelect.cpp" />
     <ClCompile Include="..\system\Directory.cpp" />
-    <ClCompile Include="..\system\System.cpp" />
     <ClCompile Include="..\system\Termination.cpp" />
     <ClCompile Include="..\Tester.cpp" />
     <ClCompile Include="..\type\Double.cpp" />
@@ -43,9 +41,13 @@
     <ClInclude Include="..\random\RandSample.h" />
     <ClInclude Include="..\random\RandSelect.h" />
     <ClInclude Include="..\system\Directory.h" />
+    <ClInclude Include="..\system\Exception.h" />
+    <ClInclude Include="..\system\Madro.h" />
     <ClInclude Include="..\system\Memory.h" />
+    <ClInclude Include="..\system\Semaphore.h" />
     <ClInclude Include="..\system\System.h" />
     <ClInclude Include="..\system\Termination.h" />
+    <ClInclude Include="..\system\ThreadPool.h" />
     <ClInclude Include="..\Tester.h" />
     <ClInclude Include="..\type\Arr.h" />
     <ClInclude Include="..\type\ConsecutiveNonNegativeIdMap.h" />
