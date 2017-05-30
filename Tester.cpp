@@ -62,6 +62,7 @@ int main() {
     //testLoopQueue();
     //testSemaphore();
     //testThreadPool();
+    //testInterval();
 
     return 0;
 }
@@ -107,7 +108,7 @@ void testRandSelect() {
         if (rs.isMinimal(result, i)) {
             result = i;
             cout << result << endl;
-        } else{
+        } else {
             cout << "skip " << i << endl;
         }
     }
@@ -176,22 +177,60 @@ void testGraph() {
 
 
     /// usage for an DirectedGraph.
-    const ID nodeNum = 20;
-    const ID edgeNum = 80;
-    const Weight distRange = 10;
-    auto nodeRand = [&]() { return rd.pick(nodeNum); };
-    auto distRand = [&]() { return rd.pick(distRange); };
+    const ID edgeNum = 150;
+    const ID src = 0;
+    const ID dst = 4;
+    const Weight maxWeight = static_cast<Weight>(edgeNum * coordRange * 2 * sqrt(2));
+
+    auto capRand = [&]() { return rd.pick(15); };
 
     // generate an arcList for an directed graph with unsigned distance randomly
     vector<Network::Edge> edges;
-    for (ID i = 0; i < edgeNum; ++i) {
-        ID startVertex = nodeRand();
-        ID endVertex;
-        do { endVertex = nodeRand(); } while (endVertex == startVertex);
-        edges.push_back(Network::Edge{ startVertex, endVertex, distRand(), distRand() });
+    for (ID i = 0; i < pointNum; ++i) {
+        for (ID j = 0; j < pointNum; ++j) {
+            if (!rd.isPicked(edgeNum, pointNum * pointNum)) { continue; }
+            edges.push_back(Network::Edge{ i, j, adjMat.at(i, j), capRand() });
+        }
     }
 
-    Network::AdjList adjList(UNetwork::toAdjList<vector>(edges, nodeNum));
+    Network::AdjList adjList(UNetwork::toAdjList<vector>(edges, pointNum));
+
+    DNetwork::ShortestPath::BellmanFord bf(adjList, src);
+    bf.findSingleSourcePaths();
+    if (bf.pathFound(dst)) {
+        Network::Path path(bf.getPath(dst, false, false));
+        for (auto iter = path.begin(); iter != path.end(); ++iter) {
+            cout << *iter << " ";
+        }
+        cout << ": " << bf.getDist(dst) << endl;
+    }
+
+    DNetwork::ShortestPath::Dijkstra dj(adjList, src, maxWeight);
+    int count = 10;
+    dj.next([&](ID) { return (--count < 0); });
+    cout << dj.getDist(dj.getLastNode()) << endl;
+
+    DNetwork::ShortestPath::Floyd fd(adjMat);
+    fd.findAllPairsPaths(false);
+
+    DNetwork::ShortestPath::AStar as(adjList, src, [&](ID node) {
+        return fd.adjMat.at(node, dst);
+    }, maxWeight);
+    as.findPointToPointPath(dst);
+    if (as.pathFound(dst)) {
+        cout << as.getDist(dst) << " " << fd.adjMat.at(src, dst) << endl;
+    }
+
+    Capacity restDemand = 30;
+    DNetwork::MinCostFlow::SuccessiveShortestPath ssp(adjList, src, dst);
+    cout << ssp.find(restDemand) << " : " << restDemand << endl;
+    Network::AdjList flow(ssp.retrieveFlow());
+    vector<Network::Traffic> traffics;
+    ssp.retrievePaths(traffics, flow);
+    for (auto iter = traffics.front().nodes.begin(); iter != traffics.front().nodes.end(); ++iter) {
+        cout << *iter << " ";
+    }
+    cout << ": " << traffics.front().bandwidth << endl;
 }
 
 void testLog() {
@@ -703,5 +742,20 @@ void testOscillator() {
 }
 
 void testInterval() {
+    Interval<int> i0(1, 4);
+    Interval<int> i1(5, 8);
+    Interval<int> i2(-1, 6);
+    Interval<int> i3(2, 7);
 
+    cout << i0.before(i1) << endl;
+    cout << i2.cover(i0) << endl;
+    cout << i0.cover(2) << endl;
+    cout << i0.isValid() << endl;
+    cout << i0.beginBefore(i1) << endl;
+    cout << i0.beginBefore(3) << endl;
+    cout << i0.endBefore(i1) << endl;
+    cout << i0.endBefore(6) << endl;
+    cout << Interval<int>::isOverlaped(i0, i3) << endl;
+    cout << Interval<int>::intersect(i0, i3).begin << endl;
+    cout << Interval<int>::intersect(i1, i3).begin << endl;
 }

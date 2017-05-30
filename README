@@ -21,10 +21,10 @@ CLASS LIST ( IMPLEMENTED )
 	for example, vertex set in topological graph.
 
 	[ Graph ] :
-	Geometrical Graph/Topological Graph,
-	DirectedGraph/UndirectedGraph,
-	matrix representation/ajacent table representation,
-	some basic algorithm on graph.
+	Geometrical Graph/Topological Graph, DirectedGraph/UndirectedGraph.
+	some basic algorithm on directed graph, such as
+	bellman-ford/dijkstra/a-star for shortest path problem,
+	and successive shortest path for min cost flow problem.
 
 	[ Counter ] :
 	auto incremental function object.
@@ -34,9 +34,6 @@ CLASS LIST ( IMPLEMENTED )
 
 	[ String ] :
 	string processing algorithms.
-
-	[ DijkstraPathGenerator ] :
-	dijkstra shortest path algorithm with configurable termination condition.
 
 
 [[ log ]]
@@ -69,7 +66,7 @@ CLASS LIST ( IMPLEMENTED )
 
 	[ Double ] :
 	encaptured fundamental type double.
-	make it easier to compare two floating point number by tolerate some error.
+	make it easier to compare two real numbers by tolerating some error.
 
 	[ VectorMD ] :
 	simplify multi-dimensional vector representation.
@@ -121,6 +118,9 @@ CLASS LIST ( IMPLEMENTED )
 
 	[ Oscillator ] :
 	a number generator with an oscillating pattern.
+
+	[ Interval ] :
+	a range representation with some basic operations.
 	
 
 CLASS LIST ( IN THE PLAN )

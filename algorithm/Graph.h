@@ -11,6 +11,7 @@
 #define SZX_CPPUTILIBS_GRAPH_H
 
 
+#include <array>
 #include <vector>
 
 #include <cmath>
@@ -268,7 +269,7 @@ public:
 
         class AllPairs : public virtual Base {
             // find the paths between each pair of nodes in the graph.
-            virtual void findAllPairsPaths() { throw NotImplementedException(); }
+            virtual void findAllPairsPaths(bool /*recordPath*/ = true) { throw NotImplementedException(); }
         };
 
 
@@ -284,7 +285,7 @@ public:
                 clear();
             }
 
-            void clear() override {
+            virtual void clear() override {
                 std::fill(prevNode.begin(), prevNode.end(), InvalidId);
 
                 std::fill(minCost.begin(), minCost.end(), NoLinkWeight);
@@ -299,7 +300,7 @@ public:
 
 
             // find shortest paths to all other nodes from source.
-            void findSingleSourcePaths() override {
+            virtual void findSingleSourcePaths() override {
                 while (!nodesToRelax.empty()) {
                     // OPTIMIZE[szx][8]: Large Label Last optimization.
                     ID node = nodesToRelax.front();
@@ -376,14 +377,14 @@ public:
                 return InvalidId;
             }
 
-            bool findPointToPointPath(ID dst) override {
+            virtual bool findPointToPointPath(ID dst) override {
                 findSingleSourcePaths();
                 return pathFound(dst);
             }
 
-            bool pathFound(ID dst) const override { return (prevNode[dst] != InvalidId); }
+            virtual bool pathFound(ID dst) const override { return (prevNode[dst] != InvalidId); }
 
-            Path getReversePath(ID dst, bool withoutSrc = true, bool withoutDst = true) const override {
+            virtual Path getReversePath(ID dst, bool withoutSrc = true, bool withoutDst = true) const override {
                 Path path;
                 path.reserve(adjList.size());
                 ID endNode = withoutSrc ? src : InvalidId;
@@ -391,7 +392,7 @@ public:
                 for (; dst != endNode; dst = prevNode[dst]) { path.push_back(dst); }
                 return path;
             }
-            Path getPath(ID dst, bool withoutSrc = true, bool withoutDst = true) const override {
+            virtual Path getPath(ID dst, bool withoutSrc = true, bool withoutDst = true) const override {
                 Path path(getReversePath(dst, withoutSrc, withoutDst));
                 std::reverse(path.begin(), path.end());
                 return path;
@@ -438,7 +439,7 @@ public:
 
             // find shortest paths between each pair of nodes.
             // src -> nextMedian[src, dst] ->->->->-> dst
-            void findAllPairsPaths(bool recordPath = true) override {
+            virtual void findAllPairsPaths(bool recordPath = true) override {
                 ID nodeNum = adjMat.size1();
 
                 if (recordPath) {
@@ -462,7 +463,7 @@ public:
                 }
             }
 
-            Path getPath(ID src, ID dst) const override {
+            Path getPath(ID src, ID dst) const {
                 Path path;
                 path.reserve(nextMedian.size1());
                 while (src != dst) { path.push_back(src = nextMedian.at(src, dst)); }
@@ -503,7 +504,7 @@ public:
                 clear();
             }
 
-            void clear() override {
+            virtual void clear() override {
                 std::fill(minCost.begin(), minCost.end(), NoLinkWeight);
                 minCost[src] = 0;
                 std::fill(prevNode.begin(), prevNode.end(), InvalidId);
@@ -602,12 +603,12 @@ public:
                 next([nearestNode](ID node) { return (node != nearestNode); });
                 return nearestNode;
             }
-            bool findPointToPointPath(ID dst) override { return (next([dst](ID node) { return (node == dst); }) != InvalidId); }
-            void findSingleSourcePaths() override { next([](ID) { return false; }); }
+            virtual bool findPointToPointPath(ID dst) override { return (next([dst](ID node) { return (node == dst); }) != InvalidId); }
+            virtual void findSingleSourcePaths() override { next([](ID) { return false; }); }
 
-            bool pathFound(ID dst) const override { return (prevNode[dst] != InvalidId); }
+            virtual bool pathFound(ID dst) const override { return (prevNode[dst] != InvalidId); }
 
-            Path getReversePath(ID dst, bool withoutSrc = true, bool withoutDst = true) const override {
+            virtual Path getReversePath(ID dst, bool withoutSrc = true, bool withoutDst = true) const override {
                 Path path;
                 path.reserve(adjList.size());
                 ID endNode = withoutSrc ? src : InvalidId;
@@ -615,7 +616,7 @@ public:
                 for (; dst != endNode; dst = prevNode[dst]) { path.push_back(dst); }
                 return path;
             }
-            Path getPath(ID dst, bool withoutSrc = true, bool withoutDst = true) const override {
+            virtual Path getPath(ID dst, bool withoutSrc = true, bool withoutDst = true) const override {
                 Path path(getReversePath(dst, withoutSrc, withoutDst));
                 std::reverse(path.begin(), path.end());
                 return path;
@@ -629,9 +630,9 @@ public:
 
             const AdjList& getAdjacencyList() const { return adjList; }
             ID getSource() const { return src; }
-            const std::vector<bool>& getNodeRemoved() const { return nodeVisited; }
+            const std::vector<bool>& getNodeVisited() const { return nodeVisited; }
             const PriorityQueueImp& getUnvisitedNodes() const { return unvisitedNodes; }
-            ID getLastNode() const { return unvisitedNodes.top(); }
+            ID getLastNode() const { return (const_cast<Dijkstra*>(this))->unvisitedNodes.top(); }
 
         protected:
             /// input.
@@ -676,7 +677,7 @@ public:
                 clear();
             }
 
-            void clear() override {
+            virtual void clear() override {
                 std::fill(minCost.begin(), minCost.end(), NoLinkWeight);
                 minCost[src] = 0;
                 std::fill(prevNode.begin(), prevNode.end(), InvalidId);
@@ -692,7 +693,7 @@ public:
             }
 
 
-            bool findPointToPointPath(ID dst) override {
+            virtual bool findPointToPointPath(ID dst) override {
                 nodeVisited[src] = true;
                 unvisitedNodes.pop();
 
@@ -767,9 +768,9 @@ public:
                 return false;
             }
 
-            bool pathFound(ID dst) const override { return (prevNode[dst] != InvalidId); }
+            virtual bool pathFound(ID dst) const override { return (prevNode[dst] != InvalidId); }
 
-            Path getReversePath(ID dst, bool withoutSrc = true, bool withoutDst = true) const override {
+            virtual Path getReversePath(ID dst, bool withoutSrc = true, bool withoutDst = true) const override {
                 Path path;
                 path.reserve(adjList.size());
                 ID endNode = withoutSrc ? src : InvalidId;
@@ -777,7 +778,7 @@ public:
                 for (; dst != endNode; dst = prevNode[dst]) { path.push_back(dst); }
                 return path;
             }
-            Path getPath(ID dst, bool withoutSrc = true, bool withoutDst = true) const override {
+            virtual Path getPath(ID dst, bool withoutSrc = true, bool withoutDst = true) const override {
                 Path path(getReversePath(dst, withoutSrc, withoutDst));
                 std::reverse(path.begin(), path.end());
                 return path;
@@ -889,6 +890,8 @@ public:
             }
 
 
+            // the demand is the requested amount of flow and will be set to the amount that can not be met.
+            // return the cost for the flow.
             Weight find(Capacity &demand) {
                 demand -= totalFlow;
                 return find(producer, consumer, demand, true);
@@ -956,7 +959,7 @@ public:
                     if (visited[nextNode]) { continue; }
 
                     if (nextNode == consumer) {
-                        traffic.bandwidth = std::min(trace.bandwidth, trace.curAdjNode->capacity);
+                        traffic.bandwidth = (std::min)(trace.bandwidth, trace.curAdjNode->capacity);
                         traffics.push_back(traffic);
                         for (auto iter = flowStack.begin(); iter != flowStack.end(); ++iter) {
                             iter->bandwidth -= traffic.bandwidth;
@@ -968,7 +971,7 @@ public:
                     }
 
                     flowStack.push_back({ flow[nextNode].begin(), flow[nextNode].end(),
-                        std::min(trace.bandwidth, trace.curAdjNode->capacity) });
+                        (std::min)(trace.bandwidth, trace.curAdjNode->capacity) });
                     visited[nextNode] = true;
                     traffic.nodes.push_back(nextNode);
                 }
@@ -1006,6 +1009,7 @@ public:
             // when it is impossible to meet the demand, return the min-cost max flow solution.
             // the demand will be set to the left demand that cannot be satisfied.
             // if it is an incremental evaluation and the bandwidth of links have been raised, set (exitOnceMeetDemand = false) to apply cycle canceling.
+            // return the cost for the flow.
             Weight find(ID source, ID target, Capacity &demand, bool exitOnceMeetDemand) {
                 if (exitOnceMeetDemand) {
                     if (demand <= 0) { return totalCost; }

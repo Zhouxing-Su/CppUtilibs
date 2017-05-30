@@ -8,14 +8,20 @@
 #define SZX_CPPUTILIBS_INTERVAL_H
 
 
+#include <algorithm>
+
+
 namespace szx {
 
 template<typename Number = int>
 struct Interval {
-    Interval() {}
     Interval(Number intervalBegin, Number intervalEnd) : begin(intervalBegin), end(intervalEnd) {}
+    Interval() : Interval(0, 0) {}
 
     bool cover(Number x) const { return ((begin <= x) && (x < end)); }
+    bool cover(const Interval& i) {
+        return ((begin < i.begin) && (i.end < end));
+    }
     bool beginBefore(Number x) const { return (begin < x); }
     bool endBefore(Number x) const { return (end <= x); }
     bool beginBefore(const Interval &i) const { return (begin < i.begin); }
@@ -27,14 +33,14 @@ struct Interval {
     static bool isValid(const Interval& i) { return i.isValid(); }
 
     static bool isOverlaped(const Interval& l, const Interval &r) {
-        return ((l.begin < r.end) && (r.begin < l.end));
+        return ((l.begin < r.end) || (r.begin < l.end));
     }
 
     /// define `\cap` as intersection, this method do result = l \cap r.
     static Interval intersect(const Interval& l, const Interval &r) {
         Interval result;
-        result.begin = std::max(l.begin, r.begin);
-        result.end = std::min(l.end, r.end);
+        result.begin = (std::max)(l.begin, r.begin);
+        result.end = (std::min)(l.end, r.end);
         return result;
     }
 
