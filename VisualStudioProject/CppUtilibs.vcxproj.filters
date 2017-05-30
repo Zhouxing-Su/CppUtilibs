@@ -92,9 +92,6 @@
     <ClInclude Include="..\type\PriorityQueue.h">
       <Filter>type</Filter>
     </ClInclude>
-    <ClInclude Include="..\algorithm\DijkstraPathGenerator.h">
-      <Filter>algorithm</Filter>
-    </ClInclude>
     <ClInclude Include="..\random\RandSample.h">
       <Filter>random</Filter>
     </ClInclude>
@@ -121,6 +118,9 @@
     </ClInclude>
     <ClInclude Include="..\system\Semaphore.h">
       <Filter>system</Filter>
+    </ClInclude>
+    <ClInclude Include="..\math\Interval.h">
+      <Filter>math</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

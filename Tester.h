@@ -40,7 +40,6 @@
 #include "algorithm/Counter.h"
 #include "algorithm/SetOperation.h"
 #include "algorithm/String.h"
-#include "algorithm/DijkstraPathGenerator.h"
 
 #include "log/Timer.h"
 #include "log/Log.h"
@@ -48,6 +47,7 @@
 
 #include "math/Math.h"
 #include "math/Oscillator.h"
+#include "math/Interval.h"
 
 
 void testDirectory();
@@ -76,7 +76,6 @@ void testBidirectionIndex();
 void testCounter();
 void testSetOperation();
 void testString();
-void testDijkstraPathGenerator();
 
 void testTimer();
 void testLog();
@@ -84,6 +83,7 @@ void testTrace();
 
 void testMath();
 void testOscillator();
+void testInterval();
 
 
 #endif

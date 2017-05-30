@@ -15,6 +15,10 @@
 #include <map>
 
 
+// [?] use `log2(priority)` as the group index instead of uniform grouping.
+#define SZX_CPPUTILIBS_PRIORITY_QUEUE_BUCKET_IMP_LOG2_GROUP_MODE  1
+
+
 namespace szx {
 
 namespace impl {
@@ -260,11 +264,11 @@ public:
 
     protected:
         static Priority getGroupIndex(Priority n) {
-            #if UTILITY_PRIORITY_QUEUE_BUCKET_IMP_LOG2_GROUP_MODE
+            #if SZX_CPPUTILIBS_PRIORITY_QUEUE_BUCKET_IMP_LOG2_GROUP_MODE
             return ((n / GroupSizeBase == 0) ? 0 : Math::log2(n / GroupSizeBase));
             #else
             return (n / GroupSize);
-            #endif // UTILITY_PRIORITY_QUEUE_BUCKET_IMP_LOG2_GROUP_MODE
+            #endif // SZX_CPPUTILIBS_PRIORITY_QUEUE_BUCKET_IMP_LOG2_GROUP_MODE
         }
 
         // update the first non-empty index of bucket group and the total non-empty buckets in each group.

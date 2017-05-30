@@ -56,7 +56,6 @@ int main() {
     //testString();
     testInteger();
     //testPriorityQueue();
-    //testDijkstraPathGenerator();
     //testMath();
     //testOscillator();
     //testConsecutiveNonNegativeIdMap();
@@ -143,68 +142,56 @@ void testRandSample() {
 }
 
 void testGraph() {
+    using ID = int;
+    using Coord = double;
+    using Weight = int;
+    using Capacity = int;
+
+    using PlanarGraph = GeometricalGraph<ID, Coord>;
+    using Network = TopologicalGraph<ID, Weight, Capacity>;
+    using UNetwork = UndirectedGraph<ID, Weight, Capacity>;
+    using DNetwork = DirectedGraph<ID, Weight, Capacity>;
+
     Random rd;
 
-    // ====== usage for an GeometricalGraph ======
-    const int pointNum = 20;
-    const int coordRange = 10;
-    auto plrr = [&]() { return rd.pick(-coordRange, coordRange + 1); };
-    auto vrr = [&]() { return rd.pick(0, pointNum); };
+    /// usage for an GeometricalGraph.
+    const ID pointNum = 20;
+    const Weight coordRange = 10;
+    auto coordRand = [&]() { return rd.pick(-coordRange, coordRange + 1); };
+    auto pointRand = [&]() { return rd.pick(pointNum); };
 
-    // generate a pointList
-    GeometricalGraph::PointList pointList;
-    for (int i = 0; i < pointNum; ++i) {
-        pointList.push_back(GeometricalGraph::Point(plrr(), plrr()));
+    // generate a pointList.
+    PlanarGraph::PointList pointList;
+    for (ID i = 0; i < pointNum; ++i) {
+        pointList.push_back(GeometricalGraph<>::Point(coordRand(), coordRand()));
     }
 
-    GeometricalGraph gg(pointList);
+    PlanarGraph gg(pointList);
 
 
+    /// usage for an TopologicalGraph.
+    Network::AdjMat<Weight> adjMat(Network::toAdjMat(gg));
 
-    // ====== usage for an UndDirectedGraph ======
-    UndirectedGraph<double> ug(gg);
-    ug.getShortestPath();    // can be leave out
-    ug.getDistSeqTable();
-    ug.printShortestDist(cout);
-    ug.printDistSeqTable(cout);
-
-    int vertex = ug.nthClosestVertex(vrr(), vrr());
-    vertex = ug.findVertexWithinRadius(vrr(), coordRange);
-    int vnum = ug.findVertexNumWithinRadius(vrr(), coordRange);
-    TopologicalGraph<double>::Distance dd = ug.distance(vrr(), vrr());
-    cout << dd << endl;
+    cout << adjMat.at(pointRand(), pointRand()) << endl;
 
 
-
-    // ====== usage for an DirectedGraph ======
-    const unsigned nodeNum = 10;
-    const unsigned arcNum = 20;
-    const int minVertexIndex = 1;
-    auto alrr = [&]() { return rd.pick(minVertexIndex, nodeNum + minVertexIndex); };
-    auto drr = [&]() { return rd.pick(1, 256); };
+    /// usage for an DirectedGraph.
+    const ID nodeNum = 20;
+    const ID edgeNum = 80;
+    const Weight distRange = 10;
+    auto nodeRand = [&]() { return rd.pick(nodeNum); };
+    auto distRand = [&]() { return rd.pick(distRange); };
 
     // generate an arcList for an directed graph with unsigned distance randomly
-    TopologicalGraph<>::ArcList arcList;
-    for (int i = 0; i < arcNum; ++i) {
-        int startVertex = alrr();
-        int endVertex;
-        do {
-            endVertex = alrr();
-        } while (endVertex == startVertex);
-        arcList.push_back(TopologicalGraph<>::Arc(startVertex, endVertex, drr()));
+    vector<Network::Edge> edges;
+    for (ID i = 0; i < edgeNum; ++i) {
+        ID startVertex = nodeRand();
+        ID endVertex;
+        do { endVertex = nodeRand(); } while (endVertex == startVertex);
+        edges.push_back(Network::Edge{ startVertex, endVertex, distRand(), distRand() });
     }
 
-    DirectedGraph<> dg(arcList, nodeNum, minVertexIndex);
-    dg.getShortestPath();    // can be leave out
-    dg.getDistSeqTable();
-    dg.printShortestDist(cout);
-    dg.printDistSeqTable(cout);
-
-    vertex = dg.nthClosestVertex(alrr(), alrr());
-    vertex = dg.findVertexWithinRadius(alrr(), drr());
-    vnum = dg.findVertexNumWithinRadius(alrr(), drr());
-    TopologicalGraph<>::Distance ud = dg.distance(alrr(), alrr());
-    cout << ud << endl;
+    Network::AdjList adjList(UNetwork::toAdjList<vector>(edges, nodeNum));
 }
 
 void testLog() {
@@ -449,21 +436,6 @@ void testString() {
     cout << String::shortestEditDistance(
         "AGTCTGACGC",
         "AGTAAGTAGGC") << endl;
-}
-
-void testDijkstraPathGenerator() {
-    vector<vector<DijkstraPathGenerator<>::Edge>> adjacencyList = {
-        {{1, 2}, {2, 2}},
-        {{0, 3}, {3, 1}},
-        {{0, 1}},
-        {{1, 3}, {2, 4}}
-    };
-    DijkstraPathGenerator<> dpg(adjacencyList, 0);
-    cout << dpg.next([](int n) { return n > 2; }) << endl;
-    for (int n = dpg.getLastNode(); n != DijkstraPathGenerator<>::InvalidId; n = dpg.getPrevNode(n)) {
-        cout << n << "<-";
-    }
-    cout << endl;
 }
 
 #if SZX_CPPUTILIBS_TIMER_CPP_STYLE
@@ -728,4 +700,8 @@ void testOscillator() {
         cout << oscillator++ << endl;
         cout << oscillator << endl;
     }
+}
+
+void testInterval() {
+
 }

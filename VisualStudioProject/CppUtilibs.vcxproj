@@ -27,7 +27,6 @@
   <ItemGroup>
     <ClInclude Include="..\algorithm\BidirectionIndex.h" />
     <ClInclude Include="..\algorithm\Counter.h" />
-    <ClInclude Include="..\algorithm\DijkstraPathGenerator.h" />
     <ClInclude Include="..\algorithm\Graph.h" />
     <ClInclude Include="..\algorithm\SetOperation.h" />
     <ClInclude Include="..\algorithm\String.h" />
@@ -35,6 +34,7 @@
     <ClInclude Include="..\log\Log.h" />
     <ClInclude Include="..\log\Timer.h" />
     <ClInclude Include="..\log\Trace.h" />
+    <ClInclude Include="..\math\Interval.h" />
     <ClInclude Include="..\math\Math.h" />
     <ClInclude Include="..\math\Oscillator.h" />
     <ClInclude Include="..\random\Random.h" />
