@@ -1,11 +1,9 @@
-/**
-*   usage : template for Geometrical Graph and Topological Graph.
-*           some basic related operation on graph is implemented.
-*
-*   note :  1.  the template parameter T_DIST should be a class or type that has
-*               compare operators , assignment operators and arithmatic operators.
-*           2.  change T_DIST to T_WEIGHT and make the minimum value a negative number.
-*/
+////////////////////////////////
+/// usage : 1.	template for Geometrical Graph and Topological Graph.
+///             some basic related operation on graph is implemented.
+/// 
+/// note  : 1.  
+////////////////////////////////
 
 #ifndef SZX_CPPUTILIBS_GRAPH_H
 #define SZX_CPPUTILIBS_GRAPH_H
