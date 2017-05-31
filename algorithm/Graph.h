@@ -430,6 +430,111 @@ public:
         };
 
 
+        #if SZX_CPPUTILIBS_GRAPH_MIN_COST_FLOW_SUCCESSIVE_SHORTEST_PATH_ADJ_MATRIX
+        class BellmanFord_mat : public PointToPoint, SingleSource {
+        public:
+            BellmanFord_mat(const std::vector<std::vector<ID> >& radjacencyList, const AdjMat<std::array<AdjInfo, 2> >& adjInfo, ID srcNodeId) : radjList(radjacencyList),
+                src(srcNodeId), nodesToRelax(radjacencyList.size()), inQueue(radjList.size()),
+                prevNode(radjacencyList.size()), minCost(radjacencyList.size()), adjNodeInfo(adjInfo) {
+                clear();
+            }
+
+            enum LinkType { Real, Fake };
+
+            void clear() override {
+                std::fill(prevNode.begin(), prevNode.end(), InvalidId);
+
+                std::fill(minCost.begin(), minCost.end(), NoLinkWeight);
+                minCost[src] = 0;
+
+                nodesToRelax.clear();
+                nodesToRelax.pushBack(src);
+
+                std::fill(inQueue.begin(), inQueue.end(), false);
+                inQueue[src] = true;
+            }
+
+
+            // find shortest paths to all other nodes from source.
+            void findSingleSourcePaths() override {
+                while (!nodesToRelax.empty()) {
+                    // OPTIMIZE[szx][8]: Large Label Last optimization.
+                    ID node = nodesToRelax.front();
+
+                    inQueue[node] = false;
+                    nodesToRelax.popFront();
+
+
+                    for (auto adjNode = radjList[node].begin(); adjNode != radjList[node].end(); ++adjNode) {
+                        if ((adjNodeInfo.at(*adjNode, node)[LinkType::Real].capacity <= 0)
+                            && (adjNodeInfo.at(*adjNode, node)[LinkType::Fake].capacity <= 0)) {
+                            continue;
+                        }
+                        Weight newDist;
+                        if (adjNodeInfo.at(*adjNode, node)[LinkType::Fake].capacity > 0) {
+                            newDist = minCost[node] + adjNodeInfo.at(*adjNode, node)[LinkType::Fake].weight;
+                        } else if (adjNodeInfo.at(*adjNode, node)[LinkType::Real].capacity > 0) {
+                            newDist = minCost[node] + adjNodeInfo.at(*adjNode, node)[LinkType::Real].weight;
+                        }
+                        if (newDist < minCost[*adjNode]) {
+                            minCost[*adjNode] = newDist;
+                            prevNode[*adjNode] = node;
+
+                            if (!inQueue[*adjNode]) {
+                                inQueue[*adjNode] = true;
+                                // Small Label First optimization.
+                                (minCost[*adjNode] < minCost[node])
+                                    ? nodesToRelax.pushFront(*adjNode)
+                                    : nodesToRelax.pushBack(*adjNode);
+                            }
+                        }
+                    }
+                }
+
+                // EXTEND[szx][8]: negative weight cycle detection.
+            }
+
+            bool findPointToPointPath(ID dst) override {
+                findSingleSourcePaths();
+                return (prevNode[dst] != InvalidId);
+            }
+
+            Path getReversePath(ID dst, bool withoutSrc = true, bool withoutDst = true) const  override {
+                Path path;
+                path.reserve(radjList.size());
+                ID endNode = withoutSrc ? src : InvalidId;
+                if (withoutDst) { dst = prevNode[dst]; }
+                for (; dst != endNode; dst = prevNode[dst]) { path.push_back(dst); }
+                return path;
+            }
+            Path getPath(ID dst, bool withoutSrc = true, bool withoutDst = true) const  override {
+                Path path(getReversePath(dst, withoutSrc, withoutDst));
+                std::reverse(path.begin(), path.end());
+                return path;
+            }
+
+            const std::vector<Weight>& getDistList() const { return minCost; }
+            Weight getDist(ID dst) const { return minCost[dst]; }
+
+        protected:
+            /// input.
+            const std::vector<std::vector<ID> >& radjList;
+            const AdjMat<std::array<AdjInfo, 2> >& adjNodeInfo;
+            ID src;
+            /// auxiliary.
+            LoopQueue<ID> nodesToRelax;
+            std::vector<bool> inQueue;
+            /// output.
+            std::vector<ID> prevNode;
+            std::vector<Weight> minCost;
+
+        private:
+            BellmanFord_mat(const BellmanFord_mat &) = delete;
+            BellmanFord_mat& operator=(const BellmanFord_mat &) = delete;
+        };
+        #endif // SZX_CPPUTILIBS_GRAPH_MIN_COST_FLOW_SUCCESSIVE_SHORTEST_PATH_ADJ_MATRIX
+
+
         class Floyd : public AllPairs {
         public:
             Floyd(const Arr2D<Weight> &squareWeightMatrix) : adjMat(squareWeightMatrix) {}
@@ -1191,6 +1296,348 @@ public:
             // adjNodePos[src, dst][type] is the index of the `type` link from src to dst in radjList[dst].
             Arr2D<LinkPosPair> adjNodePos;
         };
+
+
+        #if SZX_CPPUTILIBS_GRAPH_MIN_COST_FLOW_SUCCESSIVE_SHORTEST_PATH_ADJ_MATRIX
+        class SuccessiveShortestPath_mat {
+        public:
+            using LinkPos = AdjNodePtr; // EXTEND[szx][9]: use iterator?
+            using LinkPosPair = std::array<LinkPos, 2>; // EXTEND[szx][9]: use struct, std::array or std::vector?
+            using AdjInfoPair = std::array<AdjInfo, 2>;
+
+            enum LinkType { Real, Fake };
+
+
+            // radjacencyList is a reversed adjacency list that records in-degrees of each node.
+            SuccessiveShortestPath_mat() {}
+            SuccessiveShortestPath_mat(const AdjList &radjacencyList, ID producerId, ID consumerId)
+                : nodeNum(radjacencyList.size()), producer(producerId), consumer(consumerId), radjList(radjacencyList),
+                adjNodePos(nodeNum, nodeNum), radjNodeId(nodeNum), adjNodeInfo(nodeNum, nodeNum) {}
+
+            void backup(SuccessiveShortestPath &ssp) const {
+                ssp.nodeNum = nodeNum;
+                ssp.producer = producer;
+                ssp.consumer = consumer;
+                ssp.radjList = radjList;
+
+                ssp.totalCost = totalCost;
+                ssp.totalFlow = totalFlow;
+            }
+
+            void recover(const SuccessiveShortestPath &ssp) {
+                init(ssp.radjList, ssp.producer, ssp.consumer);
+
+                totalCost = ssp.totalCost;
+                totalFlow = ssp.totalFlow;
+            }
+
+            void init() {
+                reserve();
+
+                //adjNodePos.reset(Arr2D<LinkPosPair>::ResetOption::AllBits0);
+                adjNodeInfo.reset(Arr2D<AdjInfoPair>::ResetOption::AllBits0);
+                for (ID dst = 0; dst < nodeNum; ++dst) {
+                    ID adjNodeNum = radjList[dst].size();
+                    for (ID i = 0; i < adjNodeNum; ++i) {
+                        if (radjList[dst][i].weight > 0) {
+                            adjNodeInfo.at(radjList[dst][i].dst, dst)[LinkType::Real].weight = radjList[dst][i].weight;
+                            adjNodeInfo.at(radjList[dst][i].dst, dst)[LinkType::Real].capacity = radjList[dst][i].capacity;
+                        } else if (radjList[dst][i].weight < 0) {
+                            adjNodeInfo.at(radjList[dst][i].dst, dst)[LinkType::Fake].weight = radjList[dst][i].weight;
+                            adjNodeInfo.at(radjList[dst][i].dst, dst)[LinkType::Fake].capacity = radjList[dst][i].capacity;
+                        } else {
+                            if ((dst == producer) || radjList[dst][i].dst == consumer) {
+                                adjNodeInfo.at(radjList[dst][i].dst, dst)[LinkType::Fake].weight = radjList[dst][i].weight;
+                                adjNodeInfo.at(radjList[dst][i].dst, dst)[LinkType::Fake].capacity = radjList[dst][i].capacity;
+                            } else {
+                                adjNodeInfo.at(radjList[dst][i].dst, dst)[LinkType::Real].weight = radjList[dst][i].weight;
+                                adjNodeInfo.at(radjList[dst][i].dst, dst)[LinkType::Real].capacity = radjList[dst][i].capacity;
+                            }
+
+                        }
+                        radjNodeId[dst].push_back(radjList[dst][i].dst);
+                    }
+                }
+
+                totalCost = 0;
+                totalFlow = 0;
+            }
+            void init(const AdjList &radjacencyList, ID producerId, ID consumerId) {
+                nodeNum = radjacencyList.size();
+                producer = producerId;
+                consumer = consumerId;
+                radjList = radjacencyList;
+                adjNodePos.init(nodeNum, nodeNum);
+                adjNodeInfo.init(nodeNum, nodeNum);
+
+                init();
+            }
+
+
+            Weight find(Capacity &demand) {
+                demand -= totalFlow;
+                return find(producer, consumer, demand);
+            }
+
+            // get the flow on the link from src to dst. only valid after find() calls.
+            Capacity getFlow(ID src, ID dst) const {
+                return ((adjNodeInfo.at(dst, src)[LinkType::Fake].capacity <= 0) ? 0 : adjNodeInfo.at(dst, src)[LinkType::Fake].capacity);
+            }
+
+            AdjList retrieveFlow() const {
+                AdjList flow(nodeNum);
+                for (auto src = 0; src < nodeNum; ++src) {
+                    if ((src == producer) || (src == consumer)) { continue; }
+                    Capacity bandwidth = getFlow(producer, src);
+                    if (bandwidth > 0) { flow[producer].push_back(AdjNode(src, 0, bandwidth)); }
+                    bandwidth = getFlow(src, consumer);
+                    if (bandwidth > 0) { flow[src].push_back(AdjNode(consumer, 0, bandwidth)); }
+                    for (auto dst = 0; dst < nodeNum; ++dst) {
+                        if ((dst == producer) || (dst == consumer)) { continue; }
+                        bandwidth = getFlow(src, dst);
+                        if (bandwidth <= 0) { continue; }
+                        flow[src].push_back(AdjNode(dst, adjNodeInfo.at(src, dst)[LinkType::Real].weight, bandwidth));
+                    }
+                }
+
+                return flow;
+            }
+
+            // retrieve real traffics from flow network. only valid after find() calls.
+            // it better to reserve proper capacity for `traffics` to avoid reallocation.
+            void retrievePaths(std::vector<Traffic>& traffics, AdjList &flow) const {
+                struct FlowTrace {
+                    typename AdjVec<>::iterator curAdjNode;
+                    typename AdjVec<>::iterator endAdjNode;
+                    Capacity bandwidth;
+                };
+
+                if (flow.empty()) { return; }
+
+                std::vector<FlowTrace> flowStack;
+                std::vector<bool> visited(nodeNum, false);
+
+                flowStack.reserve(nodeNum);
+                flowStack.push_back({ flow[producer].begin(), flow[producer].end(), InfiniteCapacity });
+                //visited[producer] = true; // it is trivial since there is no link comeing back.
+
+                for (Traffic traffic; ;) {
+                    FlowTrace &trace(flowStack.back());
+
+                    if ((trace.curAdjNode == trace.endAdjNode) || (trace.bandwidth <= 0)) {
+                        flowStack.pop_back();
+                        if (flowStack.empty()) { break; }
+                        ++flowStack.back().curAdjNode;
+
+                        if (traffic.nodes.empty()) { continue; }
+                        visited[traffic.nodes.back()] = false;
+                        traffic.nodes.pop_back();
+                        continue;
+                    }
+
+                    ID nextNode = trace.curAdjNode->dst;
+                    if (visited[nextNode]) { continue; }
+
+                    if (nextNode == consumer) {
+                        traffic.bandwidth = std::min(trace.bandwidth, trace.curAdjNode->capacity);
+                        traffics.push_back(traffic);
+                        for (auto iter = flowStack.begin(); iter != flowStack.end(); ++iter) {
+                            iter->bandwidth -= traffic.bandwidth;
+                            iter->curAdjNode->capacity -= traffic.bandwidth;
+                        }
+
+                        ++trace.curAdjNode;
+                        continue;
+                    }
+
+                    flowStack.push_back({ flow[nextNode].begin(), flow[nextNode].end(),
+                        std::min(trace.bandwidth, trace.curAdjNode->capacity) });
+                    visited[nextNode] = true;
+                    traffic.nodes.push_back(nextNode);
+                }
+            }
+            void retrievePaths(std::vector<Traffic>& traffics) const {
+                AdjList flow(retrieveFlow());
+                retrievePaths(traffics, flow);
+            }
+
+            void setWeight(ID src, ID dst, Weight weight) {
+                // TODO[szx][7]: update totalCost on the link.
+                if (adjNodeInfo.at(src, dst)[LinkType::Real].capacity > 0) {
+                    adjNodeInfo.at(src, dst)[LinkType::Real].weight = weight;
+                }
+                if (adjNodeInfo.at(dst, src)[LinkType::Fake].capacity > 0) {
+                    adjNodeInfo.at(dst, src)[LinkType::Fake].weight = -weight;
+                }
+            }
+
+            // increase the bandwidth of the link from producer to its adjacent node `src`.
+            void increaseCapacity(ID src, Capacity quantity) {
+                adjNodeInfo.at(producer, src)[LinkType::Real].capacity += quantity;
+            }
+            void setGreaterCapacity(ID src, Capacity bandwidth) {
+                adjNodeInfo.at(producer, src)[LinkType::Real].capacity = bandwidth;
+            }
+
+            // decrease the bandwidth of the link from producer to its adjacent node `src`.
+            void decreaseCapacity(ID src, Capacity quantity) {
+                Capacity &capacity(adjNodeInfo.at(producer, src)[LinkType::Real].capacity);
+                reduceFLow(src, quantity - (capacity - getFlow(producer, src)));
+                capacity -= quantity;
+            }
+            void setLessCapacity(ID src, Capacity bandwidth) {
+                reduceFLow(src, getFlow(producer, src) - bandwidth);
+                adjNodeInfo.at(producer, src)[LinkType::Real].capacity = bandwidth;
+            }
+
+            // reduce the flow sent directly from producer to its adjacent node `src`.
+            void reduceFLow(ID src, Capacity quantity) {
+                if (quantity <= 0) { return; }
+                totalCost -= (quantity *adjNodeInfo.at(producer, src)[LinkType::Real].weight);
+                totalFlow -= quantity;
+                adjNodeInfo.at(src, producer)[LinkType::Fake].capacity -= quantity
+                    Capacity bandwidth = adjNode.capacity + quantity;
+                adjNodeInfo.at(producer, src)[LinkType::Fake].capacity = 0;
+
+                // send reverse flow from consumer to the removal node.
+                find(producer, src, quantity);
+
+                adjNode.capacity = bandwidth;
+            }
+            void reduceFLow(ID src) {
+                reduceFLow(src, getFlow(producer, src));
+            }
+
+        protected:
+            // solve single-source single-sink min-cost flow problem.
+            // assume the supply is the capacity of links from `producer` and the demand is the capacity of links to `consumer`.
+            // assume the `producer` and `consumer` are artificial nodes to leave out in the path.
+            // assume there is no in-degree for `producer` and no out-degree for `consumer`.
+            // ???assume the cost of out-degrees of `producer` and in-degrees of `consumer` are 0.
+            // when it is impossible to meet the demand, return the min-cost max flow solution.
+            // the demand will be set to the left demand that cannot be satisfied.
+            Weight find(ID source, ID target, Capacity &demand) {
+                if (demand <= 0) { return totalCost; }
+
+                // OPTIMIZE[szx][0]: store dst only and put other fields into AdjMat.
+
+                #if SZX_CPPUTILIBS_GRAPH_MIN_COST_FLOW_SUCCESSIVE_SHORTEST_PATH_BY_DIJKSTRA
+                typename ShortestPath::Dijkstra shortestPath(radjList, target);
+                #else
+                typename ShortestPath::BellmanFord_mat shortestPath(radjNodeId, adjNodeInfo, consumer);
+                #endif // SZX_CPPUTILIBS_GRAPH_MIN_COST_FLOW_SUCCESSIVE_SHORTEST_PATH_BY_DIJKSTRA
+                for (Traffic traffic; ; shortestPath.clear()) {
+                    /// find traffic.
+                    if (!shortestPath.findPointToPointPath(source)) {
+                        return totalCost; // unable to send more flows to meet the demand.
+                    }
+
+                    /// retrieve traffic.
+                    traffic.nodes = shortestPath.getReversePath(source, false, false);
+
+                    std::vector<bool> useRealLink(traffic.nodes.size() - 1);
+                    auto realLink = useRealLink.begin();
+
+                    // assume no augment path will come back to producer or come out from consumer through fake links.
+                    ID src = traffic.nodes.front();
+                    traffic.bandwidth = demand;
+                    for (auto node = traffic.nodes.begin() + 1; node != traffic.nodes.end(); src = *node, ++node, ++realLink) {
+                        ID dst = *node;
+                        // for a multigraph, if the shortest path goes from A to B, then the arc between them with min cost will be selected.
+                        // the cost of fake links are always negative, so if a link from A to B is in the shortest path,
+                        // it must go through the fake link when it is available or there will be shorter path.
+                        *realLink = (adjNodeInfo.at(src, dst)[LinkType::Fake].capacity <= 0);
+                        Capacity bandwidth = *realLink ? adjNodeInfo.at(src, dst)[LinkType::Real].capacity : adjNodeInfo.at(src, dst)[LinkType::Fake].capacity;
+                        Math::updateMin(traffic.bandwidth, bandwidth);
+                    }
+
+                    totalCost += (traffic.bandwidth * shortestPath.getDist(source));
+
+                    /// termination condition.
+                    demand -= traffic.bandwidth;
+                    totalFlow += traffic.bandwidth;
+                    #if !SZX_CPPUTILIBS_GRAPH_MIN_COST_FLOW_SUCCESSIVE_SHORTEST_PATH_LATE_EXIT
+                    if (demand <= 0) { break; }
+                    #endif // !SZX_CPPUTILIBS_GRAPH_MIN_COST_FLOW_SUCCESSIVE_SHORTEST_PATH_LATE_EXIT
+
+                    /// update network.
+                    // EXTEND[szx][6]: update super link cost?
+                    #if SZX_CPPUTILIBS_GRAPH_MIN_COST_FLOW_SUCCESSIVE_SHORTEST_PATH_BY_DIJKSTRA
+                    // reduce costs to eliminate negative cost links.
+                    shortestPath.findSingleSourcePaths();
+                    for (dst = 0; dst < nodeNum; ++dst) {
+                        AdjVec<> &adjVec(radjList[dst]);
+                        for (auto adjNode = adjVec.begin(); adjNode != adjVec.end(); ++adjNode) {
+                            // TODO[szx][0]: skip all appended fake links.
+                            adjNode->weight += (shortestPath.getDist(dst) - shortestPath.getDist(adjNode->dst));
+                        }
+                    }
+                    #endif // SZX_CPPUTILIBS_GRAPH_MIN_COST_FLOW_SUCCESSIVE_SHORTEST_PATH_BY_DIJKSTRA
+
+                    // update bandwidth of links in traffic.
+                    // skip reverse links generation/updating on super links due to no path will turn back to producer
+                    // or come out from consumer to form a cycle, which means the symmetric fake links will never be used.
+                    src = traffic.nodes.front();
+                    realLink = useRealLink.begin();
+                    for (auto node = traffic.nodes.begin() + 1; node != traffic.nodes.end(); src = *node, ++node, ++realLink) {
+                        ID dst = *node;
+
+                        if (*realLink) { // choose real link.
+                                         // reduce bandwidth of the chosen link.
+                            adjNodeInfo.at(src, dst)[LinkType::Real].capacity -= traffic.bandwidth;
+
+                            // raise bandwidth of the symmetric fake link.
+                            #if SZX_CPPUTILIBS_GRAPH_MIN_COST_FLOW_SUCCESSIVE_SHORTEST_PATH_BY_DIJKSTRA
+                            getAdjNode_safe(dst, src, LinkType::Fake, 0).capacity += traffic.bandwidth;
+                            #else
+                            adjNodeInfo.at(dst, src)[LinkType::Fake].weight = -adjNodeInfo.at(src, dst)[LinkType::Real].weight;
+                            adjNodeInfo.at(dst, src)[LinkType::Fake].capacity += traffic.bandwidth;
+                            #endif // SZX_CPPUTILIBS_GRAPH_MIN_COST_FLOW_SUCCESSIVE_SHORTEST_PATH_BY_DIJKSTRA
+                        } else { // choose fake link.
+                                 // reduce bandwidth of the chosen link.
+                            adjNodeInfo.at(src, dst)[LinkType::Fake].capacity -= traffic.bandwidth;
+
+                            // raise bandwidth of the symmetric real link.
+                            adjNodeInfo.at(dst, src)[LinkType::Real].capacity += traffic.bandwidth;
+                        }
+                    }
+
+                    #if SZX_CPPUTILIBS_GRAPH_MIN_COST_FLOW_SUCCESSIVE_SHORTEST_PATH_LATE_EXIT
+                    if (demand <= 0) { break; }
+                    #endif // SZX_CPPUTILIBS_GRAPH_MIN_COST_FLOW_SUCCESSIVE_SHORTEST_PATH_LATE_EXIT
+                }
+
+                return totalCost;
+            }
+
+
+            void reserve() {
+                for (auto adjVec = radjList.begin(); adjVec != radjList.end(); ++adjVec) {
+                    // TODO[szx][1]: actually it should be (in-degree + out-degree).
+                    //               it only works on symmentric graphs (all links are bidirectional).
+                    adjVec->reserve(radjList.size() * 2);
+                }
+            }
+
+
+            /// input.
+            ID nodeNum;
+            ID producer;
+            ID consumer;
+            // reversed adjacency list of the residual network.
+            AdjList radjList;
+            /// output.
+            Weight totalCost;
+            Capacity totalFlow;
+            /// auxiliary.
+            // adjNodePos[src, dst][type] is the index of the `type` link from src to dst in radjList[dst].
+            Arr2D<LinkPosPair> adjNodePos;
+            // adjNodeInfo[src, dst][type] are the weight and capacity from src to dst in radjList[dst].
+            AdjMat<AdjInfoPair> adjNodeInfo;
+            // adjNodeId is the list of  adjNode ID.
+            std::vector<std::vector<ID> > radjNodeId;
+        };
+        #endif // SZX_CPPUTILIBS_GRAPH_MIN_COST_FLOW_SUCCESSIVE_SHORTEST_PATH_ADJ_MATRIX
     };
 
 
