@@ -14,11 +14,13 @@
 
 #include <cmath>
 
+#include "../type/Arr.h"
 #include "../type/PriorityQueue.h"
+#include "../type/LoopQueue.h"
 #include "../system/Exception.h"
 
 
-// [off] use compare base priorty queue instead of bucket/radix based one.
+// [off] use compare base priority queue instead of bucket/radix based one.
 //       it will disable lazy remove, which keep the relaxed node in the queue. it requires the priority queue
 //       implementation tracks the original priority and the number of items in queue is irrelevant to its performance.
 //       bucket queue may be a good reason to enable this switch.
