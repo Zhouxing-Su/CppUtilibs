@@ -15,7 +15,6 @@
     <None Include="..\README" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\algorithm\BidirectionIndex.cpp" />
     <ClCompile Include="..\io\File.cpp" />
     <ClCompile Include="..\log\Trace.cpp" />
     <ClCompile Include="..\system\Directory.cpp" />
@@ -50,7 +49,7 @@
     <ClInclude Include="..\system\ThreadPool.h" />
     <ClInclude Include="..\Tester.h" />
     <ClInclude Include="..\type\Arr.h" />
-    <ClInclude Include="..\type\ConsecutiveNonNegativeIdMap.h" />
+    <ClInclude Include="..\type\ZeroBasedConsecutiveIdMap.h" />
     <ClInclude Include="..\type\Convert.h" />
     <ClInclude Include="..\type\Double.h" />
     <ClInclude Include="..\type\Integer.h" />

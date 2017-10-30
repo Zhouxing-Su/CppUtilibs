@@ -58,7 +58,7 @@ int main() {
     //testPriorityQueue();
     //testMath();
     //testOscillator();
-    //testConsecutiveNonNegativeIdMap();
+    //testZeroBasedConsecutiveIdMap();
     //testLoopQueue();
     //testSemaphore();
     //testThreadPool();
@@ -390,8 +390,8 @@ void testPriorityQueue() {
     cout << pqs.empty() << endl;
 }
 
-void testConsecutiveNonNegativeIdMap() {
-    ConsecutiveNonNegativeIdMap<int> idMap(20);
+void testZeroBasedConsecutiveIdMap() {
+    ZeroBasedConsecutiveIdMap<int> idMap(20);
 
     vector<int> aid = { 3543, 6434, 897454, 75646, 246584, 1654 };
     vector<int> cid;

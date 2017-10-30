@@ -101,9 +101,6 @@
     <ClInclude Include="..\math\Oscillator.h">
       <Filter>math</Filter>
     </ClInclude>
-    <ClInclude Include="..\type\ConsecutiveNonNegativeIdMap.h">
-      <Filter>type</Filter>
-    </ClInclude>
     <ClInclude Include="..\type\LoopQueue.h">
       <Filter>type</Filter>
     </ClInclude>
@@ -122,12 +119,12 @@
     <ClInclude Include="..\math\Interval.h">
       <Filter>math</Filter>
     </ClInclude>
+    <ClInclude Include="..\type\ZeroBasedConsecutiveIdMap.h">
+      <Filter>type</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Tester.cpp" />
-    <ClCompile Include="..\algorithm\BidirectionIndex.cpp">
-      <Filter>algorithm</Filter>
-    </ClCompile>
     <ClCompile Include="..\log\Trace.cpp">
       <Filter>log</Filter>
     </ClCompile>

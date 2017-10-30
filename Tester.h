@@ -28,7 +28,7 @@
 #include "type/VectorMD.h"
 #include "type/Arr.h"
 #include "type/PriorityQueue.h"
-#include "type/ConsecutiveNonNegativeIdMap.h"
+#include "type/ZeroBasedConsecutiveIdMap.h"
 #include "type/LoopQueue.h"
 
 #include "random/Random.h"
@@ -64,7 +64,7 @@ void testInteger();
 void testVectorMD();
 void testArr();
 void testPriorityQueue();
-void testConsecutiveNonNegativeIdMap();
+void testZeroBasedConsecutiveIdMap();
 void testLoopQueue();
 
 void testRandom();

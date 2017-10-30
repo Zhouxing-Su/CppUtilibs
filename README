@@ -80,7 +80,7 @@ CLASS LIST ( IMPLEMENTED )
 	[ LoopQueue ] :
 	loop queue for the cases that the max number of items in queue is known.
 
-	[ ConsecutiveNonNegativeIdMap ] :
+	[ ZeroBasedConsecutiveIdMap ] :
 	a number mapping utility.
 
 
