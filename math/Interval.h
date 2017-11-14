@@ -13,39 +13,57 @@
 
 namespace szx {
 
-template<typename Number = int>
+template<typename Unit>
 struct Interval {
-    Interval(Number intervalBegin, Number intervalEnd) : begin(intervalBegin), end(intervalEnd) {}
-    Interval() : Interval(0, 0) {}
+    Interval() {}
+    Interval(Unit intervalBegin, Unit intervalEnd) : begin(intervalBegin), end(intervalEnd) {}
 
-    bool cover(Number x) const { return ((begin <= x) && (x < end)); }
-    bool cover(const Interval& i) {
-        return ((begin < i.begin) && (i.end < end));
-    }
-    bool beginBefore(Number x) const { return (begin < x); }
-    bool endBefore(Number x) const { return (end <= x); }
+    bool cover(Unit x) const { return ((begin <= x) && (x < end)); }
+    bool beginBefore(Unit x) const { return (begin < x); }
+    bool endBefore(Unit x) const { return (end <= x); }
     bool beginBefore(const Interval &i) const { return (begin < i.begin); }
     bool endBefore(const Interval &i) const { return (end < i.end); }
-    /// return true if this is strictly before i (no overlap).
+    // return true if this is strictly before i (no overlap).
     bool before(const Interval &i) const { return (end < i.begin); }
 
     bool isValid() const { return (begin < end); }
-    static bool isValid(const Interval& i) { return i.isValid(); }
+    static bool isValid(const Interval &i) { return i.isValid(); }
 
-    static bool isOverlaped(const Interval& l, const Interval &r) {
-        return ((l.begin < r.end) || (r.begin < l.end));
+    static bool isOverlapped(const Interval &l, const Interval &r) {
+        return ((l.begin < r.end) && (r.begin < l.end));
     }
 
-    /// define `\cap` as intersection, this method do result = l \cap r.
-    static Interval intersect(const Interval& l, const Interval &r) {
-        Interval result;
-        result.begin = (std::max)(l.begin, r.begin);
-        result.end = (std::min)(l.end, r.end);
-        return result;
+    // vector measurement of the interval span.
+    Unit displacement() const { return (end - begin); }
+    // scalar measurement of the interval span.
+    Unit length() const { return std::abs(end - begin); }
+
+    // return the intersection of l and r if they are overlapped,
+    // or the reversed gap between them if there is no intersection.
+    static Interval overlap(const Interval &l, const Interval &r) {
+        return Interval(std::max(l.begin, r.begin), std::min(l.end, r.end));
     }
 
-    Number begin;
-    Number end;
+    // return the length of the blank space between l and r if they are not interseted,
+    // or the opposite number of the minimal distance to make them mutually exclusive.
+    static Unit gap(const Interval &l, const Interval &r) {
+        if (l.begin < r.begin) {
+            if (l.end < r.end) {
+                return r.begin - l.end;
+            } else { // if (l.end >= r.end)
+                return std::max(r.begin - l.end, l.begin - r.end);
+            }
+        } else { // if (l.begin >= r.end)
+            if (l.end < r.end) {
+                return std::max(r.begin - l.end, l.begin - r.end);
+            } else { // if (l.end >= r.end)
+                return l.begin - r.end;
+            }
+        }
+    }
+
+    Unit begin;
+    Unit end;
 };
 
 }
