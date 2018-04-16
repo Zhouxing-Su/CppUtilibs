@@ -510,7 +510,9 @@ void testTermination() {
 void testMemory() {
     cout << Memory::getAvailablePhysicalMemory() << endl
         << Memory::getTotalPhysicalMemory() << endl
-        << Memory::getMemoryStatus().dwMemoryLoad << endl;
+        << Memory::getMemoryStatus().dwMemoryLoad << endl
+        << Memory::memoryUsage().physicalMemory << endl
+        << Memory::peakMemoryUsage().virtualMemory << endl;
 }
 
 void testSemaphore() {
@@ -755,7 +757,7 @@ void testInterval() {
     cout << i0.beginBefore(3) << endl;
     cout << i0.endBefore(i1) << endl;
     cout << i0.endBefore(6) << endl;
-    cout << Interval<int>::isOverlaped(i0, i3) << endl;
-    cout << Interval<int>::intersect(i0, i3).begin << endl;
-    cout << Interval<int>::intersect(i1, i3).begin << endl;
+    cout << Interval<int>::isOverlapped(i0, i3) << endl;
+    cout << Interval<int>::overlap(i0, i3).begin << endl;
+    cout << Interval<int>::overlap(i1, i3).end << endl;
 }

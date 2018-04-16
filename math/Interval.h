@@ -19,12 +19,13 @@ struct Interval {
     Interval(Unit intervalBegin, Unit intervalEnd) : begin(intervalBegin), end(intervalEnd) {}
 
     bool cover(Unit x) const { return ((begin <= x) && (x < end)); }
+    bool cover(const Interval &i) const { return ((begin <= i.begin) && (i.end <= end)); }
     bool beginBefore(Unit x) const { return (begin < x); }
-    bool endBefore(Unit x) const { return (end <= x); }
     bool beginBefore(const Interval &i) const { return (begin < i.begin); }
+    bool endBefore(Unit x) const { return (end <= x); }
     bool endBefore(const Interval &i) const { return (end < i.end); }
     // return true if this is strictly before i (no overlap).
-    bool before(const Interval &i) const { return (end < i.begin); }
+    bool before(const Interval &i) const { return (end <= i.begin); }
 
     bool isValid() const { return (begin < end); }
     static bool isValid(const Interval &i) { return i.isValid(); }
@@ -41,7 +42,7 @@ struct Interval {
     // return the intersection of l and r if they are overlapped,
     // or the reversed gap between them if there is no intersection.
     static Interval overlap(const Interval &l, const Interval &r) {
-        return Interval(std::max(l.begin, r.begin), std::min(l.end, r.end));
+        return Interval((std::max)(l.begin, r.begin), (std::min)(l.end, r.end));
     }
 
     // return the length of the blank space between l and r if they are not interseted,
@@ -51,11 +52,11 @@ struct Interval {
             if (l.end < r.end) {
                 return r.begin - l.end;
             } else { // if (l.end >= r.end)
-                return std::max(r.begin - l.end, l.begin - r.end);
+                return (std::max)(r.begin - l.end, l.begin - r.end);
             }
         } else { // if (l.begin >= r.end)
             if (l.end < r.end) {
-                return std::max(r.begin - l.end, l.begin - r.end);
+                return (std::max)(r.begin - l.end, l.begin - r.end);
             } else { // if (l.end >= r.end)
                 return l.begin - r.end;
             }
