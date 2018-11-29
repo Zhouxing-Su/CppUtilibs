@@ -25,7 +25,7 @@ public:
 
     explicit Arr() : arr(nullptr), len(0) {}
     explicit Arr(IndexType length) { allocate(length); }
-    explicit Arr(IndexType length, T *data) : arr(data), len(length) {}
+    explicit Arr(IndexType length, T *data) : arr(data), len(length) {} // make sure `this` will be the only one who owns `data`.
     explicit Arr(IndexType length, const T &defaultValue) : Arr(length) {
         std::fill(arr, arr + length, defaultValue);
     }
@@ -40,8 +40,10 @@ public:
 
     Arr& operator=(const Arr &a) {
         if (this != &a) {
-            clear();
-            init(a.len);
+            if (len != a.len) {
+                clear();
+                init(a.len);
+            }
             copyData(a.arr);
         }
         return *this;
@@ -132,8 +134,13 @@ public:
 
     Arr2D& operator=(const Arr2D &a) {
         if (this != &a) {
-            clear();
-            init(a.len1, a.len2);
+            if (len != a.len) {
+                clear();
+                init(a.len1, a.len2);
+            } else {
+                len1 = a.len1;
+                len2 = a.len2;
+            }
             copyData(a.arr);
         }
         return *this;

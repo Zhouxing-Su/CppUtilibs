@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<AutoVisualizer xmlns="http://schemas.microsoft.com/vstudio/debugger/natvis/2010">
+  <Type Name="szx::Arr&lt;*&gt;">
+    <DisplayString>{{ arr={arr} len={len} }}</DisplayString>
+    <Expand>
+      <ArrayItems>
+        <Size>len</Size>
+        <ValuePointer>arr</ValuePointer>
+      </ArrayItems>
+    </Expand>
+  </Type>
+  
+  <!-- https://docs.microsoft.com/en-us/visualstudio/debugger/create-custom-views-of-native-objects?view=vs-2017 -->
+  <Type Name="szx::Arr2D&lt;*&gt;">
+    <DisplayString>{{ arr={arr} len={len1}x{len2}={len} }}</DisplayString>
+    <Expand>
+      <ArrayItems Condition="arr != 0">
+        <!-- Forward/Backward controls the order of index listing, e.g., [0,1,2] or [2,1,0] -->
+        <Direction>Forward</Direction>
+        <!-- reference template parameters by using macros $T1, $T2, and so forth. -->
+        <Rank>2</Rank>
+        <!-- the Size element accepts the implicit $i parameter, which it substitutes with the dimension index to find the length of the array in that dimension. -->
+        <Size>$i == 0 ? len1 : len2</Size>
+        <ValuePointer>arr</ValuePointer>
+      </ArrayItems>
+    </Expand>
+  </Type>
+</AutoVisualizer>

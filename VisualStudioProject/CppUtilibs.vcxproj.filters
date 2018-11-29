@@ -144,4 +144,7 @@
       <Filter>system</Filter>
     </ClCompile>
   </ItemGroup>
+  <ItemGroup>
+    <Natvis Include="..\CppUtilibs.natvis" />
+  </ItemGroup>
 </Project>
