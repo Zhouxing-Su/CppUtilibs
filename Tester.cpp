@@ -54,7 +54,6 @@ int main() {
     //testMemory();
     //testArr();
     //testString();
-    testInteger();
     //testPriorityQueue();
     //testMath();
     //testOscillator();
@@ -63,6 +62,8 @@ int main() {
     //testSemaphore();
     //testThreadPool();
     //testInterval();
+    //testInteger();
+    testKnapsack();
 
     return 0;
 }
@@ -438,43 +439,123 @@ void testCounter() {
 }
 
 void testFile() {
-    cout << File::getLastNoneEmptyLine("../TestCases/FileTest1.txt") << endl;
-    cout << File::getLastNoneEmptyLine("../TestCases/FileTest2.txt") << endl;
-    cout << File::getLastNoneEmptyLine("../TestCases/FileTest3.txt") << endl;
+    cout << File::readAll("../TestCases/FileTest1.txt") << endl;
+    cout << File::readAll("../TestCases/FileTest2.txt") << endl;
+    cout << File::readAll("../TestCases/FileTest3.txt") << endl;
 }
 
-void testSetOperation() {
-    char a = 'a';
+void testContainer() {
     set<char> cs = { 'b', 'n', 'm' };
-    string s1 = "asd";
-    char s2[] = "zxc";
 
     char target = 'a';
-    cout << contain<char>(a, target) << endl;
-    cout << contain(cs, target) << endl;
-    cout << contain(s1, target) << endl;
-    cout << contain(s2, target) << endl;
-    cout << contain("test", target) << endl;
-
+    cout << contains(cs, target) << endl;
     target = 'b';
-    cout << contain<char>(a, target) << endl;
-    cout << contain(cs, target) << endl;
-    cout << contain(s1, target) << endl;
-    cout << contain(s2, target) << endl;
-    cout << contain("test", target) << endl;
-
+    cout << contains(cs, target) << endl;
     target = 'c';
-    cout << contain<char>(a, target) << endl;
-    cout << contain(cs, target) << endl;
-    cout << contain(s1, target) << endl;
-    cout << contain(s2, target) << endl;
-    cout << contain("test", target) << endl;
+    cout << contains(cs, target) << endl;
 }
 
 void testString() {
     cout << String::shortestEditDistance(
         "AGTCTGACGC",
         "AGTAAGTAGGC") << endl;
+}
+
+void testKnapsack() {
+    int runCount = 10;
+
+    //int maxItemWidth = 2500;
+    //int maxItemHeight = 1500;
+    //int minItemLength = 100;
+    //int capacity = 6000 * 3210;
+    //int maxItemNum = 300;
+    //int minItemNum = 50;
+    //int candidateNum = 8;
+    int maxItemWidth = 1250;
+    int maxItemHeight = 750;
+    int minItemLength = 50;
+    int capacity = 3000 * 1605;
+    int maxItemNum = 150;
+    int minItemNum = 25;
+    int candidateNum = 4;
+
+    Random r;
+    vector<Knapsack::Item<int>> items;
+    items.reserve(maxItemNum);
+    auto resetItemList = [&]() {
+        items.clear();
+        for (int i = r.pick(minItemNum, maxItemNum); i >= 0; --i) {
+            items.push_back(r.pick(minItemLength, maxItemWidth) * r.pick(minItemLength, maxItemHeight));
+        }
+    };
+    auto printResult = [](ostream &os, Knapsack::List<Knapsack::IdSet> slns, int weight, int value) {
+        os << "weight=" << weight << " value=" << value << endl;
+        for (auto s = slns.begin(); s != slns.end(); ++s) {
+            int i = 0;
+            for (auto item = s->begin(); item != s->end(); ++item, ++i) {
+                if (*item) { os << i << " "; }
+            }
+            os << endl;
+        }
+        os << endl;
+    };
+
+    // speed test.
+    {
+        Timer timer(0ms);
+        r.setSeed();
+        for (int k = 0; k < runCount; ++k) {
+            resetItemList();
+
+            int value = 2;
+            Knapsack::List<Knapsack::IdSet> slns;
+            int weight = Knapsack::dynamicProgramming(items, capacity, value, slns, candidateNum);
+            cout << k << " (" << items.size() << "): " << timer.elapsedSeconds() << endl;
+        }
+        cout << "dp: " << timer.elapsedSeconds() << endl;
+    }
+    cout << endl;
+    {
+        Timer timer(0ms);
+        r.setSeed();
+        for (int k = 0; k < runCount; ++k) {
+            resetItemList();
+
+            int value = 2;
+            Knapsack::List<Knapsack::IdSet> slns;
+            int weight = Knapsack::dynamicProgrammingForSparseWeightDistribution(items, capacity, value, slns, candidateNum);
+            cout << k << " (" << items.size() << "): " << timer.elapsedSeconds() << endl;
+        }
+        cout << "dp+: " << timer.elapsedSeconds() << endl;
+    }
+
+    // correctness check.
+    {
+        ofstream ofs("dp0.txt");
+        r.setSeed();
+        for (int k = 0; k < runCount; ++k) {
+            resetItemList();
+
+            int value = 2;
+            Knapsack::List<Knapsack::IdSet> slns;
+            int weight = Knapsack::dynamicProgramming(items, capacity, value, slns, candidateNum);
+            printResult(ofs, slns, weight, value);
+        }
+    }
+
+    {
+        ofstream ofs("dp1.txt");
+        r.setSeed();
+        for (int k = 0; k < runCount; ++k) {
+            resetItemList();
+
+            int value = 2;
+            Knapsack::List<Knapsack::IdSet> slns;
+            int weight = Knapsack::dynamicProgrammingForSparseWeightDistribution(items, capacity, value, slns, candidateNum);
+            printResult(ofs, slns, weight, value);
+        }
+    }
+
 }
 
 #if SZX_CPPUTILIBS_TIMER_CPP_STYLE

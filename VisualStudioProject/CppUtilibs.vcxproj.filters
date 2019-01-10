@@ -62,9 +62,6 @@
     <ClInclude Include="..\algorithm\Counter.h">
       <Filter>algorithm</Filter>
     </ClInclude>
-    <ClInclude Include="..\algorithm\SetOperation.h">
-      <Filter>algorithm</Filter>
-    </ClInclude>
     <ClInclude Include="..\log\Timer.h">
       <Filter>log</Filter>
     </ClInclude>
@@ -122,6 +119,12 @@
     <ClInclude Include="..\type\ZeroBasedConsecutiveIdMap.h">
       <Filter>type</Filter>
     </ClInclude>
+    <ClInclude Include="..\algorithm\Knapsack.h">
+      <Filter>algorithm</Filter>
+    </ClInclude>
+    <ClInclude Include="..\algorithm\Container.h">
+      <Filter>algorithm</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Tester.cpp" />
@@ -136,9 +139,6 @@
     </ClCompile>
     <ClCompile Include="..\system\Directory.cpp">
       <Filter>system</Filter>
-    </ClCompile>
-    <ClCompile Include="..\io\File.cpp">
-      <Filter>io</Filter>
     </ClCompile>
     <ClCompile Include="..\system\Termination.cpp">
       <Filter>system</Filter>

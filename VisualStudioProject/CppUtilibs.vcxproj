@@ -15,7 +15,6 @@
     <None Include="..\README" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\io\File.cpp" />
     <ClCompile Include="..\log\Trace.cpp" />
     <ClCompile Include="..\system\Directory.cpp" />
     <ClCompile Include="..\system\Termination.cpp" />
@@ -27,7 +26,8 @@
     <ClInclude Include="..\algorithm\BidirectionIndex.h" />
     <ClInclude Include="..\algorithm\Counter.h" />
     <ClInclude Include="..\algorithm\Graph.h" />
-    <ClInclude Include="..\algorithm\SetOperation.h" />
+    <ClInclude Include="..\algorithm\Knapsack.h" />
+    <ClInclude Include="..\algorithm\Container.h" />
     <ClInclude Include="..\algorithm\String.h" />
     <ClInclude Include="..\io\File.h" />
     <ClInclude Include="..\log\Log.h" />

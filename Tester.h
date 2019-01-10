@@ -1,11 +1,11 @@
-/**
-*   usage : 1.  test all units in CPPutilibs.
-*
-*   note :  1.
-*/
+////////////////////////////////
+/// usage : 1.	test all units in CPPutilibs.
+/// 
+/// note  : 1.	
+////////////////////////////////
 
-#ifndef TESTER_H
-#define TESTER_H
+#ifndef SZX_CPPUTILIBS_TESTER_H
+#define SZX_CPPUTILIBS_TESTER_H
 
 
 #include <iostream>
@@ -38,8 +38,9 @@
 #include "algorithm/Graph.h"
 #include "algorithm/BidirectionIndex.h"
 #include "algorithm/Counter.h"
-#include "algorithm/SetOperation.h"
+#include "algorithm/Container.h"
 #include "algorithm/String.h"
+#include "algorithm/Knapsack.h"
 
 #include "log/Timer.h"
 #include "log/Log.h"
@@ -74,8 +75,9 @@ void testRandSample();
 void testGraph();
 void testBidirectionIndex();
 void testCounter();
-void testSetOperation();
+void testContainer();
 void testString();
+void testKnapsack();
 
 void testTimer();
 void testLog();
@@ -86,4 +88,4 @@ void testOscillator();
 void testInterval();
 
 
-#endif
+#endif // SZX_CPPUTILIBS_TESTER_H

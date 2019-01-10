@@ -13,11 +13,11 @@
 #include "../system/System.h"
 
 
-#if _CC_MSVC
+#if _CC_MS_VC
 #include <intrin.h> // for `log2()`.
 #elif _CC_GNU_GCC
 #include <climits> // for `log2()`.
-#endif // _CC_MSVC
+#endif // _CC_MS_VC
 
 
 namespace szx {
@@ -36,7 +36,7 @@ public:
         return static_cast<Uint>(std::log2(n));
     }
 
-    #if _CC_MSVC
+    #if _CC_MS_VC
     // http://stackoverflow.com/questions/9411823/fast-log2float-x-implementation-c
     static Ulong log2v1(Ulong n) {
         Ulong r;
@@ -48,7 +48,7 @@ public:
     static Uint log2v1(Uint x) {
         return static_cast<Uint>(((sizeof(Int) * CHAR_BIT) - 1) - __builtin_clz(x));
     }
-    #endif // _CC_MSVC
+    #endif // _CC_MS_VC
 
     // http://graphics.stanford.edu/~seander/bithacks.html#IntegerLogLookup
     static Uint log2v2(Uint n) {
@@ -126,20 +126,46 @@ public:
 
 class Math {
 public:
+    static constexpr double DefaultTolerance = 0.01;
+
+
+    static bool weakEqual(double l, double r, double tolerance = DefaultTolerance) {
+        return (std::abs(l - r) < tolerance);
+    }
+    static bool weakLess(double l, double r, double tolerance = DefaultTolerance) { // operator<=().
+        return ((l - r) < tolerance);
+    }
+    static bool strongLess(double l, double r, double tolerance = DefaultTolerance) { // operator<().
+        return ((l - r) < -tolerance);
+    }
+
     static int round(double num) { return static_cast<int>(num + 0.5); }
+
+    static double floor(double d) { return std::floor(d + DefaultTolerance); }
+    static long lfloor(double d) { return static_cast<long>(d + DefaultTolerance); }
+
+    template<typename T>
+    static bool isOdd(T integer) { return ((integer % 2) == 1); }
+    template<typename T>
+    static bool isEven(T integer) { return ((integer % 2) == 0); }
+
+    template<typename T>
+    static T bound(T num, T lb, T ub) {
+        return (std::min)((std::max)(num, lb), ub);
+    }
 
     template<typename T>
     static T power2(T num) { return (num * num); }
 
     // [Inaccurate]
     static unsigned log2(unsigned n) {
-        #if _CC_MSVC
+        #if _CC_MS_VC
         return impl::Math::log2v1(n);
         #elif _CC_GNU_GCC
         return impl::Math::log2v3(n);
         #else
         return impl::Math::log2v2(n);
-        #endif // _CC_MSVC
+        #endif // _CC_MS_VC
     }
 
     template<typename T>
@@ -174,7 +200,7 @@ public:
         auto itemRange = std::minmax_element(list.begin(), list.end());
         normalize(list, maxValue, *(itemRange.first), *(itemRange.second));
     }
-    };
+};
 
 }
 

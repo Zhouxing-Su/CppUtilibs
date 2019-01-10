@@ -44,6 +44,9 @@ public:
         return (rgen() % max);
     }
 
+    void setSeed() { rgen.seed(); }
+    void setSeed(int seed) { rgen.seed(seed); }
+
 protected:
     Generator rgen;
 };
