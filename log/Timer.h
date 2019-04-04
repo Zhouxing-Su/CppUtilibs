@@ -77,7 +77,7 @@ public:
 
     static Millisecond toMillisecond(double second) {
         #if SZX_CPPUTILIBS_TIMER_CPP_STYLE
-        return Millisecond(static_cast<int>(second * MillisecondsPerSecond));
+        return Millisecond(static_cast<long long>(second * MillisecondsPerSecond));
         #else
         return static_cast<Millisecond>(second * MillisecondsPerSecond);
         #endif // SZX_CPPUTILIBS_TIMER_CPP_STYLE
