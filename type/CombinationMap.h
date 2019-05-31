@@ -16,7 +16,6 @@
 #include <iostream>
 #include <fstream>
 #include <functional>
-#include <mutex>
 
 
 namespace szx {
@@ -37,6 +36,7 @@ struct CombinationMapBase {
         return es;
     }
     static bool alwaysTrue(const Data&, const Data&) { return true; }
+    static bool alwaysFalse(const Data&, const Data&) { return false; }
 
 
     CombinationMapBase() {}
@@ -70,8 +70,8 @@ struct CombinationMapBase {
     virtual const Data& get(const ItemList &orderedItems) const = 0; // the orderedItems is a list of items in increasing order.
 
     // return true if overwriting happens or a new entry is added.
-    virtual bool set(const ItemSet &containItem, const Data &str, CmpData shouldOverwrite = alwaysTrue) = 0;
-    virtual bool set(const ItemList &orderedItems, const Data &str, CmpData shouldOverwrite = alwaysTrue) = 0; // the orderedItems is a list of items in increasing order.
+    virtual bool set(const ItemSet &containItem, const Data &str, CmpData shouldOverwrite = alwaysFalse) = 0;
+    virtual bool set(const ItemList &orderedItems, const Data &str, CmpData shouldOverwrite = alwaysFalse) = 0; // the orderedItems is a list of items in increasing order.
 
     // `onCombination` return true if the traverse should be breaked, otherwise the loop will continue.
     // return true if no break happens.
@@ -93,6 +93,7 @@ struct CombinationMap_BinTreeImpl : public CombinationMapBase<Data, Item> {
     using CmpData = CombinationMapBase<Data, Item>::CmpData;
     using CombinationMapBase<Data, Item>::emptyData;
     using CombinationMapBase<Data, Item>::alwaysTrue;
+    using CombinationMapBase<Data, Item>::alwaysFalse;
     using CombinationMapBase<Data, Item>::toItemSet;
 
 protected:
@@ -133,10 +134,8 @@ public:
         return get(toItemSet(orderedItems));
     }
 
-    virtual bool set(const ItemSet &containItem, const Data &data, CmpData shouldOverwrite = alwaysTrue) override {
+    virtual bool set(const ItemSet &containItem, const Data &data, CmpData shouldOverwrite = alwaysFalse) override {
         if (static_cast<Item>(containItem.size()) != itemNum) { return false; }
-
-        std::lock_guard<std::mutex> writeLock(writeMutex);
 
         TreeNodeId treeNode = 0;
         auto lastItem = containItem.end() - 1;
@@ -163,7 +162,7 @@ public:
 
         return true;
     }
-    virtual bool set(const ItemList &orderedItems, const Data &data, CmpData shouldOverwrite = alwaysTrue) override {
+    virtual bool set(const ItemList &orderedItems, const Data &data, CmpData shouldOverwrite = alwaysFalse) override {
         return set(toItemSet(orderedItems), data, shouldOverwrite);
     }
 
@@ -179,7 +178,6 @@ public:
 
     std::vector<BinTreeNode> nodePool;
     std::vector<Data> dataPool;
-    std::mutex writeMutex;
 };
 
 
@@ -191,6 +189,7 @@ struct CombinationMap_TrieImpl : public CombinationMapBase<Data, Item> {
     using CmpData = CombinationMapBase<Data, Item>::CmpData;
     using CombinationMapBase<Data, Item>::emptyData;
     using CombinationMapBase<Data, Item>::alwaysTrue;
+    using CombinationMapBase<Data, Item>::alwaysFalse;
     using CombinationMapBase<Data, Item>::toItemSet;
 
 protected:
@@ -227,12 +226,10 @@ public:
         return dataPool[treeNode->dataId]; // data found.
     }
 
-    virtual bool set(const ItemSet &containItem, const Data &data, CmpData shouldOverwrite = alwaysTrue) override {
+    virtual bool set(const ItemSet &containItem, const Data &data, CmpData shouldOverwrite = alwaysFalse) override {
         return set(toItemList(containItem), data, shouldOverwrite);
     }
-    virtual bool set(const ItemList &orderedItems, const Data &data, CmpData shouldOverwrite = alwaysTrue) override {
-        std::lock_guard<std::mutex> writeLock(writeMutex);
-
+    virtual bool set(const ItemList &orderedItems, const Data &data, CmpData shouldOverwrite = alwaysFalse) override {
         TreeNode *treeNode = &root;
         for (auto i = orderedItems.begin(); i != orderedItems.end(); ++i) {
             treeNode = &(treeNode->children[*i]);
@@ -261,7 +258,6 @@ public:
 
     TreeNode root;
     std::vector<Data> dataPool;
-    std::mutex writeMutex;
 };
 
 
@@ -273,6 +269,7 @@ struct CombinationMap_HashImpl : public CombinationMapBase<Data, Item> {
     using CmpData = CombinationMapBase<Data, Item>::CmpData;
     using CombinationMapBase<Data, Item>::emptyData;
     using CombinationMapBase<Data, Item>::alwaysTrue;
+    using CombinationMapBase<Data, Item>::alwaysFalse;
     using CombinationMapBase<Data, Item>::toItemSet;
 
 
@@ -292,9 +289,7 @@ struct CombinationMap_HashImpl : public CombinationMapBase<Data, Item> {
         return get(toItemSet(orderedItems));
     }
 
-    virtual bool set(const ItemSet &containItem, const Data &data, CmpData shouldOverwrite = alwaysTrue) override {
-        std::lock_guard<std::mutex> writeLock(writeMutex);
-
+    virtual bool set(const ItemSet &containItem, const Data &data, CmpData shouldOverwrite = alwaysFalse) override {
         auto d = dataMap.find(containItem);
         if (d == dataMap.end()) {
             dataMap[containItem] = data;
@@ -306,7 +301,7 @@ struct CombinationMap_HashImpl : public CombinationMapBase<Data, Item> {
 
         return true;
     }
-    virtual bool set(const ItemList &orderedItems, const Data &data, CmpData shouldOverwrite = alwaysTrue) override {
+    virtual bool set(const ItemList &orderedItems, const Data &data, CmpData shouldOverwrite = alwaysFalse) override {
         return set(toItemSet(orderedItems), data, shouldOverwrite);
     }
 
@@ -321,7 +316,6 @@ struct CombinationMap_HashImpl : public CombinationMapBase<Data, Item> {
 
 
     std::unordered_map<ItemSet, Data> dataMap;
-    std::mutex writeMutex;
 };
 
 
