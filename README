@@ -129,6 +129,10 @@ CLASS LIST ( IMPLEMENTED )
 	[ ZeroBasedConsecutiveIdMap ] :
 	a number mapping utility.
 	
+	[ CombinationMap ] :
+	mapping a combination of items to corresponding data.
+	unlike the normal maps, the key is not a string or permutation.
+	
 
 CLASS LIST ( IN THE PLAN )
 ==============================

@@ -30,6 +30,7 @@
 #include "type/PriorityQueue.h"
 #include "type/ZeroBasedConsecutiveIdMap.h"
 #include "type/LoopQueue.h"
+#include "type/CombinationMap.h"
 
 #include "random/Random.h"
 #include "random/RandSelect.h"
@@ -67,6 +68,7 @@ void testArr();
 void testPriorityQueue();
 void testZeroBasedConsecutiveIdMap();
 void testLoopQueue();
+void testCombinationMap();
 
 void testRandom();
 void testRandSelect();

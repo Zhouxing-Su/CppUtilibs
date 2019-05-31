@@ -125,6 +125,9 @@
     <ClInclude Include="..\algorithm\Container.h">
       <Filter>algorithm</Filter>
     </ClInclude>
+    <ClInclude Include="..\type\CombinationMap.h">
+      <Filter>type</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Tester.cpp" />

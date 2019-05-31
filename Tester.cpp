@@ -63,7 +63,8 @@ int main() {
     //testThreadPool();
     //testInterval();
     //testInteger();
-    testKnapsack();
+    //testKnapsack();
+    testCombinationMap();
 
     return 0;
 }
@@ -422,6 +423,104 @@ void testLoopQueue() {
         cout << lq.front() << endl;
         lq.popFront();
     }
+}
+
+void testCombinationMap() {
+    int nodeNum = 200;
+    int tourNum = 100000;
+    int minNodeNumInTour = 3;
+    int writeCount = 4 * tourNum;
+    int readCount = 12 * tourNum;
+    string cacheFilePath = "TspCache.csv";
+
+    struct Tour {
+        int dist;
+        vector<int> nodes;
+    };
+
+    using TspCache = CombinationMap<Tour, int>;
+
+    mt19937 rgen;
+    chrono::steady_clock::time_point begin, end;
+
+    cerr << "init test data: ";
+    begin = chrono::steady_clock::now();
+    TspCache::ItemList nodes(nodeNum);
+    for (int i = 0; i < nodeNum; ++i) { nodes[i] = i; }
+    vector<Tour> tours(tourNum);
+    for (int i = 0; i < tourNum; ++i) {
+        if (rgen() % 1000 != 0) { shuffle(nodes.begin(), nodes.end(), rgen); } // small number of duplicated paths with different distances.
+        int tourLen = (rgen() % (nodeNum - minNodeNumInTour)) + minNodeNumInTour;
+        tours[i].nodes.resize(tourLen);
+        for (int n = 0; n < tourLen; ++n) { tours[i].nodes[n] = nodes[n]; }
+        tours[i].dist = static_cast<int>(rgen() % 10000) - 100; // allow negative distance.
+    }
+    TspCache::ItemSet containNode(nodeNum);
+    TspCache tspCache(nodeNum, tourNum);
+    end = chrono::steady_clock::now();
+    cerr << chrono::duration_cast<chrono::milliseconds>(end - begin).count() << "ms" << endl;
+
+    cerr << endl;
+
+    cerr << "zero overhead set test (x" << writeCount << "): ";
+    rgen.seed();
+    begin = chrono::steady_clock::now();
+    int overwriteCount = 0;
+    for (int i = 0; i < writeCount; ++i) {
+        Tour &tour(tours[rgen() % tours.size()]); // pick a random tour.
+        tspCache.toItemSet(tour.nodes, containNode);
+        ++overwriteCount;
+    }
+    end = chrono::steady_clock::now();
+    cerr << chrono::duration_cast<chrono::milliseconds>(end - begin).count() << "ms" << endl;
+
+    cerr << "              set test (x" << writeCount << "): ";
+    rgen.seed();
+    begin = chrono::steady_clock::now();
+    overwriteCount = 0;
+    for (int i = 0; i < writeCount; ++i) {
+        Tour &tour(tours[rgen() % tours.size()]); // pick a random tour.
+        tspCache.toItemSet(tour.nodes, containNode);
+        overwriteCount += tspCache.set(containNode, tour, // add it to cache.
+            [](const Tour &oldTour, const Tour &newTour) { return newTour.dist < oldTour.dist; });
+    }
+    end = chrono::steady_clock::now();
+    cerr << chrono::duration_cast<chrono::milliseconds>(end - begin).count() << "ms" << endl;
+    cerr << "overwrite=" << overwriteCount << endl;
+
+    cerr << endl;
+
+    cerr << "zero overhead get test (x" << readCount << "): ";
+    rgen.seed();
+    begin = chrono::steady_clock::now();
+    int missCount = 0;
+    for (int i = 0; i < readCount; ++i) {
+        Tour &tour(tours[rgen() % tours.size()]); // pick a random tour.
+        tspCache.toItemSet(tour.nodes, containNode);
+        for (int perturb = rgen() % 8 - 1; perturb > 0; --perturb) {
+            containNode[rgen() % nodeNum] = (rgen() & 1); // modify the node set randomly.
+        }
+        missCount += tour.nodes.empty();
+    }
+    end = chrono::steady_clock::now();
+    cerr << chrono::duration_cast<chrono::milliseconds>(end - begin).count() << "ms" << endl;
+
+    cerr << "              get test (x" << readCount << "): ";
+    rgen.seed();
+    begin = chrono::steady_clock::now();
+    missCount = 0;
+    for (int i = 0; i < readCount; ++i) {
+        Tour &tour(tours[rgen() % tours.size()]); // pick a random tour.
+        tspCache.toItemSet(tour.nodes, containNode);
+        for (int perturb = rgen() % 8 - 1; perturb > 0; --perturb) {
+            containNode[rgen() % nodeNum] = (rgen() & 1); // modify the node set randomly.
+        }
+        const Tour &sln(tspCache.get(containNode)); // read it from cache.
+        missCount += sln.nodes.empty();
+    }
+    end = chrono::steady_clock::now();
+    cerr << chrono::duration_cast<chrono::milliseconds>(end - begin).count() << "ms" << endl;
+    cerr << "miss=" << missCount << endl;
 }
 
 void testDirectory() {

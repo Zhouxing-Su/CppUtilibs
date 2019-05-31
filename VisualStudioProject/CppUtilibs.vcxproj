@@ -49,6 +49,7 @@
     <ClInclude Include="..\system\ThreadPool.h" />
     <ClInclude Include="..\Tester.h" />
     <ClInclude Include="..\type\Arr.h" />
+    <ClInclude Include="..\type\CombinationMap.h" />
     <ClInclude Include="..\type\ZeroBasedConsecutiveIdMap.h" />
     <ClInclude Include="..\type\Convert.h" />
     <ClInclude Include="..\type\Double.h" />
