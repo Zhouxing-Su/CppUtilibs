@@ -51,7 +51,7 @@ int main() {
     //testTimer();
     //testFileLock();
     //testTermination();
-    //testMemory();
+    testMemory();
     //testArr();
     //testString();
     //testPriorityQueue();
@@ -64,7 +64,7 @@ int main() {
     //testInterval();
     //testInteger();
     //testKnapsack();
-    testCombinationMap();
+    //testCombinationMap();
 
     return 0;
 }
@@ -688,11 +688,24 @@ void testTermination() {
 }
 
 void testMemory() {
-    cout << Memory::getAvailablePhysicalMemory() << endl
-        << Memory::getTotalPhysicalMemory() << endl
-        << Memory::getMemoryStatus().dwMemoryLoad << endl
+    cout << Memory::getPhysicalMemoryByteSize() << endl
+        << Memory::getFreePhysicalMemoryByteSize() << endl
+        << Memory::getPhysicalMemoryKbSize() << endl
         << Memory::memoryUsage().physicalMemory << endl
         << Memory::peakMemoryUsage().virtualMemory << endl;
+
+    cout << Memory::setMaxMemorySize(1, Memory::Scale::MB) << endl;
+
+    char *c = new char[1024];
+    delete c;
+    cout << "allocation successful." << endl;
+
+    try {
+        c = new char[2 * 1024 * 1024];
+        delete c;
+    } catch (...) {
+        cout << "quota exceeded." << endl;
+    }
 }
 
 void testSemaphore() {

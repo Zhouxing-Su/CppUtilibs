@@ -17,6 +17,7 @@
   <ItemGroup>
     <ClCompile Include="..\log\Trace.cpp" />
     <ClCompile Include="..\system\Directory.cpp" />
+    <ClCompile Include="..\system\Memory.cpp" />
     <ClCompile Include="..\system\Termination.cpp" />
     <ClCompile Include="..\Tester.cpp" />
     <ClCompile Include="..\type\Double.cpp" />
@@ -108,6 +109,7 @@
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <UACExecutionLevel>HighestAvailable</UACExecutionLevel>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -125,6 +127,7 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
+      <UACExecutionLevel>HighestAvailable</UACExecutionLevel>
     </Link>
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

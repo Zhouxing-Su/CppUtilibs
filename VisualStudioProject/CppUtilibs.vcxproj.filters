@@ -146,6 +146,9 @@
     <ClCompile Include="..\system\Termination.cpp">
       <Filter>system</Filter>
     </ClCompile>
+    <ClCompile Include="..\system\Memory.cpp">
+      <Filter>system</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Natvis Include="..\CppUtilibs.natvis" />

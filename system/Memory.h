@@ -11,23 +11,20 @@
 #include <iostream>
 #include <iomanip>
 
-#ifdef WIN32
-#include <Windows.h>
-#include <Psapi.h>
-#else // unix like systems
-#include <unistd.h>
-#endif // WIN32
+#include "System.h"
 
 
 namespace szx {
 
 class Memory {
 public:
+    using Unit = long long;
+
+    static constexpr Unit Base = 1024;
+
+    enum Scale : Unit { B = 1, KB = Base * B, MB = Base * KB, GB = Base * MB, TB = Base * GB };
+
     struct Size {
-        using Unit = long long;
-
-        static constexpr Unit Base = 1024;
-
         friend std::ostream& operator<<(std::ostream &os, const Size &memSize) {
             auto units = { "B", "KB", "MB", "GB", "TB", "PB" };
             double size = static_cast<double>(memSize.size);
@@ -41,59 +38,30 @@ public:
             return os;
         }
 
+        Size(Unit memSize) : size(memSize) {}
+
+        operator Unit() const { return size; }
+        operator Unit&() { return size; }
+        operator const Unit&() const { return size; }
+
         Unit size;
     };
 
-    struct MemoryUsage {
+    struct Usage {
         Size physicalMemory;
         Size virtualMemory;
     };
 
-    #ifdef WIN32
-    static MemoryUsage memoryUsage() {
-        MemoryUsage mu = { 0, 0 };
+    static bool setMaxMemorySize(Unit byteSize); // the working set will also be expanded.
+    static bool setMaxMemorySize(Unit size, Scale unit) { return setMaxMemorySize(static_cast<Unit>(size * unit)); }
 
-        PROCESS_MEMORY_COUNTERS pmc;
-        HANDLE hProcess = GetCurrentProcess();
-        if (GetProcessMemoryInfo(hProcess, &pmc, sizeof(pmc))) {
-            mu.physicalMemory.size = pmc.WorkingSetSize;
-            mu.virtualMemory.size = pmc.PagefileUsage;
-        }
-        CloseHandle(hProcess);
+    static Usage memoryUsage();
+    static Usage peakMemoryUsage();
 
-        return mu;
-    }
-    static MemoryUsage peakMemoryUsage() {
-        MemoryUsage mu = { 0, 0 };
+    static Unit getPhysicalMemoryByteSize();
+    static Unit getFreePhysicalMemoryByteSize();
 
-        PROCESS_MEMORY_COUNTERS pmc;
-        HANDLE hProcess = GetCurrentProcess();
-        if (GetProcessMemoryInfo(hProcess, &pmc, sizeof(pmc))) {
-            mu.physicalMemory.size = pmc.PeakWorkingSetSize;
-            mu.virtualMemory.size = pmc.PeakPagefileUsage;
-        }
-        CloseHandle(hProcess);
-
-        return mu;
-    }
-
-    static MEMORYSTATUSEX getMemoryStatus() {
-        MEMORYSTATUSEX status;
-        status.dwLength = sizeof(status);
-        GlobalMemoryStatusEx(&status);
-        return status;
-    }
-
-    static Size::Unit getTotalPhysicalMemory() { return getMemoryStatus().ullTotalPhys; }
-
-    static Size::Unit getAvailablePhysicalMemory() { return getMemoryStatus().ullAvailPhys; }
-    #else // unix like systems
-    static Size getTotalPhysicalMemory() {
-        Size pages = sysconf(_SC_PHYS_PAGES);
-        Size pageSize = sysconf(_SC_PAGE_SIZE);
-        return pages * pageSize;
-    }
-    #endif // WIN32
+    static Unit getPhysicalMemoryKbSize();
 };
 
 }
