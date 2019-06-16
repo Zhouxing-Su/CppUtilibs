@@ -33,8 +33,7 @@
 #include "type/CombinationMap.h"
 
 #include "random/Random.h"
-#include "random/RandSelect.h"
-#include "random/RandSample.h"
+#include "random/Sampling.h"
 
 #include "algorithm/Graph.h"
 #include "algorithm/BidirectionIndex.h"
@@ -71,8 +70,7 @@ void testLoopQueue();
 void testCombinationMap();
 
 void testRandom();
-void testRandSelect();
-void testRandSample();
+void testSampling();
 
 void testGraph();
 void testBidirectionIndex();

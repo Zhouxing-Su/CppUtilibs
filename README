@@ -71,11 +71,11 @@ CLASS LIST ( IMPLEMENTED )
 	[ Random ] :
 	wrap a random number generator with some simple probability distrubution.
 
-	[ RandSelect ] :
+	[ Sample1 ] :
 	make it possible to pick one element out of a sequence of elements 
 	by same probability without recording all of them.
 
-	[ RandSample ] :
+	[ Sample ] :
 	an online algorithm for sampling targetNum items from a data stream.
 
 

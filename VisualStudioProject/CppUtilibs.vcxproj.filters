@@ -44,9 +44,6 @@
     <ClInclude Include="..\random\Random.h">
       <Filter>random</Filter>
     </ClInclude>
-    <ClInclude Include="..\random\RandSelect.h">
-      <Filter>random</Filter>
-    </ClInclude>
     <ClInclude Include="..\type\Convert.h">
       <Filter>type</Filter>
     </ClInclude>
@@ -89,9 +86,6 @@
     <ClInclude Include="..\type\PriorityQueue.h">
       <Filter>type</Filter>
     </ClInclude>
-    <ClInclude Include="..\random\RandSample.h">
-      <Filter>random</Filter>
-    </ClInclude>
     <ClInclude Include="..\math\Math.h">
       <Filter>math</Filter>
     </ClInclude>
@@ -127,6 +121,9 @@
     </ClInclude>
     <ClInclude Include="..\type\CombinationMap.h">
       <Filter>type</Filter>
+    </ClInclude>
+    <ClInclude Include="..\random\Sampling.h">
+      <Filter>random</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

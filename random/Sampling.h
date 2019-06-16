@@ -1,5 +1,8 @@
 ////////////////////////////////
 /// usage : 1.	an online algorithm for sampling targetNum items from a data stream.
+///         2.	for the case of single selection, call Sampling1::isPicked() on each element to randomly select equiprobability.
+///             this class is usefull when you can not find out how many elements are there before enumerating them all,
+///             you will not need to hold all possible selections and use (rand() % N) to select one by using this class.
 /// 
 /// note  : 1.	https://en.wikipedia.org/wiki/Reservoir_sampling
 ////////////////////////////////
@@ -15,11 +18,49 @@
 
 namespace szx {
 
-// if the TargetNum is not known when compiling, use RandSample_Dynamic.
-template<const int TargetNum>
-class RandSample_Static {
+class Sampling1 { // pick single item.
 public:
-    RandSample_Static(Random &randomNumberGenerator) : rgen(randomNumberGenerator), pickCount(0) {}
+    enum StartCount { NoPresetElement = 0, WithPresetElement = 1 };
+
+    Sampling1(Random &randomNumberGenerator, int startCount = StartCount::WithPresetElement)
+        : rgen(randomNumberGenerator) {
+        reset(startCount);
+    }
+
+    // start a new selection on another N elements.
+    // sometimes the first element is pre-selected with the possibility of 1, 
+    // so you can pass 1 in this condition to leave out a isPicked() call.
+    void reset(int startCount = StartCount::WithPresetElement) { pickCount = startCount; }
+
+    // call this for each of the N elements (N times in total) to judge 
+    // whether each of them is selected. 
+    // only the last returned "true" means that element is selected finally.
+    bool isPicked() { return ((rgen() % (++pickCount)) == 0); }
+
+    // if (newItem != minItem), return as their strict order. else select one
+    // as the minimal in the sequence of isMinimal() calls randomly.
+    template<typename T>
+    bool isMinimal(const T &minItem, const T &newItem) {
+        if (newItem > minItem) {
+            return false;
+        } else if (newItem == minItem) {
+            return isPicked();
+        } else {
+            reset();
+            return true;
+        }
+    }
+
+protected:
+    Random &rgen;
+    int pickCount; // number of elements that have been considered.
+};
+
+// if the TargetNum is not known when compiling, use Sampling_Dynamic.
+template<const int TargetNum>
+class Sampling_Static {
+public:
+    Sampling_Static(Random &randomNumberGenerator) : rgen(randomNumberGenerator), pickCount(0) {}
 
     // return 0 for not picked.
     // return an integer i \in [1, TargetNum] if it is the i_th item in the picked set.
@@ -49,10 +90,10 @@ protected:
 };
 
 
-// if the TargetNum is known when compiling, use RandSample_Static to speed up.
-class RandSample_Dynamic {
+// if the TargetNum is known when compiling, use Sampling_Static to speed up.
+class Sampling_Dynamic {
 public:
-    RandSample_Dynamic(Random &randomNumberGenerator, int targetNumber)
+    Sampling_Dynamic(Random &randomNumberGenerator, int targetNumber)
         : rgen(randomNumberGenerator), targetNum(targetNumber), pickCount(0) {}
 
     // return 0 for not picked.
@@ -92,7 +133,7 @@ protected:
 // ------|------------------------------------------
 // index | 0 1 2 3 ... k-1   k    k+1   k+2  ... n-1
 // prob. | 1 1 1 1 ...  1  k/k+1 k/k+2 k/k+3 ... k/n
-using RandSample = RandSample_Dynamic;
+using Sampling = Sampling_Dynamic;
 
 }
 

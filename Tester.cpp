@@ -36,8 +36,7 @@ int main() {
     //testTimer();
     //testRandom();
     //testRangeRand();
-    //testRandSelect();
-    //testRandSample();
+    //testSampling();
     //testGraph();
     //testLog();
     //testBidirectionIndex();
@@ -93,19 +92,20 @@ void testRandom() {
     }
 }
 
-void testRandSelect() {
+void testSampling() {
+    // Sampling1.
     int result = 0;
 
     Random rd;
-    RandSelect rs(rd, RandSelect::StartCount::NoPreseletedElement);
+    Sampling1 rs(rd, Sampling1::StartCount::NoPresetElement);
     for (int i = 0; i < 10; ++i) {
-        if (rs.isSelected()) {
+        if (rs.isPicked()) {
             result = i;
         }
     }
     cout << result << endl;
 
-    rs.reset(RandSelect::StartCount::WithPreseletedElement);
+    rs.reset(Sampling1::StartCount::WithPresetElement);
     for (int i = 10; i >= 0; --i) {
         if (rs.isMinimal(result, i)) {
             result = i;
@@ -115,9 +115,8 @@ void testRandSelect() {
         }
     }
     cout << result << endl;
-}
 
-void testRandSample() {
+    // Sampling.
     enum { Population = 20, TargetNum = 10 };
 
     random_device rd;
@@ -126,8 +125,8 @@ void testRandSample() {
 
     int count[Population + 1] = { 0 };
     for (int i = 0; i < 1000000; ++i) {
-        RandSample rs0(rgen0, TargetNum);
-        RandSample_Static<TargetNum> rs1(rgen1);
+        Sampling rs0(rgen0, TargetNum);
+        Sampling_Static<TargetNum> rs1(rgen1);
         int r[TargetNum + 1] = { 0 };
         for (int j = 1; j <= Population; ++j) {
             int index = rs0.isPicked();

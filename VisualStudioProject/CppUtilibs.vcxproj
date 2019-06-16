@@ -38,8 +38,7 @@
     <ClInclude Include="..\math\Math.h" />
     <ClInclude Include="..\math\Oscillator.h" />
     <ClInclude Include="..\random\Random.h" />
-    <ClInclude Include="..\random\RandSample.h" />
-    <ClInclude Include="..\random\RandSelect.h" />
+    <ClInclude Include="..\random\Sampling.h" />
     <ClInclude Include="..\system\Directory.h" />
     <ClInclude Include="..\system\Exception.h" />
     <ClInclude Include="..\system\Madro.h" />
