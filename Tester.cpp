@@ -119,8 +119,7 @@ void testSampling() {
     // Sampling.
     enum { Population = 20, TargetNum = 10 };
 
-    random_device rd;
-    unsigned seed = rd();
+    unsigned seed = random_device()();
     Random rgen0(seed), rgen1(seed);
 
     int count[Population + 1] = { 0 };

@@ -145,8 +145,7 @@ struct Knapsack : public KnapsackBase {
         Map<Weight, Value> values = { { 0, 0 } };
         ID i = 0;
         for (auto item = items.begin(); item != items.end(); ++item, ++i) {
-            for (auto wv = values.end(); wv != values.begin();) {
-                --wv;
+            for (auto wv = values.rbegin(); wv != values.rend(); ++wv) {
                 Weight w = wv->first + item->weight();
                 if (w > capacity) { continue; }
                 Weight weightBeforePick = wv->first;
@@ -171,6 +170,8 @@ struct Knapsack : public KnapsackBase {
                     return capacity;
                 }
             }
+            // OPTIMIZE[szx][0]: remove the dominated solutions <w, v> if there are items' (weight != value),
+            //                   i.e., (w > w*) && (v <= v*). (otherwise this never happens)
         }
 
         lowerBound = values.rbegin()->second;
@@ -186,26 +187,28 @@ struct Knapsack : public KnapsackBase {
         return dynamicProgrammingForSparseWeightDistribution(items, capacity, lowerBound, sln, IdList(), candidateNum);
     }
 
-    // grouped 0-1 knapsack solver.
-    // `items` is a list of items where sum(items, itemNumInGroup[g - 1], itemNumInGroup[g])
-    // `itemNumInGroup[g]` is the number of items in the g_th group.
+    // grouped 0-1 knapsack solver (items in the same group are exclusive to each other and only one item can be picked at most).
+    // `items' is a list of items where the indices of the items in group g are within [sum(itemNumInGroups, 0, g-1), sum(itemNumInGroups, 0, g)].
+    // `itemNumInGroups[g]` is the number of items in group g.
     // `capacity` is the inclusive maximal weight of picked items.
     // `lowerBound` is the worst value of the optima, and it will be updated with the best solution found by this method.
     // `candidateNum` is the maximal number of optima to record in `sln`.
     // return the total weight of items of the best solution.
     // it will be better if items are ordered by weight in increasing order.
     template<typename Item, typename Weight, typename Value = Weight, typename Candidate>
-    static Weight dynamicProgramming(const List<Item> &items, const List<ID> itemNumInGroup, Weight capacity, Value &lowerBound, List<Candidate> &sln, const Candidate &emptyCandidate, ID candidateNum = 1) {
+    static Weight dynamicProgramming(const List<Item> &items, const List<ID> itemNumInGroups, Weight capacity, Value &lowerBound, List<Candidate> &sln, const Candidate &emptyCandidate, ID candidateNum = 1) {
         Weight capacityRange = capacity + 1;
         List<List<Candidate>> slns(capacityRange, List<Candidate>(1, emptyCandidate));
 
         List<Value> values(capacityRange, 0);
         Weight weightSum = 0;
         ID i = 0;
-        for (auto group = itemNumInGroup.begin(); group != itemNumInGroup.end(); ++group) {
-            weightSum += item->weight();
+        auto groupItemBegin = items.begin();
+        for (auto groupItemNum = itemNumInGroups.begin(); groupItemNum != itemNumInGroups.end(); ++groupItemNum) {
+            auto groupItemEnd = items.begin() + *groupItemNum;
+            weightSum += (std::max)(groupItemBegin, groupItemEnd, [](const Item &item) { return item.weight(); });
             for (Weight w = (std::min)(weightSum, capacity); w >= item->weight(); --w) {
-                for (auto item = items.begin(); item != items.end(); ++item, ++i) {
+                for (auto item = groupItemBegin; item != groupItemEnd; ++item, ++i) {
                     Weight weightBeforePick = w - item->weight();
                     Value valueAfterPick = values[weightBeforePick] + item->value();
                     Value &bestValue = values[w];
@@ -228,6 +231,7 @@ struct Knapsack : public KnapsackBase {
                     }
                 }
             }
+            groupItemBegin = groupItemEnd;
         }
 
         for (; (capacity > 0) && slns[capacity].empty(); --capacity) {}
