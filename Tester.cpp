@@ -248,41 +248,41 @@ void testLog() {
     Log(LogType::AsdTestClassD) << "some useless information from asd." << endl;
 }
 
-void testBidirectionIndex() {
-    BidirectionIndex bi(10);
+void testConsecutiveIdSet() {
+    ConsecutiveIdSet bi(10);
     bi.insert(5);
     bi.insert(9);
     bi.insert(2);
     bi.insert(8);
     bi.insert(0);
     bi.insert(9);
-    //bi.insert( 10 );      // fail and crack
-    bi.eraseElement(2);
-    //bi.eraseElement( 4 ); // fail and crack
+    //bi.insert(10);      // fail and crack
+    bi.eraseItem(2);
+    //bi.eraseItem(4); // fail and crack
     bi.eraseIndex(1);
-    //bi.eraseIndex( 8 );   // fail and crack
+    //bi.eraseIndex(8);   // fail and crack
     int i = bi.indexOf(5);
     cout << i << endl;
-    //cout << bi.indexOf( 3 ) << endl;      // fail and crack
-    //cout << bi.elementAt( 8 ) << endl;    // fail and crack
-    cout << bi.elementAt(i) << endl;
+    //cout << bi.indexOf(3) << endl;      // fail and crack
+    //cout << bi.itemAt(8) << endl;    // fail and crack
+    cout << bi.itemAt(i) << endl;
 
-    BidirectionIndex_Safe bis(10, 1);
+    ConsecutiveIdSet_Safe bis(10, 1);
     bis.insert(5);
     bis.insert(9);
     bis.insert(2);
     bis.insert(8);
     bis.insert(0);        // fail but won't crack
     bis.insert(10);
-    bis.eraseElement(2);
-    bis.eraseElement(4);  // fail but won't crack
+    bis.eraseItem(2);
+    bis.eraseItem(4);  // fail but won't crack
     bis.eraseIndex(1);
     bis.eraseIndex(8);    // fail but won't crack
     int j = bis.indexOf(5);
     cout << j << endl;
     cout << bis.indexOf(3) << endl;   // fail but won't crack
-    cout << bis.elementAt(8) << endl; // fail but won't crack
-    cout << bis.elementAt(j) << endl;
+    cout << bis.itemAt(8) << endl; // fail but won't crack
+    cout << bis.itemAt(j) << endl;
 }
 
 static void testTrace_f(int i) {
