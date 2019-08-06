@@ -24,7 +24,7 @@
     <ClCompile Include="..\type\Integer.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\algorithm\BidirectionIndex.h" />
+    <ClInclude Include="..\algorithm\ConsecutiveIdSet.h" />
     <ClInclude Include="..\algorithm\Counter.h" />
     <ClInclude Include="..\algorithm\Graph.h" />
     <ClInclude Include="..\algorithm\Knapsack.h" />
@@ -39,6 +39,7 @@
     <ClInclude Include="..\math\Oscillator.h" />
     <ClInclude Include="..\random\Random.h" />
     <ClInclude Include="..\random\Sampling.h" />
+    <ClInclude Include="..\system\ColorStr.h" />
     <ClInclude Include="..\system\Directory.h" />
     <ClInclude Include="..\system\Exception.h" />
     <ClInclude Include="..\system\Madro.h" />
@@ -108,7 +109,7 @@
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <UACExecutionLevel>HighestAvailable</UACExecutionLevel>
+      <UACExecutionLevel>RequireAdministrator</UACExecutionLevel>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -126,7 +127,7 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <UACExecutionLevel>HighestAvailable</UACExecutionLevel>
+      <UACExecutionLevel>RequireAdministrator</UACExecutionLevel>
     </Link>
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

@@ -19,6 +19,7 @@
 #include "system/Memory.h"
 #include "system/Semaphore.h"
 #include "system/ThreadPool.h"
+#include "system/ColorStr.h"
 
 #include "io/File.h"
 
@@ -36,7 +37,7 @@
 #include "random/Sampling.h"
 
 #include "algorithm/Graph.h"
-#include "algorithm/BidirectionIndex.h"
+#include "algorithm/ConsecutiveIdSet.h"
 #include "algorithm/Counter.h"
 #include "algorithm/Container.h"
 #include "algorithm/String.h"
@@ -56,6 +57,7 @@ void testTermination();
 void testMemory();
 void testSemaphore();
 void testThreadPool();
+void testColorStr();
 
 void testFile();
 
@@ -73,7 +75,7 @@ void testRandom();
 void testSampling();
 
 void testGraph();
-void testBidirectionIndex();
+void testConsecutiveIdSet();
 void testCounter();
 void testContainer();
 void testString();

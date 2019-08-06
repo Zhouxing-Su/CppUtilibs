@@ -29,9 +29,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Tester.h" />
-    <ClInclude Include="..\algorithm\BidirectionIndex.h">
-      <Filter>algorithm</Filter>
-    </ClInclude>
     <ClInclude Include="..\algorithm\Graph.h">
       <Filter>algorithm</Filter>
     </ClInclude>
@@ -124,6 +121,12 @@
     </ClInclude>
     <ClInclude Include="..\random\Sampling.h">
       <Filter>random</Filter>
+    </ClInclude>
+    <ClInclude Include="..\system\ColorStr.h">
+      <Filter>system</Filter>
+    </ClInclude>
+    <ClInclude Include="..\algorithm\ConsecutiveIdSet.h">
+      <Filter>algorithm</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

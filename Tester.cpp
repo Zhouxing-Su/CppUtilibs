@@ -39,7 +39,7 @@ int main() {
     //testSampling();
     //testGraph();
     //testLog();
-    //testBidirectionIndex();
+    //testConsecutiveIdSet();
     //testConvert();
     //testTrace();
     //testVectorMD();
@@ -50,7 +50,7 @@ int main() {
     //testTimer();
     //testFileLock();
     //testTermination();
-    testMemory();
+    //testMemory();
     //testArr();
     //testString();
     //testPriorityQueue();
@@ -64,6 +64,7 @@ int main() {
     //testInteger();
     //testKnapsack();
     //testCombinationMap();
+    testColorStr();
 
     return 0;
 }
@@ -804,6 +805,25 @@ void testThreadPool() {
     print("f5.i=", f5.i);
 
     print("duration=", duration.get());
+}
+
+void testColorStr() {
+    using CmdColor = ColorStr::CmdColor;
+
+    ostringstream oss;
+    oss << CmdColor::BrightRedFG << CmdColor::BrightYellowBG << "test" << CmdColor::Reset << "test" << endl;
+    cout << ColorStr::get(" abc ", CmdColor::BrightYellowBG) << ColorStr::get(" abc ", CmdColor::BrightYellowBG) << oss.str() << endl;
+
+    int b = CmdColor::RedBG;
+    for (int f = CmdColor::BlackFG; f < CmdColor::WhiteFG; ++f, ++b) {
+        cout << static_cast<CmdColor>(f) << static_cast<CmdColor>(b)
+            << "test" << CmdColor::Reset << "test" << endl;
+    }
+    b = CmdColor::RedBG;
+    for (int f = CmdColor::BrightBlackFG; f < CmdColor::BrightWhiteFG; ++f, ++b) {
+        cout << static_cast<CmdColor>(f) << static_cast<CmdColor>(b)
+            << "test" << CmdColor::Reset << "test" << endl;
+    }
 }
 
 
