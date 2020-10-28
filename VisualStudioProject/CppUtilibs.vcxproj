@@ -31,6 +31,7 @@
     <ClInclude Include="..\algorithm\Container.h" />
     <ClInclude Include="..\algorithm\String.h" />
     <ClInclude Include="..\io\File.h" />
+    <ClInclude Include="..\log\DateTime.h" />
     <ClInclude Include="..\log\Log.h" />
     <ClInclude Include="..\log\Timer.h" />
     <ClInclude Include="..\log\Trace.h" />

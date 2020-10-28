@@ -64,7 +64,8 @@ int main() {
     //testInteger();
     //testKnapsack();
     //testCombinationMap();
-    testColorStr();
+    //testColorStr();
+    testDateTime();
 
     return 0;
 }
@@ -675,6 +676,16 @@ void testTimer() {
 
     cout << Timer::durationInMillisecond(start, end) << endl;
     cout << i << endl;
+}
+
+void testDateTime() {
+    DateTime now(time(nullptr));
+    DateTime dt(2020, 10, 28, 15, 01, 33);
+
+    cout << DateTime::durationInSecond(dt, now) << endl;
+    cout << static_cast<time_t>(dt) << endl;
+    dt = dt + static_cast<time_t>(1000);
+    cout << static_cast<time_t>(dt) << endl;
 }
 
 void testTermination() {

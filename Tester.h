@@ -44,6 +44,7 @@
 #include "algorithm/Knapsack.h"
 
 #include "log/Timer.h"
+#include "log/DateTime.h"
 #include "log/Log.h"
 #include "log/Trace.h"
 
@@ -82,6 +83,7 @@ void testString();
 void testKnapsack();
 
 void testTimer();
+void testDateTime();
 void testLog();
 void testTrace();
 
